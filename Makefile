@@ -14,7 +14,7 @@ start:
 	docker run -p 80:80 -t -i $(IMAGE):latest
 
 unit-test:
-	yarn --dev && yarn test
+	yarn --dev && CI=true yarn test
 
 integration-test:
 	yarn link puppeteer && yarn --dev && yarn integration
