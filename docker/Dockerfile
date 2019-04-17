@@ -8,4 +8,4 @@ WORKDIR /home/app/webapp
 
 RUN yarn
 
-CMD yarn build && serve -s build -l 80
+CMD yarn build && yarn production
