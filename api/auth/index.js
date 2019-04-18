@@ -12,4 +12,8 @@ router.get('/token', (req,res) => {
   res.send(`${process.env.BLACKHOLE_API_KEY}.${signature}.${timestamp}`)
 })
 
+router.get('/websocket', (req,res) => {
+  res.send(`${process.env.BLACKHOLE_API_ENDPOINT}`)
+})
+
 module.exports = router
