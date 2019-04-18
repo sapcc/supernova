@@ -13,7 +13,7 @@ router.get('/token', (req,res) => {
 })
 
 router.get('/websocket', (req,res) => {
-  res.send(`${process.env.BLACKHOLE_API_ENDPOINT}`)
+  res.send(`${process.env.BLACKHOLE_ENDPOINT}`)
 })
 
 module.exports = router
