@@ -9,7 +9,7 @@ const App = () => {
   const [alerts, setAlerts] = useState([])
   const [authToken, setAuthToken] = useState(null)
 
-
+ 
   // re-new auth token automaticaly
   useEffect(() => {
     let timer
@@ -17,7 +17,7 @@ const App = () => {
     const renewToken = () => {
       axios.get('/api/auth/token').then(response => {
         const token = response.data
-        const [key,signature,timeout] = token.split('.')
+        const [, , timeout] = token.split('.')
         setAuthToken(token)
         timer = setTimeout(renewToken,(timeout-60)*1000)
       }).catch(error => console.error(error))
@@ -30,14 +30,19 @@ const App = () => {
   useEffect(() => {
     let socket
     if(authToken) {
+
+      // open socket connection
       socket = openSocket(process.env.REACT_APP_BLACKHOLE_API_ENDPOINT, {
         query: {authToken},
-        transports: [ 'websocket' ]
+        //transports: [ 'websocket' ]
       })
 
+      // load initial all active alerts
       socket.emit('find','alerts',{}, (error,data) => {
-        if(data) setAlerts(data.alerts)
-        console.log(alerts)
+        if(data) setAlerts(sortAlerts(data.alerts))
+        //console.log(alerts)
+
+        // register listener for changes
         socket.on('alerts changes', changes => {
           setAlerts(alerts => {
             let newAlerts = alerts.slice()
@@ -54,26 +59,32 @@ const App = () => {
               const fingerprints = changes.deleted.map(deletedAlert => deletedAlert.fingerprint)
               newAlerts = newAlerts.filter(fingerprints.indexOf(alert.fingerprint)<0)
             }
-            console.log('added',changes.added.length, 'updated', changes.updated.length)
+            //console.log('added',changes.added.length, 'updated', changes.updated.length)
             newAlerts = newAlerts.filter((item,index) => newAlerts.indexOf(item) === index)
-            console.log(newAlerts)
-            return newAlerts
+            console.log('::::::::alerts.length',alerts.length, 'newAlerts.length',newAlerts.length, alerts[0],newAlerts[0])
+            return sortAlerts(newAlerts)
           })
         })
       })
-    } 
+    }
 
     return () => socket && socket.disconnect()
   }, [authToken])
 
+  const sortAlerts = (alerts) => {
+    return alerts.sort((a,b) => a.startsAt<b.startsAt ? 1 : a.startsAt>b.startsAt ? -1 : 0)
+  }
+
   return (
     <div className="App">
       <pre>{authToken}</pre>
-
-        <img src={logo} className="App-logo" alt="logo" />
+        <img src={logo} className="App-logo" alt="logo" />  
         <table width="100%">
           <thead>
             <tr>
+              <th>
+                Region
+              </th>  
               <th> 
                 Severity
               </th>  
@@ -92,8 +103,9 @@ const App = () => {
             </tr>  
           </thead>
           <tbody>
-            {alerts.sort((a,b) => a.startsAt<b.startsAt ? 1 : a.startsAt>b.startsAt ? -1 : 0).map((alert,index) =>
-              <tr key={index} className={alert.labels.severity} style={{color: alert.labels.severity == 'critical' ? 'red' : alert.labels.severity == 'warning' ? 'orange' : 'blue'}}>
+            {alerts.map((alert,index) =>
+              <tr key={index} className={alert.labels.severity} style={{color: alert.labels.severity === 'critical' ? 'red' : alert.labels.severity === 'warning' ? 'orange' : 'blue'}}>
+                <td>{alert.labels.region}</td>
                 <td>{alert.labels.severity}</td>
                 <td>{alert.annotations.summary}</td>
                 <td>{moment(alert.startsAt).format('DD.MM.YYYY h:mm:ss')}</td>
