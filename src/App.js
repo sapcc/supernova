@@ -6,10 +6,15 @@ import moment from 'moment'
 import './App.css';
 
 const App = () => {
+  const [websocketEndpoint, setWebsocketEndpoint] = useState(null)
   const [alerts, setAlerts] = useState([])
   const [authToken, setAuthToken] = useState(null)
 
- 
+
+  useEffect(() => {
+    axios.get('/api/auth/websocket').then(response => setWebsocketEndpoint(response.data))
+  },[])
+
   // re-new auth token automaticaly
   useEffect(() => {
     let timer
@@ -29,10 +34,10 @@ const App = () => {
 
   useEffect(() => {
     let socket
-    if(authToken) {
+    if(authToken && websocketEndpoint) {
 
       // open socket connection
-      socket = openSocket(process.env.REACT_APP_BLACKHOLE_API_ENDPOINT, {
+      socket = openSocket(websocketEndpoint, {
         query: {authToken},
         //transports: [ 'websocket' ]
       })
@@ -70,7 +75,7 @@ const App = () => {
     }
 
     return () => socket && socket.disconnect()
-  }, [authToken])
+  }, [authToken, websocketEndpoint])
 
   const sortAlerts = (alerts) => {
     return alerts.sort((a,b) => a.startsAt<b.startsAt ? 1 : a.startsAt>b.startsAt ? -1 : 0)
