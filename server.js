@@ -9,6 +9,9 @@ const port = process.env.NODE_ENV === 'production' ? 80 : process.env.PORT || 50
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
+app.use('/system/readiness', (req,res) => res.sendStatus(200))
+app.use('/system/liveliness', (req,res) => res.sendStatus(200))
+
 app.use('/api', require('./api'))
 
 // in production the client code is served by express.

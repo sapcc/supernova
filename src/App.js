@@ -40,10 +40,11 @@ const App = () => {
       // load initial all active alerts
       socket.emit('find','alerts',{}, (error,data) => {
         if(data) setAlerts(sortAlerts(data.alerts))
-        //console.log(alerts)
+        //console.log(data.alerts)
 
         // register listener for changes
         socket.on('alerts changes', changes => {
+          console.log('alerts changes')
           setAlerts(alerts => {
             let newAlerts = alerts.slice()
             if(changes.updated) {
