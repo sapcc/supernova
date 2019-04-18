@@ -78,11 +78,11 @@ const App = () => {
   return (
     <div className="App">
       <pre>{authToken}</pre>
-        <img src={logo} className="App-logo" alt="logo" />  
+        <img src={logo} style={{width: 200, height: 200}} className="App-logo" alt="logo" />  
         <table width="100%">
           <thead>
             <tr>
-              <th>
+              <th style={{width: '100px'}}>
                 Region
               </th>  
               <th> 
