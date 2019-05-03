@@ -9,7 +9,7 @@ const App = () => {
   const [alerts, setAlerts] = useState([])
 
   useEffect(() => {
-    let socket = openSocket('http://10.47.41.138:5000')
+    let socket = openSocket('/')
     
     // register listener for changes
     socket.on('alerts changes', changes => {
