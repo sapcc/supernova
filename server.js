@@ -3,6 +3,7 @@ require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
 const path = require('path')
+const configureWesocket = require('./socket_proxy')
 const app = express()
 const port = process.env.NODE_ENV === 'production' ? 80 : process.env.PORT || 5000
 
@@ -14,6 +15,9 @@ app.use('/system/liveliness', (req,res) => res.sendStatus(200))
 
 app.use('/api', require('./api'))
 
+const server = require('http').createServer(app)
+configureWesocket(server)
+
 // in production the client code is served by express.
 if (process.env.NODE_ENV === 'production') {
   // Serve any static files
@@ -24,4 +28,5 @@ if (process.env.NODE_ENV === 'production') {
   })
 }
 
-app.listen(port, () => console.log(`Listening on port ${port}`))
+//app.listen(port, () => console.log(`Listening on port ${port}`))
+server.listen(port, () => console.log(`Listening on port ${port}`))
