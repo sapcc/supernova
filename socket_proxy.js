@@ -5,7 +5,7 @@ const io= require('socket.io')
 let currentAuthToken, apiWsConnection
 
 const createAuthToken = () => {
-  console.log('ACTIVE TOKEN:', apiWsConnection && apiWsConnection.io.opts.query)
+  //console.log('ACTIVE TOKEN:', apiWsConnection && apiWsConnection.io.opts.query)
   // random expiration time between 4 and 8 hours
   //const timestamp = Math.floor(Date.now()/1000+Math.random()*60*60*4 + 60*60*4)
   const timestamp = Math.floor(Date.now()/1000+Math.random()*60*60*1 + 60)
@@ -23,8 +23,7 @@ const createAuthToken = () => {
   }
   // reconnect 60 seconds before expiration of the token
   const timeout = ((timestamp-60)*1000)-Date.now()
-  console.info('>>>>>>>>>>>>>TOKEN: ', currentAuthToken)
-  console.info('>>>>>>>>>>>>>>>>>>>>>>next reconnect in ',timeout/1000, 'sec', timeout/1000/60/60, 'hours')
+  //console.info('>>>>>>>>>>>>>>>>>>>>>>next reconnect in ',timeout/1000, 'sec', timeout/1000/60/60, 'hours')
   setTimeout(() => createAuthToken(), timeout)
 }
 
@@ -43,9 +42,11 @@ apiWsConnection.on('disconnect', () => console.info(':::::::::::::::::::::::::::
 module.exports = (server) => {
   const wsServer = io(server)
   
-  apiWsConnection.on('alerts changes', changes => {
-    console.info(':::::::::::::::::CHANGES',changes.added.length,changes.updated.length)
-    wsServer.sockets.emit('alerts changes', changes)
+  apiWsConnection.on('alerts created', created => {
+    if (created) {
+      console.info(':::::::::::::::::ALERTS CREATED', created.added.length, created.updated.length)
+      wsServer.sockets.emit('alerts changes', created)
+    }
   })
 
   wsServer.on('connection', socket => {
