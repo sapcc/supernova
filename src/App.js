@@ -30,7 +30,7 @@ const App = () => {
           newAlerts = newAlerts.filter(fingerprints.indexOf(alert.fingerprint)<0)
         }
         //console.log('added',changes.added.length, 'updated', changes.updated.length)
-        newAlerts = newAlerts.filter((item,index) => newAlerts.indexOf(item) === index)
+        newAlerts = newAlerts.filter((item,index) => newAlerts.findIndex(element => element.fingerprint == item.fingerprint) === index)
         return sortAlerts(newAlerts)
       })
     })
