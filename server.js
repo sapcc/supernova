@@ -13,8 +13,6 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/system/readiness', (req,res) => res.sendStatus(200))
 app.use('/system/liveliness', (req,res) => res.sendStatus(200))
 
-app.use('/api', require('./api'))
-
 const server = require('http').createServer(app)
 configureWesocket(server)
 
