@@ -30,7 +30,7 @@ import {
 export default class Alerts extends PureComponent {
   date = (alert) => {
     const d = new Date(alert.startsAt)
-    return `${d.getDay()}.${d.getMonth()+1}.${d.getFullYear()}`
+    return `${d.getDate()}.${d.getMonth()+1}.${d.getFullYear()}`
   }
 
   toData = (alerts) => {
