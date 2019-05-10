@@ -3,8 +3,11 @@ import logo from './logo.svg'
 import openSocket from 'socket.io-client'
 import moment from 'moment'
 import './App.css';
+import AlertsChart from './AlertsChart'
 
 const App = () => {
+  const [searchTerm, setSearchTerm] = useState('')   
+  const [colors, setColors] = useState({critical: '#E74C3C', warning: '#F39C12', info: '#3498DB'})
   const [filters,setFilters] = useState({critical: true, warning: false, info: false})
   const [alerts, setAlerts] = useState([])
 
@@ -28,9 +31,7 @@ const App = () => {
 
         //console.log('added',changes.added.length, 'updated', changes.updated.length)
         newAlerts = newAlerts.filter((item,index) => 
-          newAlerts.findIndex(element => element.fingerprint === item.fingerprint) === index || 
-          // remove ended alerts
-          item.endsAt < new Date()
+          newAlerts.findIndex(element => element.fingerprint === item.fingerprint) === index 
         )
         return sortAlerts(newAlerts)
       })
@@ -51,11 +52,19 @@ const App = () => {
     setFilters({...filters, [name]: value})
   }
 
+  const items = alerts.filter(alert => 
+    filters[alert.labels.severity] && 
+    new Date(alert.endsAt) > new Date() && 
+    (!searchTerm || JSON.stringify(alert.labels).includes(searchTerm))
+  )   
+
   return (
     <div className="App">
       <img src={logo} style={{width: 200, height: 200}} className="App-logo" alt="logo" />  
 
-      <div style={{height: 40}}>
+      <AlertsChart alerts={alerts} colors={colors}/>
+      <div style={{height: 40, textAlign: 'left', marginLeft: 20}}>
+        <input name="search" onChange={(e) => setSearchTerm(e.target.value)} placeholder="Search term" style={{padding: 5, width: 300}}/>
         <input name="critical" type="checkbox" checked={filters.critical} onChange={handleFilterChange}/> critical {' '}
         <input name="warning" type="checkbox" checked={filters.warning} onChange={handleFilterChange}/> warning {' '}
         <input name="info" type="checkbox" checked={filters.info} onChange={handleFilterChange}/> info {' '}
@@ -84,8 +93,8 @@ const App = () => {
           </tr>  
         </thead>
         <tbody>
-          {alerts.filter(alert => filters[alert.labels.severity]).map((alert,index) =>
-            <tr key={index} className={alert.labels.severity} style={{color: alert.labels.severity === 'critical' ? 'red' : alert.labels.severity === 'warning' ? 'orange' : 'blue'}}>
+          {items.map((alert,index) =>
+            <tr key={index} className={alert.labels.severity} style={{color: colors[alert.labels.severity]}}>
               <td>{alert.labels.region}</td>
               <td>{alert.labels.severity}</td>
               <td>{alert.annotations.summary}</td>
