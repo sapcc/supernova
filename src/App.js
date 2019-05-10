@@ -55,7 +55,7 @@ const App = () => {
   const items = alerts.filter(alert => 
     filters[alert.labels.severity] && 
     new Date(alert.endsAt) > new Date() && 
-    (!searchTerm || JSON.stringify(alert.labels).includes(searchTerm))
+    (!searchTerm || JSON.stringify(alert.labels).includes(searchTerm) || alert.annotations.summary.includes(searchTerm))
   )   
 
   return (
