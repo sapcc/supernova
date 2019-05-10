@@ -32,25 +32,25 @@ createAuthToken()
 apiWsConnection = require('socket.io-client')(process.env.BLACKHOLE_ENDPOINT, { query: { authToken: currentAuthToken } })
 
 apiWsConnection.on('reconnect_attempt', () => {
-  console.info('::::::::::::::::::::::::::API CLIENT RECONNECTING')
+  console.info(':::::API CLIENT RECONNECTING')
   apiWsConnection.io.opts.query = { authToken: currentAuthToken }
 })
 
-apiWsConnection.on('connect', () => console.info('::::::::::::::::::::::::API CLIENT CONNECTED'))
-apiWsConnection.on('disconnect', () => console.info('::::::::::::::::::::::::::::API CLIENT DISCONNECTED'))
+apiWsConnection.on('connect', () => console.info(':::::API CLIENT CONNECTED'))
+apiWsConnection.on('disconnect', () => console.info(':::::API CLIENT DISCONNECTED'))
 
 module.exports = (server) => {
   const wsServer = io(server)
   
   apiWsConnection.on('alerts created', created => {
     if (created) {
-      console.info(':::::::::::::::::ALERTS CREATED', created.added.length, created.updated.length)
+      console.info(':::::ALERTS CREATED', created.added.length, created.updated.length)
       wsServer.sockets.emit('alerts changes', created)
     }
   })
 
   wsServer.on('connection', socket => {
-    console.info('::::::::::::::::::::CONNECTED')
+    console.info(':::::CONNECTED')
 
     apiWsConnection.emit('find','alerts',{},(error,data) => {
       if(data) socket.emit('alerts changes', {added: data.alerts})
