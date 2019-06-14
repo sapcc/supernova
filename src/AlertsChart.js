@@ -80,7 +80,7 @@ export default class Alerts extends PureComponent {
         </LineChart>
         */}
         <BarChart
-          width={window.innerWidth}
+          width={this.props.width}
           height={300}
           data={data}
           margin={{

@@ -1,5 +1,26 @@
+
 .App {
   text-align: center;
+}
+
+.AppContent {
+  display: flex;
+}
+
+.Navigation {
+  flex: 0 0 auto;
+  padding: 50px 15px 15px 15px;
+  text-align: left;
+}
+
+.Navigation ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.Content {
+  flex: 1 1 auto;
 }
 
 .App-logo {
