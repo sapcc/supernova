@@ -83,7 +83,6 @@ const App = () => {
         if(!active) return false
 
         const regex = new RegExp(filter.match_re[label])
-        //console.log(':::::::::',label,alert.labels[label],regex, regex.test(alert.labels[label]))
       
         return regex.test(alert.labels[label]) 
       }, true)
@@ -116,9 +115,9 @@ const App = () => {
           </ul>  
         </div>  
         <div className="Content" ref={contentRef}>
-          {/*<AlertDurationChart alerts={items} colors={colors} width={contentWidth}/>*/}
+          <AlertDurationChart alerts={items} colors={colors} width={contentWidth}/>
 
-          <AlertsChart alerts={alerts} colors={colors} width={contentWidth}/>
+          {/*<AlertsChart alerts={alerts} colors={colors} width={contentWidth}/>*/}
           
           <table width="100%">
             <thead>
