@@ -5,6 +5,7 @@ import moment from 'moment'
 import axios from 'axios'
 import './App.css';
 import AlertsChart from './AlertsChart'
+import AlertDurationChart from './AlertDurationChart'
 
 const App = () => {
   const [colors] = useState({critical: '#E74C3C', warning: '#F39C12', info: '#3498DB'})
@@ -68,6 +69,12 @@ const App = () => {
     }
   }
 
+  const toggleAllFilters = (event) => {
+    const checked = event.target.type === 'checkbox' ? event.target.checked : event.target.value
+    const newFilters = filters.map(filter => ({...filter, active: checked}) )
+    updateFilters(newFilters)
+  }
+
   const activeFilters = filters.filter(f => f.active)
 
   const items = alerts.filter(alert => {
@@ -86,7 +93,7 @@ const App = () => {
   })
 
   const contentWidth = contentRef.current ? contentRef.current.getBoundingClientRect().width : 500
-  
+
   return (
     <div className="App">
       <img src={logo} style={{width: 200, height: 200}} className="App-logo" alt="logo" />  
@@ -94,12 +101,14 @@ const App = () => {
       <div className="AppContent">
         <div className="Navigation">
           <ul> 
+            <li><input type="checkbox" checked={ activeFilters.length === filters.length } onChange={toggleAllFilters}/> All</li>
+
             {filters.map((filter,index) => 
               <li key={index}>
                 <input
                   name={filter.name} 
                   type="checkbox" 
-                  checked={filter.active} 
+                  checked={filter.active === true} 
                   onChange={handleFilterChange}
                 /> {filter.name} {' '}
               </li>
@@ -107,6 +116,7 @@ const App = () => {
           </ul>  
         </div>  
         <div className="Content" ref={contentRef}>
+          {/*<AlertDurationChart alerts={items} colors={colors} width={contentWidth}/>*/}
 
           <AlertsChart alerts={alerts} colors={colors} width={contentWidth}/>
           
@@ -139,8 +149,8 @@ const App = () => {
                   <td>{alert.labels.region}</td>
                   <td>{alert.labels.severity}</td>
                   <td>{alert.annotations.summary}</td>
-                  <td>{moment(alert.startsAt).format('DD.MM.YYYY h:mm:ss')}</td>
-                  <td>{moment(alert.endsAt).format('DD.MM.YYYY h:m:ss')}</td>
+                  <td>{moment(alert.startsAt).format('DD.MM.YYYY HH:mm:ss')}</td>
+                  <td>{moment(alert.endsAt).format('DD.MM.YYYY HH:mm:ss')}</td>
                   <td>{JSON.stringify(alert.status)}</td>
                 </tr>
               )}
