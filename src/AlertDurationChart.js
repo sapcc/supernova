@@ -45,7 +45,8 @@ export default class Example extends PureComponent {
       }
     })
     
-    console.log(moment(Date.now()).diff(offset, "days"))
+    let tickCount = moment(Date.now()).diff(offset, 'days')
+    if(tickCount < 1) tickCount = 2
 
     return (
       <ComposedChart
@@ -58,7 +59,7 @@ export default class Example extends PureComponent {
                     }}
       >
         <CartesianGrid stroke="#f5f5f5" />
-        <XAxis type="number" interval='preserveStartEnd' tickFormatter={(a) => moment(a+offset).format('DD.MM.YYYY HH:mm')} minTickGap={2} tickCount={moment(Date.now()).diff(offset, "days")} />
+        <XAxis type="number" interval='preserveStartEnd' tickFormatter={(a) => moment(a+offset).format('DD.MM.YYYY HH:mm')} minTickGap={2} tickCount={tickCount} />
         <YAxis dataKey="name" type="category" hide={true}/>
         <Tooltip labelFormatter={label => label} formatter={(value, name, props) => `${props.payload.label[0]} - ${props.payload.label[1]}`}/>
         <Legend />

@@ -78,6 +78,7 @@ const App = () => {
   const activeFilters = filters.filter(f => f.active)
 
   const items = alerts.filter(alert => {
+    if(moment(alert.endsAt).valueOf() < Date.now()) return false 
     for(let filter of activeFilters) {
       const matches = Object.keys(filter.match_re).reduce((active, label) => {
         if(!active) return false
