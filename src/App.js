@@ -8,7 +8,7 @@ import AlertsChart from './AlertsChart'
 import AlertDurationChart from './AlertDurationChart'
 
 const App = () => {
-  const [colors] = useState({critical: '#E74C3C', warning: '#F39C12', info: '#3498DB'})
+  const [colors] = useState({resolved: 'green', critical: '#E74C3C', warning: '#F39C12', info: '#3498DB'})
   const [alerts, setAlerts] = useState([])
   const [filters, updateFilters] = useState([])
   const contentRef = useRef(null)
@@ -32,16 +32,16 @@ const App = () => {
       console.log('alerts changes', changes)
       setAlerts(alerts => {
         let newAlerts = alerts.slice()
-        if(changes.updated) {
-          changes.updated.forEach(updatedAlert => {
-            const index = newAlerts.findIndex(alert => alert.fingerprint === updatedAlert.fingerprint)
-            if(index => 0) newAlerts[index] = {...updatedAlert}
-          })
-        }
-        if(changes.added) {
-          changes.added.forEach(alert => newAlerts.unshift(alert))
-        }
+        const items = (changes.added || []).concat(changes.updated || [])
+        
+        items.forEach(item => {
+          const index = newAlerts.findIndex(alert => alert.fingerprint === item.fingerprint)
 
+          if(index >= 0 ) { newAlerts[index] = {...item} }
+          else { 
+            newAlerts.push(item) 
+          }
+        })
         //console.log('added',changes.added.length, 'updated', changes.updated.length)
         newAlerts = newAlerts.filter((item,index) => 
           newAlerts.findIndex(element => element.fingerprint === item.fingerprint) === index 
@@ -78,7 +78,7 @@ const App = () => {
   const activeFilters = filters.filter(f => f.active)
 
   const items = alerts.filter(alert => {
-    if(moment(alert.endsAt).valueOf() < Date.now()) return false 
+    //if(moment(alert.endsAt).valueOf() < Date.now()) return false 
     for(let filter of activeFilters) {
       const matches = Object.keys(filter.match_re).reduce((active, label) => {
         if(!active) return false
@@ -130,7 +130,7 @@ const App = () => {
                   Severity
                 </th>  
                 <th>
-                  Summary        
+                  Title       
                 </th>
                 <th style={{width: '150px'}}>
                   Starts At
@@ -145,10 +145,14 @@ const App = () => {
             </thead>
             <tbody>
               {items.map((alert,index) =>
-                <tr key={index} className={alert.labels.severity} style={{color: colors[alert.labels.severity]}}>
+                <tr key={index} className={alert.labels.severity} style={{color: moment(alert.endsAt).valueOf() < Date.now() ? colors.resolved : colors[alert.labels.severity]}}>
                   <td>{alert.labels.region}</td>
                   <td>{alert.labels.severity}</td>
-                  <td>{alert.annotations.summary}</td>
+                  <td>
+                    {alert.annotations.summary}
+                    <br/>
+                    <small className="info">{alert.annotations.description}</small>
+                  </td>
                   <td>{moment(alert.startsAt).format('DD.MM.YYYY HH:mm:ss')}</td>
                   <td>{moment(alert.endsAt).format('DD.MM.YYYY HH:mm:ss')}</td>
                   <td>{JSON.stringify(alert.status)}</td>

@@ -29,19 +29,37 @@ const createAuthToken = () => {
 
 createAuthToken()
 
+// Socket connection to backend (Blackhole)
 apiWsConnection = require('socket.io-client')(process.env.BLACKHOLE_ENDPOINT, { query: { authToken: currentAuthToken } })
 
+// re-new auth token on reconnection
 apiWsConnection.on('reconnect_attempt', () => {
   console.info(':::::API CLIENT RECONNECTING')
   apiWsConnection.io.opts.query = { authToken: currentAuthToken }
 })
 
-apiWsConnection.on('connect', () => console.info(':::::API CLIENT CONNECTED'))
+// log on disconnection
 apiWsConnection.on('disconnect', () => console.info(':::::API CLIENT DISCONNECTED'))
 
 module.exports = (server) => {
+  // Socket connection to client (browser)
   const wsServer = io(server)
-  
+
+  // request alerts from backend and send to the client
+  const loadCurrentAlerts  = () => {
+    console.log('::::::REQUEST AND EMIT ALERTS:::::')
+    apiWsConnection.emit('find','alerts',{},(error,data) => {
+      if(data) wsServer.emit('alerts changes', {added: data.alerts})
+    })
+  }
+
+  // on connection to backend load alerts
+  apiWsConnection.on('connect', () => {
+    console.info(':::::API CLIENT CONNECTED')
+    loadCurrentAlerts()
+  })
+
+  // on socket update from backend send to client
   apiWsConnection.on('alerts created', created => {
     if (created) {
       console.info(':::::ALERTS CREATED', created.added.length, created.updated.length)
@@ -49,11 +67,9 @@ module.exports = (server) => {
     }
   })
 
+  // on connection to the client request alerts from backend
   wsServer.on('connection', socket => {
     console.info(':::::CONNECTED')
-
-    apiWsConnection.emit('find','alerts',{},(error,data) => {
-      if(data) socket.emit('alerts changes', {added: data.alerts})
-    })
+    loadCurrentAlerts()
   })
 }
