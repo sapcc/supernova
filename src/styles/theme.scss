@@ -1,0 +1,83 @@
+@import "../../node_modules/bootstrap/scss/bootstrap";
+
+
+// Variables
+
+$bg-dark:           #354052;
+$bg-dark-active:    #1d232d;
+$light-grey:        #ced4da;
+
+
+
+// Styles
+
+.page {
+    display: flex;
+    padding-left: 0;
+}
+
+
+// SIDEBAR ------------------------------------------------
+.sidebar {
+    @supports (position: sticky) {
+        position: sticky;
+        z-index: 1000;
+        height: 100vh;
+    }
+    background: $bg-dark;
+    border-right: 1px solid rgba(0, 0, 0, .1);    
+    color: $light-grey;
+    flex: 0 1 320px;
+
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+}
+
+
+.sidebar-item {
+    padding: 0;
+
+    input {
+        margin-right: 0.25rem;
+    }
+
+    label {
+        cursor: pointer;
+        display: block;
+        margin: 0;
+        padding-left: 0.4rem;
+    }
+}
+
+.sidebar-link {
+    display: block;
+    padding: 0.75rem 1.5rem;
+
+    &.active {
+        background: darken($bg-dark, 12);
+    }
+
+    svg {
+        margin-right: 0.5rem;
+    }
+}
+
+.sidebar-folder > .sidebar-link {
+    font-size: $font-size-lg;
+}
+
+.sidebar-dropdown {
+    .sidebar-link {
+        padding: 0.25rem 1.5rem;
+    }
+}
+
+
+// --------------------------------------------------------
+
+.content {
+    flex: 0 1 100%;
+    padding: 0 15px 0 30px;
+}
