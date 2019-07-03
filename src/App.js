@@ -3,9 +3,17 @@ import logo from './logo.svg'
 import openSocket from 'socket.io-client'
 import moment from 'moment'
 import axios from 'axios'
-import './App.css';
+import './styles/theme.scss'
+import './App.css'
 import AlertsChart from './AlertsChart'
 import AlertDurationChart from './AlertDurationChart'
+
+// Icons
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faBell } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// build icon library, only needs to be done once, then the icon will be available everywhere
+library.add( faBell )
 
 const App = () => {
   const [colors] = useState({resolved: 'green', critical: '#E74C3C', warning: '#F39C12', info: '#3498DB'})
@@ -95,74 +103,84 @@ const App = () => {
   const contentWidth = contentRef.current ? contentRef.current.getBoundingClientRect().width : 500
 
   return (
-    <div className="App">
-      <img src={logo} style={{width: 200, height: 200}} className="App-logo" alt="logo" />  
-      
-      <div className="AppContent">
-        <div className="Navigation">
-          <ul> 
-            <li><input type="checkbox" checked={ activeFilters.length === filters.length } onChange={toggleAllFilters}/> All</li>
-
-            {filters.map((filter,index) => 
-              <li key={index}>
-                <input
-                  name={filter.name} 
-                  type="checkbox" 
-                  checked={filter.active === true} 
-                  onChange={handleFilterChange}
-                /> {filter.name} {' '}
+    <div className="container-fluid page">
+      <div className="sidebar ">
+        <ul className="sidebar-nav">
+          <li className="sidebar-folder">
+            <span className="sidebar-link active"><FontAwesomeIcon icon="bell" fixedWidth />Alerts</span>
+            <ul className="sidebar-dropdown">
+              <li className="sidebar-item">
+                <span className="sidebar-link">
+                  <label><input type="checkbox" checked={ activeFilters.length === filters.length } onChange={toggleAllFilters} /> All</label>
+                </span>
               </li>
-            )}
-          </ul>  
-        </div>  
-        <div className="Content" ref={contentRef}>
-          <AlertDurationChart alerts={items} colors={colors} width={contentWidth}/>
 
-          {/*<AlertsChart alerts={alerts} colors={colors} width={contentWidth}/>*/}
-          
-          <table width="100%">
-            <thead>
-              <tr>
-                <th style={{width: '100px'}}>
-                  Region
-                </th>  
-                <th> 
-                  Severity
-                </th>  
-                <th>
-                  Title       
-                </th>
-                <th style={{width: '150px'}}>
-                  Starts At
-                </th>
-                <th style={{width: '150px'}}>
-                  Ends At
-                </th>
-                <th>
-                  Status
-                </th>
-              </tr>  
-            </thead>
-            <tbody>
-              {items.map((alert,index) =>
-                <tr key={index} className={alert.labels.severity} style={{color: moment(alert.endsAt).valueOf() < Date.now() ? colors.resolved : colors[alert.labels.severity]}}>
-                  <td>{alert.labels.region}</td>
-                  <td>{alert.labels.severity}</td>
-                  <td>
-                    {alert.annotations.summary}
-                    <br/>
-                    <small className="info">{alert.annotations.description}</small>
-                  </td>
-                  <td>{moment(alert.startsAt).format('DD.MM.YYYY HH:mm:ss')}</td>
-                  <td>{moment(alert.endsAt).format('DD.MM.YYYY HH:mm:ss')}</td>
-                  <td>{JSON.stringify(alert.status)}</td>
-                </tr>
+              {filters.map((filter,index) => 
+                <li className="sidebar-item" key={index}>
+                  <span className="sidebar-link">
+                    <label>
+                      <input
+                        name={filter.name} 
+                        type="checkbox" 
+                        checked={filter.active === true} 
+                        onChange={handleFilterChange}
+                      /> {filter.name} {' '}
+                    </label>
+                  </span>
+                </li>
               )}
-            </tbody> 
-          </table> 
-        </div>
+            </ul>
+          </li>
+        </ul>  
       </div>  
-    </div>  
+
+      <div className="content" ref={contentRef}>
+        <AlertDurationChart alerts={items} colors={colors} width={contentWidth}/>
+
+        {/*<AlertsChart alerts={alerts} colors={colors} width={contentWidth}/>*/}
+        
+        <table width="100%">
+          <thead>
+            <tr>
+              <th style={{width: '100px'}}>
+                Region
+              </th>  
+              <th> 
+                Severity
+              </th>  
+              <th>
+                Title       
+              </th>
+              <th style={{width: '150px'}}>
+                Starts At
+              </th>
+              <th style={{width: '150px'}}>
+                Ends At
+              </th>
+              <th>
+                Status
+              </th>
+            </tr>  
+          </thead>
+          <tbody>
+            {items.map((alert,index) =>
+              <tr key={index} className={alert.labels.severity} style={{color: moment(alert.endsAt).valueOf() < Date.now() ? colors.resolved : colors[alert.labels.severity]}}>
+                <td>{alert.labels.region}</td>
+                <td>{alert.labels.severity}</td>
+                <td>
+                  {alert.annotations.summary}
+                  <br/>
+                  <small className="info">{alert.annotations.description}</small>
+                </td>
+                <td>{moment(alert.startsAt).format('DD.MM.YYYY HH:mm:ss')}</td>
+                <td>{moment(alert.endsAt).format('DD.MM.YYYY HH:mm:ss')}</td>
+                <td>{JSON.stringify(alert.status)}</td>
+              </tr>
+            )}
+          </tbody> 
+        </table> 
+      </div>
+    </div> 
   )
 }
 
