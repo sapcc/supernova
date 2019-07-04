@@ -1,19 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
-import logo from './logo.svg'
 import openSocket from 'socket.io-client'
 import moment from 'moment'
 import axios from 'axios'
 import './styles/theme.scss'
 import './App.css'
-import AlertsChart from './AlertsChart'
+// import AlertsChart from './AlertsChart'
 import AlertDurationChart from './AlertDurationChart'
 
 // Icons
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faBell } from '@fortawesome/free-solid-svg-icons'
+import { faBell, faSun } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // build icon library, only needs to be done once, then the icon will be available everywhere
-library.add( faBell )
+library.add( faBell, faSun )
 
 const App = () => {
   const [colors] = useState({resolved: 'green', critical: '#E74C3C', warning: '#F39C12', info: '#3498DB'})
@@ -105,19 +104,20 @@ const App = () => {
   return (
     <div className="container-fluid page">
       <div className="sidebar ">
+        <div className="sidebar-brand"><FontAwesomeIcon icon="sun" className="logo" />Supernova</div>
         <ul className="sidebar-nav">
           <li className="sidebar-folder">
             <span className="sidebar-link active"><FontAwesomeIcon icon="bell" fixedWidth />Alerts</span>
             <ul className="sidebar-dropdown">
               <li className="sidebar-item">
-                <span className="sidebar-link">
+                <span className={ activeFilters.length === filters.length ? "sidebar-link active" : "sidebar-link"}>
                   <label><input type="checkbox" checked={ activeFilters.length === filters.length } onChange={toggleAllFilters} /> All</label>
                 </span>
               </li>
 
               {filters.map((filter,index) => 
                 <li className="sidebar-item" key={index}>
-                  <span className="sidebar-link">
+                  <span className={filter.active === true ? "sidebar-link active" : "sidebar-link"}>
                     <label>
                       <input
                         name={filter.name} 
@@ -134,53 +134,58 @@ const App = () => {
         </ul>  
       </div>  
 
-      <div className="content" ref={contentRef}>
-        <AlertDurationChart alerts={items} colors={colors} width={contentWidth}/>
+      
+      <div className="main">
+        <nav className="navbar"></nav>
 
-        {/*<AlertsChart alerts={alerts} colors={colors} width={contentWidth}/>*/}
-        
-        <table width="100%">
-          <thead>
-            <tr>
-              <th style={{width: '100px'}}>
-                Region
-              </th>  
-              <th> 
-                Severity
-              </th>  
-              <th>
-                Title       
-              </th>
-              <th style={{width: '150px'}}>
-                Starts At
-              </th>
-              <th style={{width: '150px'}}>
-                Ends At
-              </th>
-              <th>
-                Status
-              </th>
-            </tr>  
-          </thead>
-          <tbody>
-            {items.map((alert,index) =>
-              <tr key={index} className={alert.labels.severity} style={{color: moment(alert.endsAt).valueOf() < Date.now() ? colors.resolved : colors[alert.labels.severity]}}>
-                <td>{alert.labels.region}</td>
-                <td>{alert.labels.severity}</td>
-                <td>
-                  {alert.annotations.summary}
-                  <br/>
-                  <small className="info">{alert.annotations.description}</small>
-                </td>
-                <td>{moment(alert.startsAt).format('DD.MM.YYYY HH:mm:ss')}</td>
-                <td>{moment(alert.endsAt).format('DD.MM.YYYY HH:mm:ss')}</td>
-                <td>{JSON.stringify(alert.status)}</td>
-              </tr>
-            )}
-          </tbody> 
-        </table> 
+        <div className="content" ref={contentRef}>
+          {/* <AlertDurationChart alerts={items} colors={colors} width={contentWidth}/> */}
+  
+          {/*<AlertsChart alerts={alerts} colors={colors} width={contentWidth}/>*/}
+  
+          <table className="table table-main">
+            <thead>
+              <tr>
+                <th>
+                  Region
+                </th>  
+                <th> 
+                  Severity
+                </th>  
+                <th>
+                  Title       
+                </th>
+                <th>
+                  Starts At
+                </th>
+                <th>
+                  Ends At
+                </th>
+                <th>
+                  Status
+                </th>
+              </tr>  
+            </thead>
+            <tbody>
+              {items.map((alert,index) =>
+                <tr key={index} className={alert.labels.severity} style={{color: moment(alert.endsAt).valueOf() < Date.now() ? colors.resolved : colors[alert.labels.severity]}}>
+                  <td className="text-nowrap">{alert.labels.region}</td>
+                  <td>{alert.labels.severity}</td>
+                  <td>
+                    {alert.annotations.summary}
+                    <br/>
+                    <small className="info">{alert.annotations.description}</small>
+                  </td>
+                  <td>{moment(alert.startsAt).format('DD.MM.YYYY HH:mm:ss')}</td>
+                  <td>{moment(alert.endsAt).format('DD.MM.YYYY HH:mm:ss')}</td>
+                  <td>{JSON.stringify(alert.status)}</td>
+                </tr>
+              )}
+            </tbody> 
+          </table> 
+        </div>
+      </div> 
       </div>
-    </div> 
   )
 }
 
