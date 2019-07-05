@@ -1,11 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
-import logo from './logo.svg'
+import { Badge } from 'reactstrap';
 import openSocket from 'socket.io-client'
 import moment from 'moment'
 import axios from 'axios'
-import './App.css';
-import AlertsChart from './AlertsChart'
+import './styles/theme.scss'
+import './App.css'
+// import AlertsChart from './AlertsChart'
 import AlertDurationChart from './AlertDurationChart'
+
+// Icons --------------------------------------------------------
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faBell, faSun } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// build icon library, only needs to be done once, then the icon will be available everywhere
+library.add( faBell, faSun )
+// --------------------------------------------------------------
 
 const App = () => {
   const [colors] = useState({resolved: 'green', critical: '#E74C3C', warning: '#F39C12', info: '#3498DB'})
@@ -92,38 +101,63 @@ const App = () => {
     return false
   })
 
+  const severityOrResolved = (alert) => {
+    console.log(alert);
+    if (moment(alert.endsAt).valueOf() < Date.now()) {
+      return "resolved"
+    } else {
+      return alert.labels.severity
+    }
+  }
+
   const contentWidth = contentRef.current ? contentRef.current.getBoundingClientRect().width : 500
 
   return (
-    <div className="App">
-      <img src={logo} style={{width: 200, height: 200}} className="App-logo" alt="logo" />  
-      
-      <div className="AppContent">
-        <div className="Navigation">
-          <ul> 
-            <li><input type="checkbox" checked={ activeFilters.length === filters.length } onChange={toggleAllFilters}/> All</li>
-
-            {filters.map((filter,index) => 
-              <li key={index}>
-                <input
-                  name={filter.name} 
-                  type="checkbox" 
-                  checked={filter.active === true} 
-                  onChange={handleFilterChange}
-                /> {filter.name} {' '}
+    <div className="container-fluid page">
+      <div className="sidebar ">
+        <div className="sidebar-brand"><FontAwesomeIcon icon="sun" className="logo" />Supernova</div>
+        <ul className="sidebar-nav">
+          <li className="sidebar-folder">
+            <span className="sidebar-link active"><FontAwesomeIcon icon="bell" fixedWidth />Alerts</span>
+            <ul className="sidebar-dropdown">
+              <li className="sidebar-item">
+                <span className={ activeFilters.length === filters.length ? "sidebar-link active" : "sidebar-link"}>
+                  <label><input type="checkbox" checked={ activeFilters.length === filters.length } onChange={toggleAllFilters} /> All</label>
+                </span>
               </li>
-            )}
-          </ul>  
-        </div>  
-        <div className="Content" ref={contentRef}>
-          <AlertDurationChart alerts={items} colors={colors} width={contentWidth}/>
 
+              {filters.map((filter,index) => 
+                <li className="sidebar-item" key={index}>
+                  <span className={filter.active === true ? "sidebar-link active" : "sidebar-link"}>
+                    <label>
+                      <input
+                        name={filter.name} 
+                        type="checkbox" 
+                        checked={filter.active === true} 
+                        onChange={handleFilterChange}
+                      /> {filter.name} {' '}
+                    </label>
+                  </span>
+                </li>
+              )}
+            </ul>
+          </li>
+        </ul>  
+      </div>  
+
+      
+      <div className="main">
+        <nav className="navbar"></nav>
+
+        <div className="content" ref={contentRef}>
+          {/* <AlertDurationChart alerts={items} colors={colors} width={contentWidth}/> */}
+  
           {/*<AlertsChart alerts={alerts} colors={colors} width={contentWidth}/>*/}
-          
-          <table width="100%">
+  
+          <table className="table table-main">
             <thead>
               <tr>
-                <th style={{width: '100px'}}>
+                <th>
                   Region
                 </th>  
                 <th> 
@@ -132,10 +166,10 @@ const App = () => {
                 <th>
                   Title       
                 </th>
-                <th style={{width: '150px'}}>
+                <th>
                   Starts At
                 </th>
-                <th style={{width: '150px'}}>
+                <th>
                   Ends At
                 </th>
                 <th>
@@ -145,9 +179,17 @@ const App = () => {
             </thead>
             <tbody>
               {items.map((alert,index) =>
-                <tr key={index} className={alert.labels.severity} style={{color: moment(alert.endsAt).valueOf() < Date.now() ? colors.resolved : colors[alert.labels.severity]}}>
-                  <td>{alert.labels.region}</td>
-                  <td>{alert.labels.severity}</td>
+                <tr key={index} className={severityOrResolved(alert)} >
+                  <td className="text-nowrap">{alert.labels.region}</td>
+                  <td>
+                    {alert.labels.severity}
+                    { severityOrResolved(alert) === "resolved" &&
+                        <React.Fragment>
+                          <br />
+                          <Badge color="success">Resolved</Badge>
+                        </React.Fragment>
+                    }
+                  </td>
                   <td>
                     {alert.annotations.summary}
                     <br/>
@@ -161,8 +203,8 @@ const App = () => {
             </tbody> 
           </table> 
         </div>
-      </div>  
-    </div>  
+      </div> 
+      </div>
   )
 }
 
