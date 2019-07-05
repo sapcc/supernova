@@ -1,6 +1,3 @@
-@import "../../node_modules/bootstrap/scss/bootstrap";
-
-
 // VARIABLES ----------------------------------------------
 
 // Brand Colors ---------------
@@ -41,15 +38,66 @@ $bg-dark-active:    #1d232d;
 $light-grey:        #ced4da;
 $border-light:      #E5E9F2;
 
+// Bootstrap Overrides ---------------
+
+$theme-colors: (
+    "primary":    $bright-blue,
+    "secondary":  #ced4da,
+    "success":    $bright-green,
+    "info":       $bright-blue,
+    "warning":    $light-sapgold
+);
+
+@import "../../node_modules/bootstrap/scss/bootstrap";
 
 
-// Styles
+
+
+
+// Status elements ----------------------------------------
+
+.critical td {
+    background: lighten($danger, 42);
+}
+
+.warning td {
+    background: lighten($warning, 42);
+}
+
+.info td {
+    background: lighten($info, 55);
+}
+
+.resolved td {
+    background: none;
+}
+
+// --------------------------------------------------------
+
+
+// Layout components --------------------------------------
 
 .page {
     display: flex;
     padding-left: 0;
     padding-right: 0;
 }
+
+.main {
+    flex: 0 1 100%;
+}
+
+.content {
+    padding: 30px 30px 30px 30px;
+}
+
+.navbar {
+    border-bottom: 1px solid $border-light;
+    box-shadow: 0 0 1px 1px rgba(100, 100, 100, 0.05);
+    height: 55px;
+}
+
+// --------------------------------------------------------
 
 
 // SIDEBAR ------------------------------------------------
@@ -130,24 +178,6 @@ $border-light:      #E5E9F2;
     }
 }
 
-
-// --------------------------------------------------------
-
-// Layout components --------------------------------------
-
-.main {
-    flex: 0 1 100%;
-}
-
-.content {
-    padding: 30px 30px 30px 30px;
-}
-
-.navbar {
-    border-bottom: 1px solid $border-light;
-    box-shadow: 0 0 1px 1px rgba(100, 100, 100, 0.05);
-    height: 55px;
-}
 
 // --------------------------------------------------------
 
