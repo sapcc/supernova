@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Badge } from 'reactstrap';
 import openSocket from 'socket.io-client'
 import moment from 'moment'
 import axios from 'axios'
@@ -7,12 +8,13 @@ import './App.css'
 // import AlertsChart from './AlertsChart'
 import AlertDurationChart from './AlertDurationChart'
 
-// Icons
+// Icons --------------------------------------------------------
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faBell, faSun } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // build icon library, only needs to be done once, then the icon will be available everywhere
 library.add( faBell, faSun )
+// --------------------------------------------------------------
 
 const App = () => {
   const [colors] = useState({resolved: 'green', critical: '#E74C3C', warning: '#F39C12', info: '#3498DB'})
@@ -99,6 +101,15 @@ const App = () => {
     return false
   })
 
+  const severityOrResolved = (alert) => {
+    console.log(alert);
+    if (moment(alert.endsAt).valueOf() < Date.now()) {
+      return "resolved"
+    } else {
+      return alert.labels.severity
+    }
+  }
+
   const contentWidth = contentRef.current ? contentRef.current.getBoundingClientRect().width : 500
 
   return (
@@ -168,9 +179,17 @@ const App = () => {
             </thead>
             <tbody>
               {items.map((alert,index) =>
-                <tr key={index} className={alert.labels.severity} style={{color: moment(alert.endsAt).valueOf() < Date.now() ? colors.resolved : colors[alert.labels.severity]}}>
+                <tr key={index} className={severityOrResolved(alert)} >
                   <td className="text-nowrap">{alert.labels.region}</td>
-                  <td>{alert.labels.severity}</td>
+                  <td>
+                    {alert.labels.severity}
+                    { severityOrResolved(alert) === "resolved" &&
+                        <React.Fragment>
+                          <br />
+                          <Badge color="success">Resolved</Badge>
+                        </React.Fragment>
+                    }
+                  </td>
                   <td>
                     {alert.annotations.summary}
                     <br/>
