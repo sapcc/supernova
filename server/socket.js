@@ -15,7 +15,8 @@ module.exports = (server) => {
   
   // PERIODIC LOAD. 
   // Create a timer for periodic polling of new alerts  
-  const timer = setInterval(() => loadAlerts(wsServer.sockets), 5000)
+  const timer = setInterval(() => loadAlerts(wsServer.sockets), 
+    process.env.ALERTS_UPDATE_TIMEOUT_SEC * 1000)
 
   // INITIAL LOAD. 
   // Every time a new client connects, load new alerts and send them to this client. 
