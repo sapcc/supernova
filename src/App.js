@@ -6,7 +6,7 @@ import axios from 'axios'
 import './styles/theme.scss'
 import './App.css'
 // import AlertsChart from './AlertsChart'
-import AlertDurationChart from './AlertDurationChart'
+// import AlertDurationChart from './AlertDurationChart'
 
 // Icons --------------------------------------------------------
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -17,7 +17,7 @@ library.add( faBell, faSun )
 // --------------------------------------------------------------
 
 const App = () => {
-  const [colors] = useState({resolved: 'green', critical: '#E74C3C', warning: '#F39C12', info: '#3498DB'})
+  // const [colors] = useState({resolved: 'green', critical: '#E74C3C', warning: '#F39C12', info: '#3498DB'})
   const [alerts, setAlerts] = useState([])
   const [filters, updateFilters] = useState([])
   const contentRef = useRef(null)
@@ -35,28 +35,17 @@ const App = () => {
 
   useEffect(() => {
     let socket = openSocket('/')
-    
-    // register listener for changes
-    socket.on('alerts changes', changes => {
-      console.log('alerts changes', changes)
-      setAlerts(alerts => {
-        let newAlerts = alerts.slice()
-        const items = (changes.added || []).concat(changes.updated || [])
-        
-        items.forEach(item => {
-          const index = newAlerts.findIndex(alert => alert.fingerprint === item.fingerprint)
 
-          if(index >= 0 ) { newAlerts[index] = {...item} }
-          else { 
-            newAlerts.push(item) 
-          }
-        })
-        //console.log('added',changes.added.length, 'updated', changes.updated.length)
-        newAlerts = newAlerts.filter((item,index) => 
-          newAlerts.findIndex(element => element.fingerprint === item.fingerprint) === index 
+    // register listener for changes
+    socket.on('alerts update', alerts => {
+      // console.log('alerts update', alerts)
+      if(alerts) {
+        const newAlerts = alerts.filter((item,index) => 
+          alerts.findIndex(a => a.fingerprint === item.fingerprint) === index
         )
-        return sortAlerts(newAlerts)
-      })
+
+        setAlerts(sortAlerts(newAlerts))
+      }
     })
 
     return () => socket && socket.disconnect()
@@ -93,7 +82,7 @@ const App = () => {
         if(!active) return false
 
         const regex = new RegExp(filter.match_re[label])
-      
+
         return regex.test(alert.labels[label]) 
       }, true)
       if(matches) return true
@@ -102,7 +91,7 @@ const App = () => {
   })
 
   const severityOrResolved = (alert) => {
-    console.log(alert);
+    // console.log(alert);
     if (moment(alert.endsAt).valueOf() < Date.now()) {
       return "resolved"
     } else {
@@ -110,7 +99,7 @@ const App = () => {
     }
   }
 
-  const contentWidth = contentRef.current ? contentRef.current.getBoundingClientRect().width : 500
+  // const contentWidth = contentRef.current ? contentRef.current.getBoundingClientRect().width : 500
 
   return (
     <div className="container-fluid page">
@@ -145,15 +134,15 @@ const App = () => {
         </ul>  
       </div>  
 
-      
+
       <div className="main">
         <nav className="navbar"></nav>
 
         <div className="content" ref={contentRef}>
           {/* <AlertDurationChart alerts={items} colors={colors} width={contentWidth}/> */}
-  
+
           {/*<AlertsChart alerts={alerts} colors={colors} width={contentWidth}/>*/}
-  
+
           <table className="table table-main">
             <thead>
               <tr>
@@ -204,7 +193,7 @@ const App = () => {
           </table> 
         </div>
       </div> 
-      </div>
+    </div>
   )
 }
 
