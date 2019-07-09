@@ -3,7 +3,7 @@ require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
 const path = require('path')
-const configureWesocket = require('./server/socket_proxy')
+const configureWesocket = require('./server/socket')
 const app = express()
 const port = process.env.NODE_ENV === 'production' ? 80 : process.env.PORT || 5000
 
