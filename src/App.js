@@ -38,6 +38,7 @@ const App = () => {
 
     // register listener for changes
     socket.on('alerts update', alerts => {
+      // console.log('update alerts')
       // console.log('alerts update', alerts)
       if(alerts) {
         const newAlerts = alerts.filter((item,index) => 
@@ -52,7 +53,12 @@ const App = () => {
   }, [])
 
   const sortAlerts = (alerts) => {
-    return alerts.sort((a,b) => a.startsAt<b.startsAt ? 1 : a.startsAt>b.startsAt ? -1 : 0)
+    return alerts.sort((a,b) => {
+      if((a.labels.severity==='critical' && b.labels.severity!=='critical') || 
+         (a.labels.severity==='warning' && ['critical','warning'].indexOf(b.labels.severity) < 0)) return -1  
+      else if(a.labels.severity===b.labels.severity) return 0
+      else return 1
+    })
   }
 
   const handleFilterChange = (event) => {
