@@ -30,7 +30,12 @@ module.exports = (server) => {
 
   // INITIAL LOAD. 
   // Every time a new client connects, send current alerts this client. 
-  wsServer.on('connection', socket => 
+  wsServer.on('connection', socket => { 
+    
+    console.log(':::CLIENT CONNECTED:::')
     getCurrentAlerts().then(alerts => socket.emit(ALERTS_UPDATE,alerts))
-  )
+  })
+
+  server.on('upgrade', () => console.log(':::UPGRADE:::'));
 }
+
