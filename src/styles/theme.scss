@@ -42,7 +42,6 @@ $border-light:      #E5E9F2;
 
 $theme-colors: (
     "primary":    $bright-blue,
-    "secondary":  #ced4da,
     "success":    $bright-green,
     "info":       $bright-blue,
     "warning":    $light-sapgold
@@ -52,6 +51,17 @@ $theme-colors: (
 
 
 
+// Shared Utilities ----------------------------------------
+
+.u-text-info {
+    color: $gray-500;
+}
+
+.u-v-align-middle {
+    vertical-align: middle !important;
+}
+
+// --------------------------------------------------------
 
 
 // Status elements ----------------------------------------
@@ -104,6 +114,7 @@ $theme-colors: (
 .sidebar {
     @supports (position: sticky) {
         position: sticky;
+        top: 0;
         z-index: 1000;
         height: 100vh;
     }
@@ -188,4 +199,20 @@ $theme-colors: (
     th {
         border-top: none;
     }
+
+    button {
+        white-space: nowrap;
+    }
 }
+
+// --------------------------------------------------------
+
+
+
+// Components ----------------------------------------------
+
+.react-json-view {
+    word-break: break-all;
+}
+
+// --------------------------------------------------------
