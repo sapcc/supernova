@@ -48,7 +48,6 @@ const App = () => {
         setAlerts(sortAlerts(newAlerts))
       }
     })
-
     return () => socket && socket.disconnect()
   }, [])
 
