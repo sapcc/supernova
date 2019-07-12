@@ -1,8 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Badge } from 'reactstrap';
+import { Badge, Button } from 'reactstrap';
 import openSocket from 'socket.io-client'
 import moment from 'moment'
 import axios from 'axios'
+import ReactJson from 'react-json-view'
+
+
+import useModal from './components/shared/useModal'
+import SuperModal from './components/shared/SuperModal'
+
 import './styles/theme.scss'
 import './App.css'
 // import AlertsChart from './AlertsChart'
@@ -21,6 +27,8 @@ const App = () => {
   const [alerts, setAlerts] = useState([])
   const [filters, updateFilters] = useState([])
   const contentRef = useRef(null)
+  const {modalIsShowing, toggleModal} = useModal()
+  const [modalContent, setModalContent] = useState([])
 
   useEffect(() => {
     axios.get('/api/filters')
@@ -104,6 +112,16 @@ const App = () => {
     }
   }
 
+  const toggleDetailsModal = (alert) => {
+    const contentForModal = {
+      header: <React.Fragment>Raw Data for <span className="u-text-info">&quot;{alert.annotations.summary}&quot;</span></React.Fragment>,
+      body: <ReactJson src={alert} collapsed={2} collapseStringsAfterLength={100} />,
+      cancelButtonText: "Close" 
+    }
+    setModalContent(contentForModal)
+    toggleModal()
+  }
+
   // const contentWidth = contentRef.current ? contentRef.current.getBoundingClientRect().width : 500
 
   return (
@@ -147,7 +165,6 @@ const App = () => {
           {/* <AlertDurationChart alerts={items} colors={colors} width={contentWidth}/> */}
 
           {/*<AlertsChart alerts={alerts} colors={colors} width={contentWidth}/>*/}
-
           <table className="table table-main">
             <thead>
               <tr>
@@ -169,9 +186,11 @@ const App = () => {
                 <th>
                   Status
                 </th>
+                <th></th>
               </tr>  
             </thead>
             <tbody>
+              {/* IF NO ALERTS -> YAY */}
               {items.map((alert,index) =>
                 <tr key={index} className={severityOrResolved(alert)} >
                   <td className="text-nowrap">{alert.labels.region}</td>
@@ -192,13 +211,19 @@ const App = () => {
                   <td>{moment(alert.startsAt).format('DD.MM.YYYY HH:mm:ss')}</td>
                   <td>{moment(alert.endsAt).format('DD.MM.YYYY HH:mm:ss')}</td>
                   <td>{JSON.stringify(alert.status)}</td>
+                  <td className="u-v-align-middle"><Button outline size="sm" onClick={() => toggleDetailsModal(alert)}>Raw data</Button></td>
                 </tr>
               )}
             </tbody> 
           </table> 
         </div>
       </div> 
+      
+      <SuperModal isShowing={modalIsShowing} hide={toggleModal} header={modalContent.header} footer={modalContent.footer} cancelButtonText={modalContent.cancelButtonText}>{modalContent.body}</SuperModal>
+      
+
     </div>
+
   )
 }
 
