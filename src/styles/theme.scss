@@ -53,8 +53,12 @@ $theme-colors: (
 
 // Shared Utilities ----------------------------------------
 
-.u-text-info {
+.u-text-info-light {
     color: $gray-500;
+}
+
+.u-text-info {
+    color: $gray-600;
 }
 
 .u-v-align-middle {

@@ -122,6 +122,27 @@ const App = () => {
     toggleModal()
   }
 
+  const alertStatus = (status) => {
+    console.log(status)
+    return (
+      <React.Fragment>
+        {status.state &&
+          <div>{status.state}</div>
+        }
+        {status.inhibitedBy && status.inhibitedBy.length ?
+          <div className="u-text-info">Inhibited by: {status.inhibitedBy}</div>
+          :
+          ""
+        }
+        {status.silencedBy && status.silencedBy.length ?
+          <div className="u-text-info">Silenced by: {status.silencedBy}</div>
+          :
+          ""
+        }
+      </React.Fragment>
+    )
+  }
+
   // const contentWidth = contentRef.current ? contentRef.current.getBoundingClientRect().width : 500
 
   return (
@@ -206,11 +227,11 @@ const App = () => {
                   <td>
                     {alert.annotations.summary}
                     <br/>
-                    <small className="info">{alert.annotations.description}</small>
+                    <small className="u-text-info">{alert.annotations.description}</small>
                   </td>
                   <td>{moment(alert.startsAt).format('DD.MM.YYYY HH:mm:ss')}</td>
                   <td>{moment(alert.endsAt).format('DD.MM.YYYY HH:mm:ss')}</td>
-                  <td>{JSON.stringify(alert.status)}</td>
+                  <td>{alertStatus(alert.status)}</td>
                   <td className="u-v-align-middle"><Button outline size="sm" onClick={() => toggleDetailsModal(alert)}>Raw data</Button></td>
                 </tr>
               )}
