@@ -12,7 +12,7 @@ const loadAlerts = async () =>
     .then(alerts => currentAlerts = alerts)
     .catch(error => {
       console.error('API ERROR: ',error)
-      return []
+      return currentAlerts || []
     })
 
 const getCurrentAlerts = async () => currentAlerts ? currentAlerts : loadAlerts()
