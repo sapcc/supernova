@@ -25,7 +25,7 @@ module.exports = (server) => {
   // Create a timer for periodic polling of new alerts  
   const timer = setInterval(() => 
     loadAlerts().then(alerts => wsServer.sockets.emit(ALERTS_UPDATE,alerts))
-    , process.env.ALERTS_UPDATE_TIMEOUT_SEC * 1000
+    , (process.env.ALERTS_UPDATE_TIMEOUT_SEC || 30) * 1000
   )
 
   // INITIAL LOAD. 
