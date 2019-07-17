@@ -8,12 +8,7 @@ export default ({alerts,filters,showModal}) => {
   const activeFilters = filters.items.filter(f => f.active)
 
   // sort and filter alerts
-  const items = alerts.items.sort((a,b) => {
-    if((a.labels.severity==='critical' && b.labels.severity!=='critical') || 
-       (a.labels.severity==='warning' && ['critical','warning'].indexOf(b.labels.severity) < 0)) return -1  
-    else if(a.labels.severity===b.labels.severity) return 0
-    else return 1
-  }).filter(alert => {
+  const items = alerts.items.filter(alert => {
     //if(moment(alert.endsAt).valueOf() < Date.now()) return false 
     for(let filter of activeFilters) {
       const matches = Object.keys(filter.match_re).reduce((active, label) => {
