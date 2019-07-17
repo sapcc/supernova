@@ -149,18 +149,12 @@ $theme-colors: (
 
 
 .sidebar-item {
-    padding: 0;
+    cursor: pointer;
+    padding-left: 0.4rem;
 
     input {
         margin-right: 0.25rem;
         cursor: pointer;
-    }
-
-    label {
-        cursor: pointer;
-        display: block;
-        margin: 0;
-        padding-left: 0.4rem;
     }
 }
 
@@ -170,6 +164,8 @@ $theme-colors: (
 
     &.active {
         background: darken($bg-dark, 12);
+        font-weight: bold;
+        color: #fff;
     }
 
     svg {
@@ -179,6 +175,10 @@ $theme-colors: (
 
 .sidebar-folder > .sidebar-link {
     font-size: $font-size-lg;
+
+    &.active {
+        font-weight: normal;
+    }
 }
 
 .sidebar-dropdown {

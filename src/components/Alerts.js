@@ -7,21 +7,22 @@ export default ({alerts,filters,showModal}) => {
 
   const activeFilters = filters.items.filter(f => f.active)
 
-  // sort and filter alerts
-  const items = alerts.items.filter(alert => {
-    //if(moment(alert.endsAt).valueOf() < Date.now()) return false 
-    for(let filter of activeFilters) {
-      const matches = Object.keys(filter.match_re).reduce((active, label) => {
-        if(!active) return false
 
-        const regex = new RegExp(filter.match_re[label])
+  const items = !activeFilters || !activeFilters.length ?
+    alerts.items // don't filter at all if filters are empty
+    :
+    alerts.items.filter(alert => {
+      for(let filter of activeFilters) {
+        const matches = Object.keys(filter.match_re).reduce((active, label) => {
+          if(!active) return false
+          const regex = new RegExp(filter.match_re[label])
 
-        return regex.test(alert.labels[label]) 
-      }, true)
-      if(matches) return true
-    }
-    return false
-  })
+          return regex.test(alert.labels[label]) 
+        }, true)
+        if(matches) return true
+      }
+      return false
+    })
 
   const severityOrResolved = (alert) => {
     // console.log(alert);

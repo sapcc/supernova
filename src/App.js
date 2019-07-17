@@ -41,7 +41,7 @@ const App = () => {
   const loadFilters = () => {
     dispatch({type: 'REQUEST_FILTERS'})
     axios.get('/api/filters').then(response => {
-      const filters = response.data.map(f => {f.active = true; return f})
+      const filters = response.data
       dispatch({type: 'RECEIVE_FILTERS', items: filters})
     }).catch(error => dispatch({type: 'REQUEST_FILTERS_FAILURE', error}))
   }

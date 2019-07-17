@@ -10,8 +10,8 @@ let currentAlerts;
 const sortAlerts = (alerts) => 
   alerts.sort((a,b) => {
     if((a.labels.severity==='critical' && b.labels.severity!=='critical') || 
-       (a.labels.severity==='warning' && ['critical','warning'].indexOf(b.labels.severity) < 0)  ) return -1  
-    else if(a.labels.severity===b.labels.severity) return 0
+      (a.labels.severity==='warning' && ['critical','warning'].indexOf(b.labels.severity) < 0)) return -1  
+    else if(a.labels.severity===b.labels.severity) return a.labels.region.localeCompare(b.labels.region)
     else return 1
   })
 ;
