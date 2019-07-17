@@ -5,17 +5,19 @@ const initialState = {
   error: null
 }
 
-const setFilter = (state,{name,checked}) => {
+const setFilter = (state,{name,active}) => {
   const index = state.items.findIndex(f => f.name === name)
   if(index < 0) return state 
   
-  const newItems = state.items.slice()
-  newItems[index] = {...newItems[index], active: checked}
+  const resetItems = state.items.map(filter => ({...filter, active: false}) )
+
+  const newItems = resetItems.slice()
+  newItems[index] = {...newItems[index], active: active}
   return {...state, items: newItems}
 }
 
-const toggleAll = (state,{checked}) => {
-  const newItems = state.items.map(filter => ({...filter, active: checked}) )
+const resetAll = (state) => {
+  const newItems = state.items.map(filter => ({...filter, active: false}) )
   return {...state, items: newItems}
 }
 
@@ -29,8 +31,8 @@ export default (state = initialState, action) => {
       return {...state, isLoading: false, error: action.error}
     case 'SET_FILTER':
       return setFilter(state,action)
-    case 'TOGGLE_ALL':
-      return toggleAll(state,action)
+    case 'RESET_ALL':
+      return resetAll(state,action)
     default:
       return state
   }
