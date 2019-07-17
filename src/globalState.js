@@ -1,8 +1,7 @@
 /**
  * This module implements global state based on react hooks and context.
  **/
-
-import React, { useReducer, createContext, useContext, useMemo } from 'react';
+import React, { useReducer, createContext, useContext } from 'react';
 
 // Global State Context
 const GlobalState = createContext(null)
@@ -14,25 +13,6 @@ const useGlobalState = () => useContext(GlobalState)
 // Custom hook for dispatch usage
 const useDispatch = () => useContext(Dispatch)
 
-/**
- * Use this function to execute code dependent on some state attributes.
- * The code will be executed only when given state props are changing!
- * useGlobalStateProps(['key.subkey'], (state) => <div>{state.key.subkey}</div>)
- **/ 
-const useGlobalStateProps = (keys,fn) => {
-  const state = useGlobalState()
-  const values = [] 
-  keys.forEach(key => {
-    const path = key.split('.')
-    let value = state
-    do { 
-      value = value[path.shift()]
-    } while (value && path.length > 0)
-    values.push(value)
-  })
-
-  return useMemo(() => fn(state),values)
-}
 
 // This function combines multiple reducers.
 const combineReducers = (reducer) => {
@@ -61,7 +41,6 @@ const GlobalStateProvider = ({reducers, children}) => {
 
 export {
   useGlobalState,
-  useGlobalStateProps,
   useDispatch,
   GlobalStateProvider
 }    

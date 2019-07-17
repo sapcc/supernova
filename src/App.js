@@ -35,6 +35,7 @@ const App = () => {
   useEffect(() => {
     loadFilters()
     loadAlerts()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const loadFilters = () => {
