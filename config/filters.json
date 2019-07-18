@@ -1,0 +1,14 @@
+{
+  "cluster": [],
+  "cluster_type": [],
+  "context": [],
+  "prometheus": [],
+  "region": [],
+  "service": [],
+  "severity": [],
+  "tier": [],
+  "app": [],
+  "type": [],
+  "state": [],
+  "job": []
+}

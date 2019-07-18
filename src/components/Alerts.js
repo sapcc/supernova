@@ -3,19 +3,16 @@ import { Badge, Button } from 'reactstrap'
 import moment from 'moment'
 import ReactJson from 'react-json-view'
 
-export default ({alerts,filters,showModal}) => {
+export default ({alerts,categories ,activeCategories,showModal}) => {
 
-  const activeFilters = filters.items.filter(f => f.active)
-
-
-  const items = !activeFilters || !activeFilters.length ?
-    alerts.items // don't filter at all if filters are empty
+  const items = !activeCategories || !activeCategories.length ?
+    alerts.items // don't filter at all if categories  are empty
     :
     alerts.items.filter(alert => {
-      for(let filter of activeFilters) {
-        const matches = Object.keys(filter.match_re).reduce((active, label) => {
+      for(let category of activeCategories) {
+        const matches = Object.keys(category.match_re).reduce((active, label) => {
           if(!active) return false
-          const regex = new RegExp(filter.match_re[label])
+          const regex = new RegExp(category.match_re[label])
 
           return regex.test(alert.labels[label]) 
         }, true)

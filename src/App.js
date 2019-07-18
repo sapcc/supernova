@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import openSocket from 'socket.io-client'
 import axios from 'axios'
 
@@ -10,6 +10,8 @@ import Alerts from './components/Alerts'
 
 import useModal from './components/shared/useModal'
 import SuperModal from './components/shared/SuperModal'
+
+import useUrlFilters from './components/shared/useUrlFilters'
 
 import './styles/theme.scss'
 import './App.css'
@@ -24,21 +26,46 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 library.add( faBell, faSun )
 // --------------------------------------------------------------
 
-
 const App = () => {
   const dispatch = useDispatch()
-  const {alerts, filters} = useGlobalState()
+  const state = useGlobalState()
+  const {alerts, filters, categories} = state
   const contentRef = useRef(null)
   const {modalIsShowing, toggleModal} = useModal()
   const [modalContent, setModalContent] = useState([])
+  const [urlFilters,setUrlFilters] = useUrlFilters()
+
+  const activeCategories = useMemo(() => categories.items.filter(c => c.active), [categories.items])
+
+  console.log('State:',state)
+  
+  useEffect(() => {
+    setUrlFilters(activeCategories.map(f => f.name))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[activeCategories])
 
   useEffect(() => {
     const loadFilters = () => {
       dispatch({type: 'REQUEST_FILTERS'})
-      axios.get('/api/filters').then(response => {
-        const filters = response.data.map(f => {f.active = true; return f})
-        dispatch({type: 'RECEIVE_FILTERS', items: filters})
-      }).catch(error => dispatch({type: 'REQUEST_FILTERS_FAILURE', error}))
+      axios.get('/api/filters')
+        .then(response => response.data)
+        .then(filters => dispatch({type:'RECEIVE_FILTERS', settings: filters}))
+        .catch(error => dispatch({type: 'REQUEST_FILTERS_FAILURE'}))
+    }
+
+    const loadCategories = () => {
+      dispatch({type: 'REQUEST_CATEGORIES'})
+      axios.get('/api/categories')
+        .then(response => response.data)
+        .then(categories => {
+          // init active categories from url
+          if(urlFilters && urlFilters.length > 0) {
+            categories.forEach(c => c.active = urlFilters.indexOf(c.name) > -1 ? true : false)
+          }
+          return categories
+        })
+        .then(categories => dispatch({type: 'RECEIVE_CATEGORIES', items: categories}))
+        .catch(error => dispatch({type: 'REQUEST_CATEGORIES_FAILURE', error}))
     }
 
     const loadAlerts = () => {
@@ -48,12 +75,14 @@ const App = () => {
         if(alerts) dispatch({type: 'RECEIVE_ALERTS', items: alerts})
       })
     }   
+
+    loadCategories()
     loadFilters()
     loadAlerts()
     
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
+ 
   return (
     <div className="container-fluid page">
       <div className="sidebar ">
@@ -61,7 +90,7 @@ const App = () => {
         <ul className="sidebar-nav">
           <li className="sidebar-folder">
             <span className="sidebar-link active"><FontAwesomeIcon icon="bell" fixedWidth />Alerts</span>
-            <Categories filters={filters}/>
+            <Categories categories={categories} activeCategories={activeCategories}/>
           </li>
         </ul>  
       </div>  
@@ -73,7 +102,8 @@ const App = () => {
         <div className="content" ref={contentRef}>
           <Alerts 
             alerts={alerts} 
-            filters={filters} 
+            categories={categories} 
+            activeCategories={activeCategories}
             showModal={(content) => { setModalContent(content); toggleModal() }}
           />
         </div>
