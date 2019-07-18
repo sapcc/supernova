@@ -33,26 +33,26 @@ const App = () => {
   const [modalContent, setModalContent] = useState([])
 
   useEffect(() => {
+    const loadFilters = () => {
+      dispatch({type: 'REQUEST_FILTERS'})
+      axios.get('/api/filters').then(response => {
+        const filters = response.data.map(f => {f.active = true; return f})
+        dispatch({type: 'RECEIVE_FILTERS', items: filters})
+      }).catch(error => dispatch({type: 'REQUEST_FILTERS_FAILURE', error}))
+    }
+
+    const loadAlerts = () => {
+      dispatch({type: 'REQUEST_ALERTS'})
+      let socket = openSocket('/')
+      socket.on('alerts update', alerts => {
+        if(alerts) dispatch({type: 'RECEIVE_ALERTS', items: alerts})
+      })
+    }   
     loadFilters()
     loadAlerts()
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  const loadFilters = () => {
-    dispatch({type: 'REQUEST_FILTERS'})
-    axios.get('/api/filters').then(response => {
-      const filters = response.data
-      dispatch({type: 'RECEIVE_FILTERS', items: filters})
-    }).catch(error => dispatch({type: 'REQUEST_FILTERS_FAILURE', error}))
-  }
-
-  const loadAlerts = () => {
-    dispatch({type: 'REQUEST_ALERTS'})
-    let socket = openSocket('/')
-    socket.on('alerts update', alerts => {
-      if(alerts) dispatch({type: 'RECEIVE_ALERTS', items: alerts})
-    })
-  }
 
   return (
     <div className="container-fluid page">
