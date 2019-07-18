@@ -1,37 +1,36 @@
 import React from 'react';
 import { useDispatch } from '../globalState'
 
-export default ({filters}) => {
+export default ({categories,activeCategories}) => {
   const dispatch = useDispatch()
 
-  const handleFilterChange = (filter) => {
-    dispatch({type: 'SET_FILTER', name: filter.name, active: !filter.active})
+  const handleCategoryChange = (category) => {
+    dispatch({type: 'SET_CATEGORY_STATUS', name: category.name, active: !category.active})
   }
 
-  const resetAllFilters = (event) => {
-    dispatch({type: 'RESET_ALL'})
+  const resetAllCategories = (event) => {
+    dispatch({type: 'RESET_ALL_CATEGORIES'})
   }
 
-  const activeFilters = filters.items.filter(f => f.active)
-
-  if(filters.isLoading) return <span>Loading...</span>
+  if(categories.isLoading) return <span>Loading...</span>
 
   return (
     <ul className="sidebar-dropdown">
-      <li className="sidebar-item" key="showallfilters">
+      <li className="sidebar-item" key="showall
+  categories">
         <span 
-          className={!activeFilters.length ? "sidebar-link active" : "sidebar-link"}
-          onClick={() => resetAllFilters()}>
+          className={!activeCategories.length ? "sidebar-link active" : "sidebar-link"}
+          onClick={() => resetAllCategories()}>
           All
         </span>
       </li>
 
-      {filters.items.map((filter,index) => 
+      {categories.items.map((category,index) => 
         <li className="sidebar-item" key={index}>
           <span 
-            className={filter.active === true ? "sidebar-link active" : "sidebar-link"}
-            onClick={() => handleFilterChange(filter)}>
-            {filter.name}
+            className={category.active === true ? "sidebar-link active" : "sidebar-link"}
+            onClick={() => handleCategoryChange(category)}>
+            {category.name}
           </span>
         </li>
       )}

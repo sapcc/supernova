@@ -4,7 +4,7 @@ let filters
 
 const loadFilters = async () => {
   if(!filters) {
-    const content = fs.readFileSync( __dirname + '/../../config/filters/default.json', 'utf8')
+    const content = fs.readFileSync( __dirname + '/../../config/filters.json', 'utf8')
     filters = JSON.parse(content)
   }
   return filters
