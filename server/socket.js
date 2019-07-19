@@ -3,7 +3,10 @@ const axios = require('axios')
 
 const ALERTS_UPDATE = 'alerts update'
 
+// cache vars
 let currentAlerts;
+let currentAlertsString;
+let hasNewAlerts = false
 
 // This function sorts alerts by severity 
 // critical > warning > info ...
@@ -22,7 +25,20 @@ const loadAlerts = async () =>
     .get(process.env.ALERTS_API_ENDPOINT)
     .then(response => response.data)
     .then(alerts => sortAlerts(alerts))
-    .then(alerts => currentAlerts = alerts)
+    .then(alerts => {
+      // build alerts string
+      const jsonString = JSON.stringify(alerts)
+      // reset new status
+      hasNewAlerts = false
+      // only if new alerts have changed
+      // update currentAlerts and new status to true
+      if(!currentAlertsString || currentAlertsString !== jsonString) {
+        currentAlerts = alerts
+        currentAlertsString = jsonString
+        hasNewAlerts = true
+      }
+      return currentAlerts
+    })
     .catch(error => {
       console.error('API ERROR: ',error)
       return currentAlerts || []
@@ -40,7 +56,11 @@ module.exports = (server) => {
   // PERIODIC LOAD. 
   // Create a timer for periodic polling of new alerts
   const timer = setInterval(() => 
-    loadAlerts().then(alerts => wsServer.sockets.emit(ALERTS_UPDATE,alerts))
+    loadAlerts().then(alerts => {
+      if(hasNewAlerts) {
+        wsServer.sockets.emit(ALERTS_UPDATE,alerts)
+      }
+    })
     , timeout * 1000
   )
 

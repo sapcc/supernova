@@ -30,9 +30,18 @@ const GlobalStateProvider = ({reducers, children}) => {
   const store = combineReducers(reducers)
   const [state,dispatch] = useReducer(store, store(undefined,{}))
 
+  const myDispatch = (action) => {
+    if(process.env.NODE_ENV === 'development') {
+      const params = {...action}
+      delete(params.type)
+      console.log(action.type, Object.keys(params).length === 0 ? '' : params)
+    }
+    return dispatch(action)
+  }
+
   return ( 
     <GlobalState.Provider value={state}>
-      <Dispatch.Provider value={dispatch}>
+      <Dispatch.Provider value={myDispatch}>
         {children}
       </Dispatch.Provider>
     </GlobalState.Provider>
