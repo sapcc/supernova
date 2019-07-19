@@ -37,8 +37,6 @@ const App = () => {
 
   const activeCategories = useMemo(() => categories.items.filter(c => c.active), [categories.items])
 
-  console.log('State:',state)
-  
   useEffect(() => {
     setUrlFilters(activeCategories.map(f => f.name))
     // eslint-disable-next-line react-hooks/exhaustive-deps
