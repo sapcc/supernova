@@ -29,41 +29,35 @@ library.add( faBell, faSun )
 const App = () => {
   const dispatch = useDispatch()
   const state = useGlobalState()
-  const {alerts, filters, categories} = state
+  const {alerts, filters} = state
   const contentRef = useRef(null)
   const {modalIsShowing, toggleModal} = useModal()
   const [modalContent, setModalContent] = useState([])
-  const [urlFilters,setUrlFilters] = useUrlFilters()
+  const [urlFilters,setUrlFilters] = useUrlFilters(['category','label'])
 
-  const activeCategories = useMemo(() => categories.items.filter(c => c.active), [categories.items])
+  const activeCategories = useMemo(() => filters.categories.filter(c => c.active), [filters.categories])
 
   useEffect(() => {
-    setUrlFilters(activeCategories.map(f => f.name))
+    setUrlFilters({"category": activeCategories.map(f => f.name),"label": filters.labels})
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[activeCategories])
+  },[activeCategories,filters.labels])
 
   useEffect(() => {
     const loadFilters = () => {
       dispatch({type: 'REQUEST_FILTERS'})
       axios.get('/api/filters')
         .then(response => response.data)
-        .then(filters => dispatch({type:'RECEIVE_FILTERS', settings: filters}))
-        .catch(error => dispatch({type: 'REQUEST_FILTERS_FAILURE'}))
-    }
-
-    const loadCategories = () => {
-      dispatch({type: 'REQUEST_CATEGORIES'})
-      axios.get('/api/categories')
-        .then(response => response.data)
-        .then(categories => {
-          // init active categories from url
-          if(urlFilters && urlFilters.length > 0) {
-            categories.forEach(c => c.active = urlFilters.indexOf(c.name) > -1 ? true : false)
+        .then(filters => {
+          if(urlFilters.category) {
+            filters.categories.forEach(c => c.active = urlFilters.category.indexOf(c.name) > -1 ? true : false)
           }
-          return categories
+          if(urlFilters.label) { 
+            filters.labels = Object.assign(filters.labels,urlFilters.label)
+          }
+          return filters
         })
-        .then(categories => dispatch({type: 'RECEIVE_CATEGORIES', items: categories}))
-        .catch(error => dispatch({type: 'REQUEST_CATEGORIES_FAILURE', error}))
+        .then(filters => dispatch({type:'RECEIVE_FILTERS', filters}))
+        .catch(error => dispatch({type: 'REQUEST_FILTERS_FAILURE'}))
     }
 
     const loadAlerts = () => {
@@ -74,7 +68,6 @@ const App = () => {
       })
     }   
 
-    loadCategories()
     loadFilters()
     loadAlerts()
     
@@ -88,7 +81,11 @@ const App = () => {
         <ul className="sidebar-nav">
           <li className="sidebar-folder">
             <span className="sidebar-link active"><FontAwesomeIcon icon="bell" fixedWidth />Alerts</span>
-            <Categories categories={categories} activeCategories={activeCategories}/>
+            <Categories 
+              categories={filters.categories} 
+              activeCategories={activeCategories}
+              isLoading={filters.isLoading}
+            />
           </li>
         </ul>  
       </div>  
@@ -100,7 +97,7 @@ const App = () => {
         <div className="content" ref={contentRef}>
           <Alerts 
             alerts={alerts} 
-            categories={categories} 
+            filterLabels={filters.labels} 
             activeCategories={activeCategories}
             showModal={(content) => { setModalContent(content); toggleModal() }}
           />

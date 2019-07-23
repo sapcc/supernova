@@ -3,7 +3,12 @@ import { Badge, Button } from 'reactstrap'
 import moment from 'moment'
 import ReactJson from 'react-json-view'
 
-export default ({alerts,categories ,activeCategories,showModal}) => {
+export default ({alerts,categories ,activeCategories,filterLabels,showModal}) => {
+
+  const activeLabels = {}
+  for(let name in filterLabels) { 
+    if(filterLabels[name] && filterLabels[name].length>0) activeLabels[name] = filterLabels[name] 
+  }
 
   const items = !activeCategories || !activeCategories.length ?
     alerts.items // don't filter at all if categories  are empty
@@ -19,6 +24,11 @@ export default ({alerts,categories ,activeCategories,showModal}) => {
         if(matches) return true
       }
       return false
+    }).filter(alert => {
+      for(let name in activeLabels) { 
+        if(activeLabels[name].indexOf(alert.labels[name]) < 0) return false
+      }
+      return true
     })
 
   const severityOrResolved = (alert) => {

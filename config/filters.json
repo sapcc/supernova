@@ -1,14 +1,63 @@
-{
-  "cluster": [],
-  "cluster_type": [],
-  "context": [],
-  "prometheus": [],
-  "region": [],
-  "service": [],
-  "severity": [],
-  "tier": [],
-  "app": [],
-  "type": [],
-  "state": [],
-  "job": []
+{ 
+  "categories": 
+  [
+    {
+      "name": "API",
+      "match_re": {
+        "tier": "^(?:os|k8s)$"
+      }
+    },
+    {
+      "name": "Concourse",
+      "match_re": {
+        "service": "^(?:concourse)$"
+      }
+    },
+    {
+      "name": "k8s",
+      "match_re": {
+        "tier": "^(?:k8s)$"
+      }
+    },
+    {
+      "name": "Kubernikus",
+      "match_re": {
+        "tier": "^(?:kks)$"
+      }
+    },
+    {
+      "name": "Metal",
+      "match_re": {
+        "tier": "^(?:metal)$"
+      }
+    },
+    {
+      "name": "Net",
+      "match_re": {
+        "tier": "^(?:net)$"
+      }
+    },
+    {
+      "name": "VmWare",
+      "match_re": {
+        "tier": "^(?:vmware)$"
+      }
+    }
+  ],
+
+  "labels": 
+  {
+    "cluster": [],
+    "cluster_type": [],
+    "context": [],
+    "prometheus": [],
+    "region": [],
+    "service": [],
+    "severity": [],
+    "tier": [],
+    "app": [],
+    "type": [],
+    "state": [],
+    "job": []
+  }
 }

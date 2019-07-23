@@ -1,18 +1,18 @@
 import React from 'react';
 import { useDispatch } from '../globalState'
 
-export default ({categories,activeCategories}) => {
+export default ({categories,activeCategories,isLoading}) => {
   const dispatch = useDispatch()
 
   const handleCategoryChange = (category) => {
-    dispatch({type: 'SET_CATEGORY_STATUS', name: category.name, active: !category.active})
+    dispatch({type: 'SET_ACTIVE_CATEGORY', name: category.name, active: !category.active})
   }
 
   const resetAllCategories = (event) => {
     dispatch({type: 'RESET_ALL_CATEGORIES'})
   }
 
-  if(categories.isLoading) return <span>Loading...</span>
+  if(isLoading) return <span>Loading...</span>
 
   return (
     <ul className="sidebar-dropdown">
@@ -25,7 +25,7 @@ export default ({categories,activeCategories}) => {
         </span>
       </li>
 
-      {categories.items.map((category,index) => 
+      {categories.map((category,index) => 
         <li className="sidebar-item" key={index}>
           <span 
             className={category.active === true ? "sidebar-link active" : "sidebar-link"}
