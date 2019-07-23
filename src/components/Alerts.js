@@ -10,7 +10,7 @@ export default ({alerts,categories ,activeCategories,filterLabels,showModal}) =>
     if(filterLabels[name] && filterLabels[name].length>0) activeLabels[name] = filterLabels[name] 
   }
 
-  const items = !activeCategories || !activeCategories.length ?
+  let items = !activeCategories || !activeCategories.length  ?
     alerts.items // don't filter at all if categories  are empty
     :
     alerts.items.filter(alert => {
@@ -24,12 +24,16 @@ export default ({alerts,categories ,activeCategories,filterLabels,showModal}) =>
         if(matches) return true
       }
       return false
-    }).filter(alert => {
+    })
+    
+  if(Object.keys(activeLabels).length >= 0) {
+    items = items.filter(alert => {
       for(let name in activeLabels) { 
         if(activeLabels[name].indexOf(alert.labels[name]) < 0) return false
       }
       return true
     })
+  }
 
   const severityOrResolved = (alert) => {
     // console.log(alert);
