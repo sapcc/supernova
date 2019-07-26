@@ -63,13 +63,26 @@ export default ({alerts,categories ,activeCategories,filterLabels,showModal}) =>
           ""
         }
         {status.silencedBy && status.silencedBy.length ?
-          <div className="u-text-info">Silenced by: {status.silencedBy}</div>
+          <div className="u-text-info u-text-small">Silenced by: {status.silencedBy}</div>
           :
           ""
         }
       </React.Fragment>
     )
   }
+
+  // get white-listed filter labels, filter out the ones we show anyway in the list, then check each of the remaining ones if they exist on the given alert. If yes render a filter pill for them
+  const alertLabels = (alert) => (
+    <React.Fragment>
+      {Object.keys(filterLabels)
+        .filter((label) => /^((?!(\bregion\b|\bseverity\b|\bcluster\b)).)*$/.test(label))
+        .map((labelKey) =>
+          alert.labels[labelKey] &&
+            <span className="filter-pill" key={labelKey}>{labelKey} = {alert.labels[labelKey]}</span>
+      )}
+    </React.Fragment>
+  )
+
 
   return (
     <table className="table table-main">
@@ -103,17 +116,13 @@ export default ({alerts,categories ,activeCategories,filterLabels,showModal}) =>
             <td className="text-nowrap">{alert.labels.region}</td>
             <td>
               {alert.labels.severity}
-              { severityOrResolved(alert) === "resolved" &&
-                  <React.Fragment>
-                    <br />
-                    <Badge color="success">Resolved</Badge>
-                  </React.Fragment>
-              }
             </td>
             <td>
               {alert.annotations.summary}
               <br/>
               <small className="u-text-info">{alert.annotations.description}</small>
+              <br />
+              {alertLabels(alert)}
             </td>
             <td>{moment(alert.startsAt).format('DD.MM.YYYY HH:mm:ss')}</td>
             <td>{moment(alert.endsAt).format('DD.MM.YYYY HH:mm:ss')}</td>
