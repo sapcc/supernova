@@ -47,17 +47,17 @@
 
   "labelFilters": 
   {
+    "app": [],
     "cluster": [],
     "cluster_type": [],
     "context": [],
+    "job": [],
     "prometheus": [],
     "region": [],
     "service": [],
     "severity": [],
-    "tier": [],
-    "app": [],
-    "type": [],
     "state": [],
-    "job": []
+    "tier": [],
+    "type": []
   }
 }
