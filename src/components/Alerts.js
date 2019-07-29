@@ -3,18 +3,20 @@ import { Badge, Button } from 'reactstrap'
 import moment from 'moment'
 import ReactJson from 'react-json-view'
 
-export default ({alerts,categories ,activeCategories,filterLabels,showModal}) => {
+const Alerts = ({alerts,categories,labelFilters,showModal}) => {
 
-  const activeLabels = {}
-  for(let name in filterLabels) { 
-    if(filterLabels[name] && filterLabels[name].length>0) activeLabels[name] = filterLabels[name] 
+  const activeLabelFilters = {}
+  for(let name in labelFilters) { 
+    if(labelFilters[name] && labelFilters[name].length>0) activeLabelFilters[name] = labelFilters[name] 
   }
 
-  let items = !activeCategories || !activeCategories.length  ?
+  let items = categories.active.length === 0 ?
     alerts.items // don't filter at all if categories  are empty
     :
     alerts.items.filter(alert => {
-      for(let category of activeCategories) {
+      for(let category of categories.items) {
+        if(!category.active) continue
+
         const matches = Object.keys(category.match_re).reduce((active, label) => {
           if(!active) return false
           const regex = new RegExp(category.match_re[label])
@@ -26,10 +28,10 @@ export default ({alerts,categories ,activeCategories,filterLabels,showModal}) =>
       return false
     })
     
-  if(Object.keys(activeLabels).length >= 0) {
+  if(Object.keys(activeLabelFilters).length >= 0) {
     items = items.filter(alert => {
-      for(let name in activeLabels) { 
-        if(activeLabels[name].indexOf(alert.labels[name]) < 0) return false
+      for(let name in activeLabelFilters) { 
+        if(activeLabelFilters[name].indexOf(alert.labels[name]) < 0) return false
       }
       return true
     })
@@ -125,3 +127,5 @@ export default ({alerts,categories ,activeCategories,filterLabels,showModal}) =>
     </table> 
   )
 }
+
+export default Alerts

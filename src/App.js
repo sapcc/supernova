@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import openSocket from 'socket.io-client'
 import axios from 'axios'
 
@@ -29,46 +29,54 @@ library.add( faBell, faSun )
 const App = () => {
   const dispatch = useDispatch()
   const state = useGlobalState()
-  const {alerts, filters} = state
+  const {alerts, categories, labelFilters} = state
   const contentRef = useRef(null)
   const {modalIsShowing, toggleModal} = useModal()
   const [modalContent, setModalContent] = useState([])
   const [urlFilters,setUrlFilters] = useUrlFilters(['category','label'])
 
-  const activeCategories = useMemo(() => filters.categories.filter(c => c.active), [filters.categories])
-
   useEffect(() => {
-    setUrlFilters({"category": activeCategories.map(f => f.name),"label": filters.labels})
+    setUrlFilters({"category": categories.active, "label": labelFilters.settings})
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[activeCategories,filters.labels])
+  },[categories.active,labelFilters.settings])
 
   useEffect(() => {
-    const loadFilters = () => {
+    // load default values
+    const loadConfig = () => {
+      dispatch({type: 'REQUEST_CATEGORIES'})
       dispatch({type: 'REQUEST_FILTERS'})
-      axios.get('/api/filters')
+      axios.get('/api/config')
         .then(response => response.data)
-        .then(filters => {
+        .then(config => {
+          // extend default values with values from URL
           if(urlFilters.category) {
-            filters.categories.forEach(c => c.active = urlFilters.category.indexOf(c.name) > -1 ? true : false)
+            config.categories.forEach(c => c.active = (urlFilters.category.indexOf(c.name) > -1))
           }
           if(urlFilters.label) { 
-            filters.labels = Object.assign(filters.labels,urlFilters.label)
+            config.labelFilters = Object.assign(config.labelFilters, urlFilters.label)
           }
-          return filters
+          return config
         })
-        .then(filters => dispatch({type:'RECEIVE_FILTERS', filters}))
-        .catch(error => dispatch({type: 'REQUEST_FILTERS_FAILURE'}))
+        .then(config => {
+          dispatch({type:'RECEIVE_CATEGORIES', items: config.categories})
+          dispatch({type:'RECEIVE_LABEL_FILTERS', settings: config.labelFilters})
+        })
+        .catch(error => { 
+          dispatch({type: 'REQUEST_CATEGORIES_FAILURE'})
+          dispatch({type: 'REQUEST_LABEL_FILTERS_FAILURE'})
+        })
     }
 
     const loadAlerts = () => {
       dispatch({type: 'REQUEST_ALERTS'})
       let socket = openSocket('/')
       socket.on('alerts update', alerts => {
-        if(alerts) dispatch({type: 'RECEIVE_ALERTS', items: alerts})
+        const {items,counts,labelValues} = alerts
+        if(alerts) dispatch({type: 'RECEIVE_ALERTS', items,counts,labelValues})
       })
     }   
 
-    loadFilters()
+    loadConfig()
     loadAlerts()
     
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -81,11 +89,7 @@ const App = () => {
         <ul className="sidebar-nav">
           <li className="sidebar-folder">
             <span className="sidebar-link active"><FontAwesomeIcon icon="bell" fixedWidth />Alerts</span>
-            <Categories 
-              categories={filters.categories} 
-              activeCategories={activeCategories}
-              isLoading={filters.isLoading}
-            />
+            <Categories categories={categories} counts={alerts.counts.category}/>
           </li>
         </ul>  
       </div>  
@@ -97,8 +101,8 @@ const App = () => {
         <div className="content" ref={contentRef}>
           <Alerts 
             alerts={alerts} 
-            filterLabels={filters.labels} 
-            activeCategories={activeCategories}
+            labelFilters={labelFilters} 
+            categories={categories}
             showModal={(content) => { setModalContent(content); toggleModal() }}
           />
         </div>
