@@ -1,7 +1,9 @@
-import filters from './filters'
+import categories from './categories'
+import labelFilters from './labelFilters'
 import alerts from './alerts'
 
 export default {
-  filters,
+  categories,
+  labelFilters,
   alerts
 }

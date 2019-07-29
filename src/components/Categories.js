@@ -1,7 +1,19 @@
-import React from 'react';
+import React from 'react'
+import { Badge } from 'reactstrap'
 import { useDispatch } from '../globalState'
 
-export default ({categories,activeCategories,isLoading}) => {
+const CategoryCounts = ({critical,warning,info}) => {
+  return (
+    <span>
+      {critical && <Badge color='danger' pill>{critical}</Badge>}
+      {/*{warning && <Badge color='warning'>{warning}</Badge>}
+      {info && <Badge color='info'>{info}</Badge>}
+      */}
+    </span>
+  )
+}
+
+const Categories = ({categories, counts}) => {
   const dispatch = useDispatch()
 
   const handleCategoryChange = (category) => {
@@ -9,31 +21,33 @@ export default ({categories,activeCategories,isLoading}) => {
   }
 
   const resetAllCategories = (event) => {
-    dispatch({type: 'RESET_ALL_CATEGORIES'})
+    dispatch({type: 'RESET_CATEGORIES'})
   }
 
-  if(isLoading) return <span>Loading...</span>
+  if(categories.isLoading) return <span>Loading...</span>
 
   return (
     <ul className="sidebar-dropdown">
       <li className="sidebar-item" key="showall
   categories">
         <span 
-          className={!activeCategories.length ? "sidebar-link active" : "sidebar-link"}
+          className={!categories.active.length ? "sidebar-link active" : "sidebar-link"}
           onClick={() => resetAllCategories()}>
           All
         </span>
       </li>
 
-      {categories.map((category,index) => 
+      {categories.items.map((category,index) => 
         <li className="sidebar-item" key={index}>
           <span 
             className={category.active === true ? "sidebar-link active" : "sidebar-link"}
             onClick={() => handleCategoryChange(category)}>
-            {category.name}
+            {category.name} {counts && counts[category.name] && <CategoryCounts {...counts[category.name]}/>}
           </span>
         </li>
       )}
     </ul>
   )
 }
+
+export default Categories
