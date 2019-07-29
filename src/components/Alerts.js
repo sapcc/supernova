@@ -71,11 +71,11 @@ export default ({alerts,categories ,activeCategories,filterLabels,showModal}) =>
     )
   }
 
-  // get white-listed filter labels, filter out the ones we show anyway in the list, then check each of the remaining ones if they exist on the given alert. If yes render a filter pill for them
+  // get white-listed filter labels, filter out the ones we show in the list anyway, then check each of the remaining ones if they exist on the given alert. If yes render a filter pill for them
   const alertLabels = (alert) => (
     <React.Fragment>
       {Object.keys(filterLabels)
-        .filter((label) => /^((?!(\bregion\b|\bseverity\b|\bcluster\b)).)*$/.test(label))
+        .filter((label) => /^((?!(\bregion\b|\bseverity\b)).)*$/.test(label))
         .map((labelKey) =>
           alert.labels[labelKey] &&
             <span className="filter-pill" key={labelKey}>{labelKey} = {alert.labels[labelKey]}</span>
