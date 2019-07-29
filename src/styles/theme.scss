@@ -61,6 +61,10 @@ $theme-colors: (
     color: $gray-600;
 }
 
+.u-text-small {
+    font-size: $small-font-size;
+}
+
 .u-v-align-middle {
     vertical-align: middle !important;
 }
@@ -217,6 +221,18 @@ $theme-colors: (
 
 .react-json-view {
     word-break: break-all;
+}
+
+.filter-pill {
+    background: rgba(255, 255, 255, 0.5);
+    color: $gray-600;
+    display: inline-block;
+    font-size: $small-font-size;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    margin: 0.5rem 1rem 0 0;
+    padding: 0.1rem 0.4rem;
+    white-space: nowrap;
 }
 
 // --------------------------------------------------------
