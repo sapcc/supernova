@@ -32,10 +32,18 @@ const extendAlerts = (items) => {
   const result = {items, counts: {}, labelValues: {}}
   //counts -> category -> NAME -> SEVERITY -> number
   items.forEach(alert => {
-    if(alert.labels.region) {
+    if(alert.labels.region && alert.labels.severity) {
       result.counts['region'] = result.counts['region'] || {}
-      result.counts['region'][alert.labels.region] = result.counts['region'][alert.labels.region] || 0
-      result.counts['region'][alert.labels.region] += 1
+      result.counts['region'][alert.labels.region] = result.counts['region'][alert.labels.region] || {}
+      result.counts['region'][alert.labels.region][alert.labels.severity] = result.counts['region'][alert.labels.region][alert.labels.severity] || 0
+      result.counts['region'][alert.labels.region][alert.labels.severity] += 1   
+    }
+
+    for(let name in alert.labels) {
+      if(config.labelFilters.hasOwnProperty(name)) {
+        result.labelValues[name] = result.labelValues[name] || []
+        result.labelValues[name].push(alert.labels[name])
+      }
     }
 
     for(let category of config.categories) {
