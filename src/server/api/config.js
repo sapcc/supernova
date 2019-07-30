@@ -4,7 +4,7 @@ let clientConfig
 
 const loadClientConfig = async () => {
   if(!clientConfig) {
-    const content = fs.readFileSync( __dirname + '/../../config/clientConfig.json', 'utf8')
+    const content = fs.readFileSync( __dirname + '/../../../config/clientConfig.json', 'utf8')
     clientConfig = JSON.parse(content)
   }
   return clientConfig

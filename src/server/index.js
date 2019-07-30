@@ -3,7 +3,7 @@ require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
 const path = require('path')
-const configureWesocket = require('./server/socket')
+const configureWesocket = require('./socket')
 const app = express()
 const port = process.env.NODE_ENV === 'production' ? 80 : process.env.PORT || 5000
 
@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/system/readiness', (req,res) => res.sendStatus(200))
 app.use('/system/liveliness', (req,res) => res.sendStatus(200))
 
-app.use('/api', require('./server/api'))
+app.use('/api', require('./api'))
 
 const server = require('http').createServer(app)
 configureWesocket(server)
