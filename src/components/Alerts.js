@@ -1,5 +1,5 @@
 import React from 'react'
-import { Badge, Button } from 'reactstrap'
+import { Button } from 'reactstrap'
 import moment from 'moment'
 import ReactJson from 'react-json-view'
 

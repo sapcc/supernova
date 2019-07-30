@@ -2,7 +2,7 @@ const io= require('socket.io')
 const axios = require('axios')
 const fs = require('fs')
 
-let config = JSON.parse(fs.readFileSync( __dirname + '/../config/clientConfig.json', 'utf8'))
+let config = JSON.parse(fs.readFileSync( __dirname + '/../../config/clientConfig.json', 'utf8'))
 
 // This function sorts alerts by severity 
 // critical > warning > info ...
@@ -42,7 +42,9 @@ const extendAlerts = (items) => {
     for(let name in alert.labels) {
       if(config.labelFilters.hasOwnProperty(name)) {
         result.labelValues[name] = result.labelValues[name] || []
-        result.labelValues[name].push(alert.labels[name])
+        if(result.labelValues[name].indexOf(alert.labels[name])<0) {
+          result.labelValues[name].push(alert.labels[name])
+        }
       }
     }
 
@@ -62,6 +64,7 @@ const extendAlerts = (items) => {
       }
     } 
   })
+  Object.keys(result.labelValues).forEach(k => result.labelValues[k] = result.labelValues[k].sort())
 
   return result
 }

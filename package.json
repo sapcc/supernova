@@ -27,8 +27,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "production": "NODE_ENV=production node server",
-    "server": "nodemon server",
+    "production": "NODE_ENV=production node src/server",
+    "server": "nodemon src/server",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn start\" "
   },
   "eslintConfig": {
