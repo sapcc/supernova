@@ -1,5 +1,5 @@
-import axios from 'axios'
-import alertsLoader from './alertsLoader'
+const axios = require('axios')
+const alertsLoader = require('./alertsLoader')
 
 jest.mock('axios')
 

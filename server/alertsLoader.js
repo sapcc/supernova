@@ -1,8 +1,6 @@
 const io= require('socket.io') 
 const axios = require('axios')
-const fs = require('fs')
-
-let config = JSON.parse(fs.readFileSync( __dirname + '/../../config/clientConfig.json', 'utf8'))
+const config = require('./configLoader')
 
 // This function sorts alerts by severity 
 // critical > warning > info ...
