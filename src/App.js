@@ -100,7 +100,7 @@ const App = () => {
         <nav className="navbar"></nav>
 
         <div className="content" ref={contentRef}>
-          <Filters filterLabels={filters.labels} />
+          <Filters filterLabels={labelFilters.settings, alerts.labelValues} />
           <Alerts 
             alerts={alerts} 
             labelFilters={labelFilters} 

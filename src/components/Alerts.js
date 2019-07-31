@@ -6,8 +6,9 @@ import ReactJson from 'react-json-view'
 const Alerts = ({alerts,categories,labelFilters,showModal}) => {
 
   const activeLabelFilters = {}
-  for(let name in labelFilters) { 
-    if(labelFilters[name] && labelFilters[name].length>0) activeLabelFilters[name] = labelFilters[name] 
+  const labelSettings = labelFilters.settings
+  for(let name in labelSettings) { 
+    if(labelSettings[name] && labelSettings[name].length>0) activeLabelFilters[name] = labelSettings[name] 
   }
 
   let items = categories.active.length === 0 ?
@@ -76,7 +77,7 @@ const Alerts = ({alerts,categories,labelFilters,showModal}) => {
   // get white-listed filter labels, filter out the ones we show in the list anyway, then check each of the remaining ones if they exist on the given alert. If yes render a filter pill for them
   const alertLabels = (alert) => (
     <React.Fragment>
-      {Object.keys(labelFilters)
+      {Object.keys(labelFilters.settings)
         .filter((label) => /^((?!(\bregion\b|\bseverity\b)).)*$/.test(label))
         .map((labelKey, index) =>
           alert.labels[labelKey] &&

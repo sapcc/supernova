@@ -3,14 +3,14 @@ import { Col, Form, FormGroup, Label, Input } from 'reactstrap'
 import { useDispatch } from '../globalState'
 
 
-const Filters = ({filterLabels}) => {
+const Filters = ({filterLabels, labelValues}) => {
   // Filter out the top level labels (they will get special treatment, i.e. display, or actions)
   const secondTierFilterLabels = Object.keys(filterLabels).filter(label => /^((?!(\bregion\b|\bseverity\b|\bstate\b)).)*$/.test(label))
 
   const dispatch = useDispatch()
 
   const addFilter = (event) => {
-    dispatch({type: 'ADD_FILTER', name: event.target.name, value: event.target.value})
+    dispatch({type: 'ADD_LABEL_FILTER', name: event.target.name, value: event.target.value})
   }
 
   return(
@@ -24,7 +24,13 @@ const Filters = ({filterLabels}) => {
                 <Col  sm={8} >
                   <Input type="select" bsSize="sm" name={topTierLabel} id={`filter-${topTierLabel}`} value={filterLabels[topTierLabel]} onChange={(e) => addFilter(e)}>
                     <option value=""></option>
-                    <option value="eu-de-2">eu-de-2</option>
+                    {labelValues ?
+                      labelValues[topTierLabel].map(value =>
+                        <option value={value} key={`${topTierLabel}-${value}`}>{value}</option>
+                      )
+                      :
+                      <option value="">Loading values...</option>
+                    }
                   </Input>
                 </Col>
               </FormGroup>
@@ -32,11 +38,11 @@ const Filters = ({filterLabels}) => {
           </div>
           <div className="filter-section">
             { secondTierFilterLabels.map((label) =>
-              <FormGroup key={ `filter-${label}`} row>
-                <Label for={ `filter-${label}` } sm={4}>{label}</Label>
+              <FormGroup key={`filter-${label}`} row>
+                <Label for={`filter-${label}` } sm={4}>{label}</Label>
                 <Col  sm={8} >
                   <Input type="select" bsSize="sm" name={label} id={`filter-${label}`} value={filterLabels[label]} onChange={(e) => addFilter(e)}>
-                    
+
                   </Input>
                 </Col>
               </FormGroup>
