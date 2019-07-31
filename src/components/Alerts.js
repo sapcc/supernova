@@ -78,9 +78,9 @@ const Alerts = ({alerts,categories,labelFilters,showModal}) => {
     <React.Fragment>
       {Object.keys(labelFilters)
         .filter((label) => /^((?!(\bregion\b|\bseverity\b)).)*$/.test(label))
-        .map((labelKey) =>
+        .map((labelKey, index) =>
           alert.labels[labelKey] &&
-            <span className="filter-pill" key={labelKey}>{labelKey} = {alert.labels[labelKey]}</span>
+            <span className="filter-pill" key={ `pill-${labelKey}` }>{labelKey} = {alert.labels[labelKey]}</span>
       )}
     </React.Fragment>
   )
