@@ -8,6 +8,7 @@ import reducers from './reducers'
 import Categories from './components/Categories'
 import Alerts from './components/Alerts'
 import Filters from './components/Filters'
+import DevTools from './components/DevTools'
 
 import useModal from './components/shared/useModal'
 import SuperModal from './components/shared/SuperModal'
@@ -112,6 +113,7 @@ const App = () => {
       
       <SuperModal isShowing={modalIsShowing} hide={toggleModal} header={modalContent.header} footer={modalContent.footer} cancelButtonText={modalContent.cancelButtonText}>{modalContent.body}</SuperModal>
 
+      {process.env.NODE_ENV === 'development' && <DevTools/>}
     </div>
   )
 }
