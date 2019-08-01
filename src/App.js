@@ -7,6 +7,7 @@ import reducers from './reducers'
 
 import Categories from './components/Categories'
 import Alerts from './components/Alerts'
+import Filters from './components/Filters'
 
 import useModal from './components/shared/useModal'
 import SuperModal from './components/shared/SuperModal'
@@ -99,6 +100,7 @@ const App = () => {
         <nav className="navbar"></nav>
 
         <div className="content" ref={contentRef}>
+          <Filters filterLabels={labelFilters.settings, alerts.labelValues} />
           <Alerts 
             alerts={alerts} 
             labelFilters={labelFilters} 
