@@ -236,3 +236,23 @@ $theme-colors: (
 }
 
 // --------------------------------------------------------
+
+
+
+// Filters -------------------------------------------------
+
+.filters {
+    .filter-section {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 2rem;
+    }
+
+    .form-group {
+        margin-right: 0.5rem;
+        flex-basis: 16%;
+    }
+
+}
+
+// --------------------------------------------------------
