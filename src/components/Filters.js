@@ -1,17 +1,23 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Col, Form, FormGroup, Label, Input } from 'reactstrap'
 import Select from 'react-select'
 import { useDispatch } from '../globalState'
 
 
 const Filters = ({filterLabels, labelValues}) => {
+
+  const dispatch = useDispatch()  
+  const [extraFiltersVisible, setExtraFiltersVisible] = useState(false)
+
   // Filter out the top level labels (they will get special treatment, i.e. display, or actions)
   const secondTierFilterLabels = Object.keys(filterLabels).filter(label => /^((?!(\bregion\b|\bseverity\b|\bstate\b|\bprometheus\b)).)*$/.test(label))
 
-  const dispatch = useDispatch()
-
   const handleChange = (values, change) => {
     dispatch({type: 'SET_VALUES_FOR_FILTER', action: change.action, name: change.name, values: transformSelectedValuesToState(values)})
+  }
+
+  const toggleFilterDisplay = () => {
+    setExtraFiltersVisible(!extraFiltersVisible)
   }
 
   const transformValuesForSelect = (values) => {
@@ -50,7 +56,9 @@ const Filters = ({filterLabels, labelValues}) => {
               </FormGroup>
             )}
           </div>
-          <div className="filter-section">
+          <a href="#" className="toggle-show" onClick={() => toggleFilterDisplay()}>Show {extraFiltersVisible ? 'fewer' : 'more'} filters</a>
+
+          <div className={`filter-section ${extraFiltersVisible ? '' : 'u-hidden'}`}>
             { secondTierFilterLabels.map((label) =>
               <FormGroup key={`filter-${label}`}>
                 <Label for={`filter-${label}` }>{label}</Label>
