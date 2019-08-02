@@ -53,6 +53,10 @@ $theme-colors: (
 
 // Shared Utilities ----------------------------------------
 
+.u-hidden {
+    display: none !important;
+}
+
 .u-text-info-light {
     color: $gray-500;
 }
@@ -245,12 +249,16 @@ $theme-colors: (
     .filter-section {
         display: flex;
         flex-wrap: wrap;
-        margin-bottom: 2rem;
     }
 
     .form-group {
         padding-right: 2rem;
         flex-basis: 25%;
+    }
+
+    .toggle-show {
+        display: block;
+        margin-bottom: 1rem;
     }
 
 }
