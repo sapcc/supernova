@@ -20,16 +20,16 @@ const resetAll = (state) => {
   return newState
 }
 
-const addFilter = (state, {name, value}) => {
-  const oldValues = state.settings[name].slice()
-  const newValues = [...oldValues, value]
-  return {...state, settings: {...state.settings, [name]: newValues}}
+const setValuesForFilter = (state, {action, name, values}) => {
+  return {...state, settings: {...state.settings, [name]: values}}
 }
+
+
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case 'ADD_LABEL_FILTER':
-      return addFilter(state,action)
+    case 'SET_VALUES_FOR_FILTER':
+      return setValuesForFilter(state,action)
     case 'REQUEST_LABEL_FILTERS':
       return {...state, isLoading: true, error: null}
     case 'RECEIVE_LABEL_FILTERS':
