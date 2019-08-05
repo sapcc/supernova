@@ -1,25 +1,27 @@
-import React, {useState} from 'react'
-import { Col, Form, FormGroup, Label, Input } from 'reactstrap'
+import React from 'react'
+import { Form, FormGroup, Label } from 'reactstrap'
 import Select from 'react-select'
-import { useDispatch } from '../globalState'
+import { useGlobalState, useDispatch } from '../globalState'
 
 
 const Filters = ({filterLabels, labelValues}) => {
 
-  const dispatch = useDispatch()  
-  const [extraFiltersVisible, setExtraFiltersVisible] = useState(false)
+  const dispatch = useDispatch()
+  const state = useGlobalState()
+  const {extraFiltersVisible} = state.labelFilters
 
   // Filter out the top level labels (they will get special treatment, i.e. display, or actions)
-  const secondTierFilterLabels = Object.keys(filterLabels).filter(label => /^((?!(\bregion\b|\bseverity\b|\bstate\b|\bprometheus\b)).)*$/.test(label))
+  const secondTierFilterLabels = Object.keys(filterLabels).filter(label => /^((?!(\bregion\b|\bseverity\b)).)*$/.test(label))
 
   const handleChange = (values, change) => {
     dispatch({type: 'SET_VALUES_FOR_FILTER', action: change.action, name: change.name, values: transformSelectedValuesToState(values)})
   }
 
   const toggleFilterDisplay = () => {
-    setExtraFiltersVisible(!extraFiltersVisible)
+    dispatch({type: 'SET_EXTRA_FILTERS_VISIBLE', visible: !extraFiltersVisible})
   }
 
+  // in our state we have an array of string values. react-select wants an array of objects of the form {value: VALUE, label: LABEL}
   const transformValuesForSelect = (values) => {
     if (values) {
       return values.map(val => ({value: val, label: val}))
@@ -28,6 +30,7 @@ const Filters = ({filterLabels, labelValues}) => {
     }
   }
 
+  // transform react-select style values back to a simple array of string values
   const transformSelectedValuesToState = (values) => {
     if (values) {
       return values.map(val => val.value)
@@ -56,6 +59,7 @@ const Filters = ({filterLabels, labelValues}) => {
               </FormGroup>
             )}
           </div>
+
           <a href="#" className="toggle-show" onClick={() => toggleFilterDisplay()}>Show {extraFiltersVisible ? 'fewer' : 'more'} filters</a>
 
           <div className={`filter-section ${extraFiltersVisible ? '' : 'u-hidden'}`}>

@@ -52,11 +52,9 @@
     "cluster_type": [],
     "context": [],
     "job": [],
-    "prometheus": [],
     "region": [],
     "service": [],
     "severity": [],
-    "state": [],
     "tier": [],
     "type": []
   }

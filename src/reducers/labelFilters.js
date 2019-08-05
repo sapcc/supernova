@@ -1,5 +1,6 @@
 const initialState = {
   settings: {},
+  extraFiltersVisible: false,
   isLoading: false,
   updatedAt: null,
   error: null
@@ -20,16 +21,35 @@ const resetAll = (state) => {
   return newState
 }
 
-const setValuesForFilter = (state, {action, name, values}) => {
-  return {...state, settings: {...state.settings, [name]: values}}
+const setValuesForFilter = (state, {action, name, values}) => (
+  {...state, settings: {...state.settings, [name]: values}}
+)
+
+const addFilter = (state, {name, value}) => {
+  const oldValues = state.settings[name].slice()
+  // check if we are already filtering by this value
+  if (oldValues.findIndex(val => val === value) > -1) {
+    return state
+  } else {
+    const newValues = [...oldValues, value]
+    return {...state, settings: {...state.settings, [name]: newValues}}
+  }
 }
+
+const setExtraFiltersVisible = (state, {visible}) => (
+  {...state, extraFiltersVisible: visible}
+)
 
 
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case 'SET_EXTRA_FILTERS_VISIBLE':
+      return setExtraFiltersVisible(state,action)
     case 'SET_VALUES_FOR_FILTER':
       return setValuesForFilter(state,action)
+    case 'ADD_FILTER':
+      return addFilter(state,action) 
     case 'REQUEST_LABEL_FILTERS':
       return {...state, isLoading: true, error: null}
     case 'RECEIVE_LABEL_FILTERS':
