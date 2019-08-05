@@ -2,9 +2,12 @@ import React from 'react'
 import { Button } from 'reactstrap'
 import moment from 'moment'
 import ReactJson from 'react-json-view'
+import { useDispatch } from '../globalState'
+
 
 const Alerts = ({alerts,categories,labelFilters,showModal}) => {
 
+  const dispatch = useDispatch()  
   const activeLabelFilters = {}
   const labelSettings = labelFilters.settings
   for(let name in labelSettings) { 
@@ -74,6 +77,11 @@ const Alerts = ({alerts,categories,labelFilters,showModal}) => {
     )
   }
 
+  const addFilter = (name, value) => {
+    dispatch({type: 'SET_EXTRA_FILTERS_VISIBLE', visible: true}) // this works because clickable labels are always among the potentially hidden filters. If we want to make the always visible filters clickable this has to be more intelligent
+    dispatch({type: 'ADD_FILTER', name, value})    
+  }
+
   // get white-listed filter labels, filter out the ones we show in the list anyway, then check each of the remaining ones if they exist on the given alert. If yes render a filter pill for them
   const alertLabels = (alert) => (
     <React.Fragment>
@@ -81,7 +89,7 @@ const Alerts = ({alerts,categories,labelFilters,showModal}) => {
         .filter((label) => /^((?!(\bregion\b|\bseverity\b)).)*$/.test(label))
         .map((labelKey, index) =>
           alert.labels[labelKey] &&
-            <span className="filter-pill" key={ `pill-${labelKey}` }>{labelKey} = {alert.labels[labelKey]}</span>
+            <span className="filter-pill" key={ `pill-${labelKey}` } onClick={() => addFilter(labelKey, alert.labels[labelKey])}>{labelKey} = {alert.labels[labelKey]}</span>
       )}
     </React.Fragment>
   )

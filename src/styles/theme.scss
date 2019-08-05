@@ -230,6 +230,7 @@ $theme-colors: (
 .filter-pill {
     background: rgba(255, 255, 255, 0.5);
     color: $gray-600;
+    cursor: pointer;
     display: inline-block;
     font-size: $small-font-size;
     border: 1px solid rgba(0, 0, 0, 0.15);
