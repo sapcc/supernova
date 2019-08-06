@@ -1,7 +1,7 @@
 import React from 'react'
 import { Form, FormGroup, Label } from 'reactstrap'
 import Select from 'react-select'
-import { useGlobalState, useDispatch } from '../globalState'
+import { useGlobalState, useDispatch } from '../lib/globalState'
 
 
 const Filters = ({filterLabels, labelValues}) => {

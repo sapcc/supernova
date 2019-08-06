@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import ReactJson from 'react-json-view'
 
-import { useGlobalState, useDispatchLogger } from '../globalState'
+import { useGlobalState, useDispatchLogger } from '../lib/globalState'
 
 export default () => {
   const state = useGlobalState()
@@ -45,8 +45,8 @@ export default () => {
 
       <div style={{maxHeight: 300, overflow: 'auto', minHeight: 200}}>
         {/*<ReactJson src={log} name="ACTIONS" theme='monokai' collapsed={2}/>*/}
-        {log.map(entry => 
-          <ReactJson src={entry} name={entry.type} theme='monokai' collapsed={true}/>
+        {log.map((entry,index) => 
+          <ReactJson key={index} src={entry} name={entry.type} theme='monokai' collapsed={true}/>
         )}
       </div>
       <div style={{marginTop: 20}}>

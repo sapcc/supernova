@@ -1,6 +1,6 @@
 import React from 'react'
 import { Badge } from 'reactstrap'
-import { useDispatch } from '../globalState'
+import { useDispatch } from '../lib/globalState'
 
 const CategoryCounts = ({critical,warning,info}) => {
   return (
