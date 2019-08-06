@@ -12,15 +12,27 @@ export default ({items}) => {
 
   if(!items) return null
 
-  const sortedRegions = useMemo(() => 
-    REGION_SORT_REGEX.map(regionRegexList => 
-      regionRegexList.map(regionRegex => items.filter(region => regionRegex.test(region)))    
-    )
-  , items)
+  const sortedRegions = useMemo(() => {
+    let tmpItems = items.slice()
 
+    return REGION_SORT_REGEX.map(regionRegexList => {
+      let result = []
+
+      for(let regionRegex of regionRegexList) {
+        const items = tmpItems.filter(region => regionRegex.test(region)).sort()
+        result = result.concat(items)
+        tmpItems = tmpItems.filter(item => !items.includes(item))
+      }  
+      return result
+    })
+  }, items)
+
+  return null
   return (
-    <div>
-      {JSON.stringify(sortedRegions)}
+    <div style={{display: 'flex', justifyContent: 'space-around', width: '100%'}}>
+      {sortedRegions.map(regionList => 
+        <div style={{backgroundColor: 'red'}}>{regionList.map(region => <div>{region}</div>)}</div>
+      )}  
     </div>
   )
 }
