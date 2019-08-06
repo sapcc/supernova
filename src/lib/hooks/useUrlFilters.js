@@ -1,4 +1,4 @@
-import {useMemo} from 'react'
+import {useMemo, useEffect} from 'react'
 
 /**
  * This function converts a json object to one level (flat) json.
@@ -95,37 +95,39 @@ const urlStringToJson = (urlString) => {
 }
 
 /**
- * Exports a default function which expects an array 
- * with keys to look for in URL.
- * Returns an array with a json object containing current url filters 
- * and a setter function to modify url filters.
+ * Exports a default function which expects a json object 
+ * with keys to look for in URL and values.
+ * Returns a json object containing current url filters.
  **/ 
-export default (keys = []) => {
-  const activeFilters = useMemo(() => {
+export default (filters) => {
+  
+  const initialUrlFilters = useMemo(() => {
     const hash = (window.location.hash || '')
     const json = urlStringToJson(decodeURI(hash))
 
     if(!json) return {}
 
     const result = {}
-    keys.forEach(k => result[k] = json[k])
+    Object.keys(filters).forEach(k => result[k] = json[k])
     return result
     // eslint-disable-next-line
   }, []) 
 
-  const setActiveFilters = (json = {}) => {
-    if(!json || Object.keys(json).length === 0) {
+
+  // Update URL every time the filters change
+  useEffect(() => {
+    if(!filters || Object.keys(filters).length === 0 || Object.values(filters).flat().length === 0) {
       const noHashURL = window.location.href.replace(/#.*$/, '')
       window.history.replaceState('', document.title, noHashURL)
-      return null
     }
-    const filterString = encodeURI(jsonToUrlString(json))
+    const filterString = encodeURI(jsonToUrlString(filters))
 
     if (window.location.hash !== filterString) {
       window.location.hash = filterString
     }  
-    return json
-  }
-  return [activeFilters, setActiveFilters]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters])
+
+  return initialUrlFilters
 }
 

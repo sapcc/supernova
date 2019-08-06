@@ -2,7 +2,7 @@ import React from 'react'
 import { Button } from 'reactstrap'
 import moment from 'moment'
 import ReactJson from 'react-json-view'
-import { useDispatch } from '../globalState'
+import { useDispatch } from '../lib/globalState'
 
 
 const Alerts = ({alerts,categories,labelFilters,showModal}) => {

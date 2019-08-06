@@ -2,18 +2,19 @@ import React, { useState, useEffect, useRef } from 'react';
 import openSocket from 'socket.io-client'
 import axios from 'axios'
 
-import { GlobalStateProvider, useGlobalState, useDispatch } from './globalState'
+import { GlobalStateProvider, useGlobalState, useDispatch } from './lib/globalState'
 import reducers from './reducers'
 
 import Categories from './components/Categories'
 import Alerts from './components/Alerts'
 import Filters from './components/Filters'
+import Regions from './components/Regions'
 import DevTools from './components/DevTools'
 
-import useModal from './components/shared/useModal'
+import useModal from './lib/hooks/useModal'
 import SuperModal from './components/shared/SuperModal'
 
-import useUrlFilters from './components/shared/useUrlFilters'
+import useUrlFilters from './lib/hooks/useUrlFilters'
 
 import './styles/theme.scss'
 import './App.css'
@@ -35,12 +36,7 @@ const App = () => {
   const contentRef = useRef(null)
   const {modalIsShowing, toggleModal} = useModal()
   const [modalContent, setModalContent] = useState([])
-  const [urlFilters,setUrlFilters] = useUrlFilters(['category','label'])
-
-  useEffect(() => {
-    setUrlFilters({"category": categories.active, "label": labelFilters.settings})
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[categories.active,labelFilters.settings])
+  const initialURLFilters = useUrlFilters({"category": categories.active, "label": labelFilters.settings})
 
   useEffect(() => {
     // load default values
@@ -51,11 +47,11 @@ const App = () => {
         .then(response => response.data)
         .then(config => {
           // extend default values with values from URL
-          if(urlFilters.category) {
-            config.categories.forEach(c => c.active = (urlFilters.category.indexOf(c.name) > -1))
+          if(initialURLFilters.category) {
+            config.categories.forEach(c => c.active = (initialURLFilters.category.indexOf(c.name) > -1))
           }
-          if(urlFilters.label) { 
-            config.labelFilters = Object.assign(config.labelFilters, urlFilters.label)
+          if(initialURLFilters.label) { 
+            config.labelFilters = Object.assign(config.labelFilters, initialURLFilters.label)
           }
           return config
         })
@@ -98,7 +94,9 @@ const App = () => {
 
 
       <div className="main">
-        <nav className="navbar"></nav>
+        <nav className="navbar">
+          <Regions items={alerts.labelValues ? alerts.labelValues['region'] : null}/>
+        </nav>
 
         <div className="content" ref={contentRef}>
           <Filters filterLabels={labelFilters.settings} labelValues={alerts.labelValues} />
