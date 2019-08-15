@@ -1,11 +1,10 @@
 import { useState } from 'react'
 
 const useModal = () => {
-  const [modalIsShowing, setmodalIsShowing] = useState(false)
+  const [modalIsShowing, setModalIsShowing] = useState(false)
 
   const toggleModal = () => {
-    console.log("toggle modal", modalIsShowing)
-    setmodalIsShowing(!modalIsShowing)
+    setModalIsShowing(!modalIsShowing)
   }
 
   return {

@@ -3,6 +3,8 @@ import { Button } from 'reactstrap'
 import moment from 'moment'
 import ReactJson from 'react-json-view'
 import { useDispatch } from '../lib/globalState'
+import useFilters from '../lib/hooks/useFilters'
+
 
 
 const Alerts = ({alerts,categories,labelFilters,showModal}) => {
@@ -10,6 +12,9 @@ const Alerts = ({alerts,categories,labelFilters,showModal}) => {
   const dispatch = useDispatch()  
   const activeLabelFilters = {}
   const labelSettings = labelFilters.settings
+  const {primaryFilters, secondaryFilters} = useFilters(labelSettings)
+
+
   for(let name in labelSettings) { 
     if(labelSettings[name] && labelSettings[name].length>0) activeLabelFilters[name] = labelSettings[name] 
   }
@@ -77,19 +82,29 @@ const Alerts = ({alerts,categories,labelFilters,showModal}) => {
     )
   }
 
+  const isFilterActive = (label, value) => (
+    labelSettings[label].findIndex(val => val === value) >= 0
+  )
+
   const addFilter = (name, value) => {
-    dispatch({type: 'SET_EXTRA_FILTERS_VISIBLE', visible: true}) // this works because clickable labels are always among the potentially hidden filters. If we want to make the always visible filters clickable this has to be more intelligent
+    if (secondaryFilters.includes(name)) {
+      // if the clicked value is a secondary filter ensure that the secondary filter panel is visible
+      dispatch({type: 'SET_EXTRA_FILTERS_VISIBLE', visible: true})
+    }
     dispatch({type: 'ADD_FILTER', name, value})    
   }
 
   // get white-listed filter labels, filter out the ones we show in the list anyway, then check each of the remaining ones if they exist on the given alert. If yes render a filter pill for them
   const alertLabels = (alert) => (
     <React.Fragment>
-      {Object.keys(labelFilters.settings)
-        .filter((label) => /^((?!(\bregion\b|\bseverity\b)).)*$/.test(label))
-        .map((labelKey, index) =>
+      {secondaryFilters.map((labelKey, index) =>
           alert.labels[labelKey] &&
-            <span className="filter-pill" key={ `pill-${labelKey}` } onClick={() => addFilter(labelKey, alert.labels[labelKey])}>{labelKey} = {alert.labels[labelKey]}</span>
+            <span 
+              className={`filter-pill ${isFilterActive(labelKey, alert.labels[labelKey]) ? 'active' : ''}`}
+              key={ `pill-${labelKey}` } 
+              onClick={() => addFilter(labelKey, alert.labels[labelKey])}>
+              {labelKey} = {alert.labels[labelKey]}
+            </span>
       )}
     </React.Fragment>
   )

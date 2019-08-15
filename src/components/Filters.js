@@ -1,7 +1,8 @@
 import React from 'react'
-import { Form, FormGroup, Label } from 'reactstrap'
+import { Button, Form, FormGroup, Label } from 'reactstrap'
 import Select from 'react-select'
 import { useGlobalState, useDispatch } from '../lib/globalState'
+import useFilters from '../lib/hooks/useFilters'
 
 
 const Filters = ({filterLabels, labelValues}) => {
@@ -9,9 +10,8 @@ const Filters = ({filterLabels, labelValues}) => {
   const dispatch = useDispatch()
   const state = useGlobalState()
   const {extraFiltersVisible} = state.labelFilters
+  const {primaryFilters, secondaryFilters} = useFilters(filterLabels)
 
-  // Filter out the top level labels (they will get special treatment, i.e. display, or actions)
-  const secondTierFilterLabels = Object.keys(filterLabels).filter(label => /^((?!(\bregion\b|\bseverity\b)).)*$/.test(label))
 
   const handleChange = (values, change) => {
     dispatch({type: 'SET_VALUES_FOR_FILTER', action: change.action, name: change.name, values: transformSelectedValuesToState(values)})
@@ -44,26 +44,26 @@ const Filters = ({filterLabels, labelValues}) => {
       <div className="filters">
         <Form>
           <div className="filter-section">
-            { ['severity', 'region'].map((topTierLabel) =>
-            <FormGroup key={ `filter-${topTierLabel}`}>
-                <Label for={ `filter-${topTierLabel}` }>{topTierLabel}</Label>
+            { primaryFilters && primaryFilters.map((primaryLabel) =>
+            <FormGroup key={ `filter-${primaryLabel}`}>
+                <Label for={ `filter-${primaryLabel}` }>{primaryLabel}</Label>
                 <Select 
-                  name={topTierLabel} 
-                  id={`filter-${topTierLabel}`} 
-                  value={transformValuesForSelect(filterLabels[topTierLabel])} 
+                  name={primaryLabel} 
+                  id={`filter-${primaryLabel}`} 
+                  value={transformValuesForSelect(filterLabels[primaryLabel])} 
                   onChange={(value, change) => handleChange(value, change)}
-                  options={transformValuesForSelect(labelValues[topTierLabel])}
-                  isLoading={!labelValues || !labelValues[topTierLabel]}
+                  options={transformValuesForSelect(labelValues[primaryLabel])}
+                  isLoading={!labelValues || !labelValues[primaryLabel]}
                   isMulti>
                 </Select>
               </FormGroup>
             )}
           </div>
 
-          <a href="#" className="toggle-show" onClick={() => toggleFilterDisplay()}>Show {extraFiltersVisible ? 'fewer' : 'more'} filters</a>
+          <Button color="link" className="toggle-show" onClick={() => toggleFilterDisplay()}>Show {extraFiltersVisible ? 'fewer' : 'more'} filters</Button>
 
           <div className={`filter-section ${extraFiltersVisible ? '' : 'u-hidden'}`}>
-            { secondTierFilterLabels.map((label) =>
+            { secondaryFilters && secondaryFilters.map((label) =>
               <FormGroup key={`filter-${label}`}>
                 <Label for={`filter-${label}` }>{label}</Label>
                 <Select 
