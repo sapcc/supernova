@@ -238,6 +238,12 @@ $theme-colors: (
     margin: 0.5rem 1rem 0 0;
     padding: 0.1rem 0.4rem;
     white-space: nowrap;
+
+    &:hover, &.active {
+        background: rgba(0,0,0,0.05);
+        color: $gray-700;
+        border-color: rgba(0,0,0,0.2);
+    }
 }
 
 // --------------------------------------------------------
@@ -260,6 +266,7 @@ $theme-colors: (
     .toggle-show {
         display: block;
         margin-bottom: 1rem;
+        padding-left: 0;
     }
 
 }

@@ -38,6 +38,7 @@ const App = () => {
   const [modalContent, setModalContent] = useState([])
   const initialURLFilters = useUrlFilters({"category": categories.active, "label": labelFilters.settings})
 
+
   useEffect(() => {
     // load default values
     const loadConfig = () => {
@@ -52,6 +53,7 @@ const App = () => {
           }
           if(initialURLFilters.label) { 
             config.labelFilters = Object.assign(config.labelFilters, initialURLFilters.label)
+            dispatch({type: 'SET_EXTRA_FILTERS_VISIBLE', visible: true}) // if we have initial filters via URL ensure that extra filter panel is visible (ideally we would toggle it only if the url-provided filter is one of the hidden ones but I haven't figured out a way to get past the race condition of the useFilters hook with the loadConfig process)
           }
           return config
         })
