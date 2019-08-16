@@ -23,10 +23,10 @@ import './App.css'
 
 // Icons --------------------------------------------------------
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faBell, faSun } from '@fortawesome/free-solid-svg-icons'
+import { faBell, faSun, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// build icon library, only needs to be done once, then the icon will be available everywhere
-library.add( faBell, faSun )
+// build icon library, only needs to be done once, then the icon will be available everywhere, only the FontAwesomeIcon import is necessary in other components
+library.add( faBell, faSun, faTimesCircle )
 // --------------------------------------------------------------
 
 const App = () => {
