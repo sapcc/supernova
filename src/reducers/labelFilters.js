@@ -15,6 +15,7 @@ const receive = (state,{settings}) => (
   }
 )
 const setFilters = (state,{settings}) => ({...state, settings: {...settings}})
+
 const resetAll = (state) => {
   const newState = {...state, settings: {}}
   Object.keys(state.settings).forEach(label => newState.settings[label] = [])
@@ -36,6 +37,12 @@ const addFilter = (state, {name, value}) => {
   }
 }
 
+const removeFilter = (state, {name, value}) => {
+  const oldValues = state.settings[name].slice()
+  const newValues = oldValues.filter(val => val !== value) // remove value from values list
+  return {...state, settings: {...state.settings, [name]: newValues}}
+}
+
 const setExtraFiltersVisible = (state, {visible}) => (
   {...state, extraFiltersVisible: visible}
 )
@@ -49,7 +56,9 @@ export default (state = initialState, action) => {
     case 'SET_VALUES_FOR_FILTER':
       return setValuesForFilter(state,action)
     case 'ADD_FILTER':
-      return addFilter(state,action) 
+      return addFilter(state,action)
+    case 'REMOVE_FILTER':
+      return removeFilter(state,action) 
     case 'REQUEST_LABEL_FILTERS':
       return {...state, isLoading: true, error: null}
     case 'RECEIVE_LABEL_FILTERS':
