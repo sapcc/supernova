@@ -244,6 +244,23 @@ $theme-colors: (
         color: $gray-700;
         border-color: rgba(0,0,0,0.2);
     }
+
+    &.active {
+        padding-right: 0.2rem;
+
+        svg {
+            color: #888;
+            margin-left: 0.4rem;
+        }
+
+        &:hover {
+            text-decoration: line-through;
+
+            svg {
+                color: $gray-700;
+            }
+        }
+    }
 }
 
 // --------------------------------------------------------
