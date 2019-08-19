@@ -2,6 +2,8 @@ import React from 'react'
 import { Button } from 'reactstrap'
 import moment from 'moment'
 import ReactJson from 'react-json-view'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 import { useDispatch } from '../lib/globalState'
 import useFilters from '../lib/hooks/useFilters'
 
@@ -86,6 +88,14 @@ const Alerts = ({alerts,categories,labelFilters,showModal}) => {
     labelSettings[label].findIndex(val => val === value) >= 0
   )
 
+  const handlePillClick = (name, value) => {
+    if (isFilterActive(name, value)) {
+      dispatch({type: 'REMOVE_FILTER', name, value})          
+    } else {
+      addFilter(name, value)
+    }
+  }
+
   const addFilter = (name, value) => {
     if (secondaryFilters.includes(name)) {
       // if the clicked value is a secondary filter ensure that the secondary filter panel is visible
@@ -102,8 +112,11 @@ const Alerts = ({alerts,categories,labelFilters,showModal}) => {
             <span 
               className={`filter-pill ${isFilterActive(labelKey, alert.labels[labelKey]) ? 'active' : ''}`}
               key={ `pill-${labelKey}` } 
-              onClick={() => addFilter(labelKey, alert.labels[labelKey])}>
+              onClick={() => handlePillClick(labelKey, alert.labels[labelKey])}>
               {labelKey} = {alert.labels[labelKey]}
+              { isFilterActive(labelKey, alert.labels[labelKey]) &&
+                <FontAwesomeIcon icon="times-circle" fixedWidth />
+              }
             </span>
       )}
     </React.Fragment>
