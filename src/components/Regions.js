@@ -25,7 +25,7 @@ export default ({items}) => {
       }  
       return result
     })
-  }, items)
+  }, [items])
 
   return null
   return (
