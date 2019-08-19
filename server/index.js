@@ -6,12 +6,18 @@ const path = require('path')
 const configureWesocket = require('./socket')
 const app = express()
 const port = process.env.NODE_ENV === 'production' ? 80 : process.env.PORT || 5000
+const metrics = require('./metrics')
+
+if (process.env.NODE_ENV === 'production') { 
+  app.use(metrics({path: '/system/metrics'}))
+}
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use('/system/readiness', (req,res) => res.sendStatus(200))
 app.use('/system/liveliness', (req,res) => res.sendStatus(200))
+//app.use(require('./metrics'))
 
 app.use('/api', require('./api'))
 
