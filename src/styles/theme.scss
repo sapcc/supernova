@@ -164,7 +164,17 @@ $theme-colors: (
         margin-right: 0.25rem;
         cursor: pointer;
     }
+
+    // ADDED BY ANDREAS
+    &.head {
+      display: block;
+      color: #808080;
+      margin-top: 20px;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
 }
+
 
 .sidebar-link {
     display: block;
