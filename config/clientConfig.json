@@ -2,6 +2,19 @@
   "categories": 
   [
     {
+      "name": "Productive",
+      "match_re": {
+        "region": "^(?!staging)",
+        "tier": "^(?!k8s|kks)"
+      }
+    },
+    {
+      "name": "LAB",
+      "match_re": {
+        "region": "^(?:staging|qa-de-2)$"
+      }
+    },
+    {
       "name": "API",
       "match_re": {
         "tier": "^(?:os|k8s)$"
@@ -57,5 +70,13 @@
     "severity": [],
     "tier": [],
     "type": []
+  },
+
+  "applicationSettings": {
+    "productionOnly": false,
+
+    "productionOnlyExclusiveFilters": {
+      "region": ["staging"]
+    }
   }
 }

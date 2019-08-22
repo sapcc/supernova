@@ -9,8 +9,8 @@ import useFilters from '../lib/hooks/useFilters'
 
 
 
-const Alerts = ({alerts,categories,labelFilters,showModal}) => {
-
+const Alerts = ({alerts,categories,labelFilters,showModal, exclusiveFilters}) => {
+  exclusiveFilters = exclusiveFilters || {}
   const dispatch = useDispatch()  
   const activeLabelFilters = {}
   const labelSettings = labelFilters.settings
@@ -39,10 +39,15 @@ const Alerts = ({alerts,categories,labelFilters,showModal}) => {
       return false
     })
     
-  if(Object.keys(activeLabelFilters).length >= 0) {
+  if(Object.keys(activeLabelFilters).length >= 0 || Object.keys(exclusiveFilters).length > 0) {
     items = items.filter(alert => {
+      // positive filters
       for(let name in activeLabelFilters) { 
         if(activeLabelFilters[name].indexOf(alert.labels[name]) < 0) return false
+      }
+      // negative filters 
+      for(let name in exclusiveFilters) {
+        if(exclusiveFilters[name].indexOf(alert.labels[name]) >= 0) return false
       }
       return true
     })
@@ -137,10 +142,7 @@ const Alerts = ({alerts,categories,labelFilters,showModal}) => {
             Title       
           </th>
           <th>
-            Starts At
-          </th>
-          <th>
-            Ends At
+            Firing since
           </th>
           <th>
             Status
@@ -164,7 +166,6 @@ const Alerts = ({alerts,categories,labelFilters,showModal}) => {
               {alertLabels(alert)}
             </td>
             <td>{moment(alert.startsAt).format('DD.MM.YYYY HH:mm:ss')}</td>
-            <td>{moment(alert.endsAt).format('DD.MM.YYYY HH:mm:ss')}</td>
             <td>{alertStatus(alert.status)}</td>
             <td className="u-v-align-middle"><Button outline size="sm" onClick={() => toggleDetailsModal(alert)}>Raw data</Button></td>
           </tr>
