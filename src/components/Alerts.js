@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useMemo} from 'react'
 import { Button } from 'reactstrap'
 import moment from 'moment'
 import ReactJson from 'react-json-view'
@@ -8,35 +8,40 @@ import { useDispatch } from '../lib/globalState'
 import useFilters from '../lib/hooks/useFilters'
 
 
-
 const Alerts = ({alerts,categories,labelFilters,showModal}) => {
 
   const dispatch = useDispatch()  
   const activeLabelFilters = {}
   const labelSettings = labelFilters.settings
   const {primaryFilters, secondaryFilters} = useFilters(labelSettings)
-
+  const activeCategories = useMemo(() => categories.items.filter(c => c.active), [categories.items])
 
   for(let name in labelSettings) { 
     if(labelSettings[name] && labelSettings[name].length>0) activeLabelFilters[name] = labelSettings[name] 
   }
 
   let items = categories.active.length === 0 ?
-    alerts.items // don't filter at all if categories  are empty
+    alerts.items // don't filter at all if categories are empty
     :
     alerts.items.filter(alert => {
-      for(let category of categories.items) {
-        if(!category.active) continue
-
-        const matches = Object.keys(category.match_re).reduce((active, label) => {
-          if(!active) return false
+      return activeCategories.reduce((matchesOtherCategories,category) => {
+        return matchesOtherCategories && Object.keys(category.match_re).reduce((matchesOtherLabels,label) => {
           const regex = new RegExp(category.match_re[label])
+          return matchesOtherLabels && regex.test(alert.labels[label]) 
+        },true)
+      },true)
+      //for(let category of categories.items) {
+      //  if(!category.active) continue
 
-          return regex.test(alert.labels[label]) 
-        }, true)
-        if(matches) return true
-      }
-      return false
+      //  const matches = Object.keys(category.match_re).reduce((active, label) => {
+      //    if(!active) return false
+      //    const regex = new RegExp(category.match_re[label])
+
+      //    return regex.test(alert.labels[label]) 
+      //  }, true)
+      //  if(matches) return true
+      //}
+      //return false
     })
     
   if(Object.keys(activeLabelFilters).length >= 0) {

@@ -1,16 +1,15 @@
 import React from 'react'
 import { Button, Form, FormGroup, Label } from 'reactstrap'
 import Select from 'react-select'
-import { useGlobalState, useDispatch } from '../lib/globalState'
+import { useDispatch } from '../lib/globalState'
 import useFilters from '../lib/hooks/useFilters'
 
 
-const Filters = ({filterLabels, labelValues}) => {
+const Filters = ({labelFilters, labelValues}) => {
 
   const dispatch = useDispatch()
-  const state = useGlobalState()
-  const {extraFiltersVisible} = state.labelFilters
-  const {primaryFilters, secondaryFilters} = useFilters(filterLabels)
+  const {extraFiltersVisible, settings} = labelFilters
+  const {primaryFilters, secondaryFilters} = useFilters(settings)
 
 
   const handleChange = (values, change) => {
@@ -40,7 +39,7 @@ const Filters = ({filterLabels, labelValues}) => {
   }
 
   return(
-    filterLabels ? 
+    settings ? 
       <div className="filters">
         <Form>
           <div className="filter-section">
@@ -50,7 +49,7 @@ const Filters = ({filterLabels, labelValues}) => {
                 <Select 
                   name={primaryLabel} 
                   id={`filter-${primaryLabel}`} 
-                  value={transformValuesForSelect(filterLabels[primaryLabel])} 
+                  value={transformValuesForSelect(settings[primaryLabel])} 
                   onChange={(value, change) => handleChange(value, change)}
                   options={transformValuesForSelect(labelValues[primaryLabel])}
                   isLoading={!labelValues || !labelValues[primaryLabel]}
@@ -69,7 +68,7 @@ const Filters = ({filterLabels, labelValues}) => {
                 <Select 
                   name={label} 
                   id={`filter-${label}`} 
-                  value={transformValuesForSelect(filterLabels[label])} 
+                  value={transformValuesForSelect(settings[label])} 
                   onChange={(value, change) => handleChange(value, change)}
                   options={transformValuesForSelect(labelValues[label])}
                   isLoading={!labelValues || !labelValues[label]}

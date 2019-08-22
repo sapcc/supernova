@@ -2,45 +2,68 @@
   "categories": 
   [
     {
+      "area": "landscape",
+      "name": "Productive",
+      "match_re": {
+        "region": "^(?!staging)",
+        "tier": "^(?!k8s|kks)"
+      },
+      "active": true
+    },
+    {
+      "area": "landscape",
+      "name": "LAB",
+      "match_re": {
+        "region": "^(?:staging|qa-de-2)$"
+      }
+    },
+    {
+      "area": "support",
       "name": "API",
       "match_re": {
         "tier": "^(?:os|k8s)$"
       }
     },
     {
-      "name": "Concourse",
-      "match_re": {
-        "service": "^(?:concourse)$"
-      }
-    },
-    {
-      "name": "k8s",
-      "match_re": {
-        "tier": "^(?:k8s)$"
-      }
-    },
-    {
-      "name": "Kubernikus",
-      "match_re": {
-        "tier": "^(?:kks)$"
-      }
-    },
-    {
+      "area": "support",
       "name": "Metal",
       "match_re": {
         "tier": "^(?:metal)$"
       }
     },
     {
-      "name": "Net",
+      "area": "support",
+      "name": "Network",
       "match_re": {
         "tier": "^(?:net)$"
       }
     },
     {
+      "area": "support",
       "name": "VmWare",
       "match_re": {
         "tier": "^(?:vmware)$"
+      }
+    },
+    {
+      "area": "service",
+      "name": "Concourse",
+      "match_re": {
+        "service": "^(?:concourse)$"
+      }
+    },
+    {
+      "area": "service",
+      "name": "k8s",
+      "match_re": {
+        "tier": "^(?:k8s)$"
+      }
+    },
+    {
+      "area": "service",
+      "name": "Kubernikus",
+      "match_re": {
+        "tier": "^(?:kks)$"
       }
     }
   ],
@@ -57,5 +80,7 @@
     "severity": [],
     "tier": [],
     "type": []
-  }
+  },
+
+  "applicationSettings": {}
 }

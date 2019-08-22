@@ -20,32 +20,59 @@ const Categories = ({categories, counts}) => {
     dispatch({type: 'SET_ACTIVE_CATEGORY', name: category.name, active: !category.active})
   }
 
-  const resetAllCategories = (event) => {
-    dispatch({type: 'RESET_CATEGORIES'})
-  }
-
   if(categories.isLoading) return <span>Loading...</span>
 
   return (
     <ul className="sidebar-dropdown">
-      <li className="sidebar-item" key="showall
-  categories">
-        <span 
-          className={!categories.active.length ? "sidebar-link active" : "sidebar-link"}
-          onClick={() => resetAllCategories()}>
-          All
-        </span>
+      <li>  
+        <span className="sidebar-item head">Landscape</span> 
+
+        <ul>  
+          {categories.items.filter(c => c.area === 'landscape').map((category,index) => 
+            <li className="sidebar-item" key={index}>
+              <span 
+                className={category.active === true ? "sidebar-link active" : "sidebar-link"}
+                onClick={() => handleCategoryChange(category)}>
+                {category.name} {counts && counts[category.name] && <CategoryCounts {...counts[category.name]}/>}
+              </span>
+            </li>
+          )}
+        </ul>       
       </li>
 
-      {categories.items.map((category,index) => 
-        <li className="sidebar-item" key={index}>
-          <span 
-            className={category.active === true ? "sidebar-link active" : "sidebar-link"}
-            onClick={() => handleCategoryChange(category)}>
-            {category.name} {counts && counts[category.name] && <CategoryCounts {...counts[category.name]}/>}
-          </span>
-        </li>
-      )}
+      <li>
+        <span className="sidebar-item head">Support</span>
+          
+        <ul>
+          {categories.items.filter(c => c.area === 'support').map((category,index) => 
+            <li className="sidebar-item" key={index}>
+              <span 
+                className={category.active === true ? "sidebar-link active" : "sidebar-link"}
+                onClick={() => handleCategoryChange(category)}>
+                {category.name} {/*counts && counts[category.name] && <CategoryCounts {...counts[category.name]}/>*/}
+              </span>
+            </li>
+          )}
+        </ul> 
+    
+      </li>  
+      
+      <li>
+        <span className="sidebar-item head">Service</span>
+          
+        <ul>
+          {categories.items.filter(c => c.area === 'service').map((category,index) => 
+            <li className="sidebar-item" key={index}>
+              <span 
+                className={category.active === true ? "sidebar-link active" : "sidebar-link"}
+                onClick={() => handleCategoryChange(category)}>
+                {category.name} {/*counts && counts[category.name] && <CategoryCounts {...counts[category.name]}/>*/}
+              </span>
+            </li>
+          )}
+        </ul> 
+    
+      </li>     
     </ul>
   )
 }
