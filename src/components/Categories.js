@@ -1,23 +1,39 @@
-import React from 'react'
-import { Badge } from 'reactstrap'
+import React, {useMemo} from 'react'
 import { useDispatch } from '../lib/globalState'
-
-const CategoryCounts = ({critical,warning,info}) => {
-  return (
-    <span>
-      {critical && <Badge color='danger' pill>{critical}</Badge>}
-      {/*{warning && <Badge color='warning'>{warning}</Badge>}
-      {info && <Badge color='info'>{info}</Badge>}
-      */}
-    </span>
-  )
-}
+import  CategorySeverityBadges from './shared/SeverityBadges'
 
 const Categories = ({categories, counts}) => {
   const dispatch = useDispatch()
 
   const handleCategoryChange = (category) => {
+    // reset all dependent filters
+    if(!category.active && category.area === 'landscape') {
+      Object.keys(category.match_re).forEach(key => 
+        dispatch({type: 'SET_VALUES_FOR_FILTER', name: key, values: []})
+      )
+    }
+
     dispatch({type: 'SET_ACTIVE_CATEGORY', name: category.name, active: !category.active})
+  }
+
+  const activeLandscapeCategory = useMemo(() => 
+    categories.items.find(c => c.area === 'landscape' && c.active)
+    ,[categories.items]
+  )
+
+  // calculate category counts.
+  // result is the minimum of current category and if selected the landscape category.
+  const categoryCounts = (category) => {
+    if(!activeLandscapeCategory) return counts[category.name]
+
+    const lCounts = counts[activeLandscapeCategory.name]
+    const {critical,warning,info} = counts[category.name]
+    const result = {
+      critical: critical && lCounts.critical && Math.min(critical,lCounts.critical),
+      warning: warning && lCounts.warning && Math.min(warning,lCounts.warning),
+      info: info && lCounts.info && Math.min(info,lCounts.info),
+    }
+    return result
   }
 
   if(categories.isLoading) return <span>Loading...</span>
@@ -33,7 +49,7 @@ const Categories = ({categories, counts}) => {
               <span 
                 className={category.active === true ? "sidebar-link active" : "sidebar-link"}
                 onClick={() => handleCategoryChange(category)}>
-                {category.name} {counts && counts[category.name] && <CategoryCounts {...counts[category.name]}/>}
+                {category.name} {counts && counts[category.name] && <CategorySeverityBadges {...counts[category.name]} small/>}
               </span>
             </li>
           )}
@@ -49,7 +65,9 @@ const Categories = ({categories, counts}) => {
               <span 
                 className={category.active === true ? "sidebar-link active" : "sidebar-link"}
                 onClick={() => handleCategoryChange(category)}>
-                {category.name} {/*counts && counts[category.name] && <CategoryCounts {...counts[category.name]}/>*/}
+                {category.name} {counts && counts[category.name] && 
+                  <CategorySeverityBadges small {...categoryCounts(category)}/>
+                }
               </span>
             </li>
           )}
@@ -66,7 +84,9 @@ const Categories = ({categories, counts}) => {
               <span 
                 className={category.active === true ? "sidebar-link active" : "sidebar-link"}
                 onClick={() => handleCategoryChange(category)}>
-                {category.name} {/*counts && counts[category.name] && <CategoryCounts {...counts[category.name]}/>*/}
+                {category.name} {counts && counts[category.name] && 
+                  <CategorySeverityBadges small {...categoryCounts(category)}/>
+                }
               </span>
             </li>
           )}

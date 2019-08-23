@@ -20,29 +20,19 @@ const Alerts = ({alerts,categories,labelFilters,showModal}) => {
     if(labelSettings[name] && labelSettings[name].length>0) activeLabelFilters[name] = labelSettings[name] 
   }
 
-  let items = categories.active.length === 0 ?
-    alerts.items // don't filter at all if categories are empty
-    :
-    alerts.items.filter(alert => {
+  let items = useMemo(() => {
+    // don't filter at all if categories are empty
+    if(categories.active.length === 0) return alerts.items
+    
+    return alerts.items.filter(alert => {
       return activeCategories.reduce((matchesOtherCategories,category) => {
         return matchesOtherCategories && Object.keys(category.match_re).reduce((matchesOtherLabels,label) => {
           const regex = new RegExp(category.match_re[label])
           return matchesOtherLabels && regex.test(alert.labels[label]) 
         },true)
       },true)
-      //for(let category of categories.items) {
-      //  if(!category.active) continue
-
-      //  const matches = Object.keys(category.match_re).reduce((active, label) => {
-      //    if(!active) return false
-      //    const regex = new RegExp(category.match_re[label])
-
-      //    return regex.test(alert.labels[label]) 
-      //  }, true)
-      //  if(matches) return true
-      //}
-      //return false
     })
+  }, [alerts,categories])
     
   if(Object.keys(activeLabelFilters).length >= 0) {
     items = items.filter(alert => {
@@ -136,16 +126,13 @@ const Alerts = ({alerts,categories,labelFilters,showModal}) => {
             Region
           </th>  
           <th> 
-            Severity
+            Service
           </th>  
           <th>
             Title       
           </th>
-          <th>
-            Starts At
-          </th>
-          <th>
-            Ends At
+          <th className="text-nowrap">
+            Firing Since
           </th>
           <th>
             Status
@@ -159,7 +146,7 @@ const Alerts = ({alerts,categories,labelFilters,showModal}) => {
           <tr key={index} className={severityOrResolved(alert)} >
             <td className="text-nowrap">{alert.labels.region}</td>
             <td>
-              {alert.labels.severity}
+              {alert.labels.service}
             </td>
             <td>
               {alert.annotations.summary}
@@ -169,7 +156,6 @@ const Alerts = ({alerts,categories,labelFilters,showModal}) => {
               {alertLabels(alert)}
             </td>
             <td>{moment(alert.startsAt).format('DD.MM.YYYY HH:mm:ss')}</td>
-            <td>{moment(alert.endsAt).format('DD.MM.YYYY HH:mm:ss')}</td>
             <td>{alertStatus(alert.status)}</td>
             <td className="u-v-align-middle"><Button outline size="sm" onClick={() => toggleDetailsModal(alert)}>Raw data</Button></td>
           </tr>

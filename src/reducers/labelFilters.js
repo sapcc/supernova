@@ -38,9 +38,14 @@ const addFilter = (state, {name, value}) => {
 }
 
 const removeFilter = (state, {name, value}) => {
-  const oldValues = state.settings[name].slice()
-  const newValues = oldValues.filter(val => val !== value) // remove value from values list
-  return {...state, settings: {...state.settings, [name]: newValues}}
+  if(!Array.isArray(state.settings[name])) return 
+
+  const index = state.settings[name].indexOf(value)
+  if(index < 0) return
+
+  const values = state.settings[name].slice()
+  values.splice(index)
+  return {...state, settings: {...state.settings, [name]: values} }
 }
 
 const setExtraFiltersVisible = (state, {visible}) => (
