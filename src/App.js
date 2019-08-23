@@ -23,10 +23,14 @@ import './App.css'
 
 // Icons --------------------------------------------------------
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faBell, faSun, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import { 
+  faBell, faSun, faTimesCircle, faCode, 
+  faAngleUp, faAngleDown 
+} from '@fortawesome/free-solid-svg-icons'
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // build icon library, only needs to be done once, then the icon will be available everywhere, only the FontAwesomeIcon import is necessary in other components
-library.add( faBell, faSun, faTimesCircle )
+library.add( faBell, faSun, faTimesCircle, faCode, faAngleUp, faAngleDown )
 // --------------------------------------------------------------
 
 const App = () => {
@@ -53,7 +57,7 @@ const App = () => {
           }
           if(initialURLFilters.label) { 
             config.labelFilters = Object.assign(config.labelFilters, initialURLFilters.label)
-            dispatch({type: 'SET_EXTRA_FILTERS_VISIBLE', visible: true}) // if we have initial filters via URL ensure that extra filter panel is visible (ideally we would toggle it only if the url-provided filter is one of the hidden ones but I haven't figured out a way to get past the race condition of the useFilters hook with the loadConfig process)
+            //dispatch({type: 'SET_EXTRA_FILTERS_VISIBLE', visible: true}) // if we have initial filters via URL ensure that extra filter panel is visible (ideally we would toggle it only if the url-provided filter is one of the hidden ones but I haven't figured out a way to get past the race condition of the useFilters hook with the loadConfig process)
           }
           return config
         })
@@ -97,10 +101,15 @@ const App = () => {
 
       <div className="main">
         <nav className="navbar">
-          <Regions items={alerts.labelValues ? alerts.labelValues['region'] : null}/>
         </nav>
 
         <div className="content" ref={contentRef}>
+          <Regions
+            categories={categories}
+            labelFilters={labelFilters} 
+            items={alerts.labelValues ? alerts.labelValues['region'] : null} 
+            counts={alerts.counts.region}
+          />
           <Filters labelFilters={labelFilters} labelValues={alerts.labelValues} />
           <Alerts 
             alerts={alerts} 
