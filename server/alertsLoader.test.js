@@ -102,8 +102,8 @@ describe('get', () => {
 
     it('returns counts of categories',() => {
       expect(counts.category).toMatchObject({
-        "API": { "critical": 1, "warning": 1, "info": 1},
-        "k8s": { "warning": 1 }
+        "API": { "region": {"eu-de-1": {"critical": 1}, "eu-nl-1": {"info": 1}}, "summary": {"critical": 1, "warning": 1, "info": 1}},
+        "k8s": { "region": {"qa-de-1": {"warning": 1 }}, "summary": {"warning": 1}}
       })
     })
     
