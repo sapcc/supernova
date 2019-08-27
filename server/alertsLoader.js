@@ -41,6 +41,15 @@ const updateCounts = (container,alert) => {
       container.region[alert.labels.region][alert.labels.severity] = container.region[alert.labels.region][alert.labels.severity] || 0
       container.region[alert.labels.region][alert.labels.severity] += 1
     }
+    
+    if(alert.status && alert.status.state === 'suppressed') {
+      container.summary[`${alert.labels.severity}Acked`] = container.summary[`${alert.labels.severity}Acked`] || 0
+      container.summary[`${alert.labels.severity}Acked`] += 1
+      
+      container.region[alert.labels.region][`${alert.labels.severity}Acked`] = container.region[alert.labels.region][`${alert.labels.severity}Acked`] || 0
+      container.region[alert.labels.region][`${alert.labels.severity}Acked`] += 1
+    }
+
   }
 }
 // END ################################################################
