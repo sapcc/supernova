@@ -26,17 +26,33 @@ const hasNewAlerts = (items) => {
   return false
 }
 
+
+// EXPEREMENTAL #######################################################
+const nonLandscapeCategories = config.categories.filter(c => c.area !== 'landscape')
+const updateCounts = (container,alert) => {
+  if(alert && alert.labels && alert.labels.severity){
+    container.summary = container.summary || {}
+    container.summary[alert.labels.severity] = container.summary[alert.labels.severity] || 0
+    container.summary[alert.labels.severity] += 1
+
+    if(alert.labels.region){
+      container.region = container.region || {}
+      container.region[alert.labels.region] = container.region[alert.labels.region] || {}
+      container.region[alert.labels.region][alert.labels.severity] = container.region[alert.labels.region][alert.labels.severity] || 0
+      container.region[alert.labels.region][alert.labels.severity] += 1
+    }
+  }
+}
+// END ################################################################
+
+
 const extendAlerts = (items) => {
   const result = {items, counts: {}, labelValues: {}}
+
   //counts -> category -> NAME -> SEVERITY -> number
   items.forEach(alert => {
-    if(alert.labels.region && alert.labels.severity) {
-      result.counts['region'] = result.counts['region'] || {}
-      result.counts['region'][alert.labels.region] = result.counts['region'][alert.labels.region] || {}
-      result.counts['region'][alert.labels.region][alert.labels.severity] = result.counts['region'][alert.labels.region][alert.labels.severity] || 0
-      result.counts['region'][alert.labels.region][alert.labels.severity] += 1   
-    }
 
+    // get all available values fro label filters
     for(let name in alert.labels) {
       if(config.labelFilters.hasOwnProperty(name)) {
         result.labelValues[name] = result.labelValues[name] || []
@@ -46,21 +62,41 @@ const extendAlerts = (items) => {
       }
     }
 
+    // calculate severity counts dependent on categories
+    updateCounts(result.counts,alert)
     for(let category of config.categories) {
+      result.counts.category = result.counts.category || {}
+      updateCounts(result.counts.category)
+    
+      const itemInCategory = Object.keys(category.match_re).reduce((active, label) => {
+        return active && new RegExp(category.match_re[label]).test(alert.labels[label])
+      },true)
 
-      const itemIsInCategory = Object.keys(category.match_re).reduce((active, label) => {
-        if(!active) return false
-        const regex = new RegExp(category.match_re[label])
-        return regex.test(alert.labels[label])
-      }, true)
+      result.counts.category[category.name] = result.counts.category[category.name] || {}
+      
+      if(itemInCategory) {
+        updateCounts(result.counts.category[category.name],alert)
 
-      if(itemIsInCategory) {
-        result.counts['category'] = result.counts['category'] || {}
-        result.counts.category[category.name] = result.counts.category[category.name] || {}
-        result.counts.category[category.name][alert.labels.severity] = result.counts.category[category.name][alert.labels.severity] || 0
-        result.counts.category[category.name][alert.labels.severity] += 1 
+        if(category.area === 'landscape') {
+          // severity counts for categories dependent on this landscape category
+          for(let subCategory of nonLandscapeCategories) {
+            result.counts.category[category.name]['category'] = result.counts.category[category.name]['category'] || {}
+            result.counts.category[category.name].category[subCategory.name] = result.counts.category[category.name].category[subCategory.name] || {}
+
+            const itemInSubCategory = Object.keys(subCategory.match_re).reduce((active, label) => {
+              if(!active) return false
+              const regex = new RegExp(subCategory.match_re[label])
+              return regex.test(alert.labels[label])
+            }, true)
+
+            if(itemInSubCategory) {
+              updateCounts(result.counts.category[category.name].category[subCategory.name],alert)
+            }
+          } 
+        }
       }
-    } 
+    }
+    // END 
   })
   Object.keys(result.labelValues).forEach(k => result.labelValues[k] = result.labelValues[k].sort())
 

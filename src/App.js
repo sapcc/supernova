@@ -1,8 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
-import openSocket from 'socket.io-client'
-import axios from 'axios'
+import React, { useState, useRef } from 'react';
 
-import { GlobalStateProvider, useGlobalState, useDispatch } from './lib/globalState'
+import { GlobalStateProvider, useGlobalState } from './lib/globalState'
 import reducers from './reducers'
 
 import Categories from './components/Categories'
@@ -15,6 +13,8 @@ import useModal from './lib/hooks/useModal'
 import SuperModal from './components/shared/SuperModal'
 
 import useUrlFilters from './lib/hooks/useUrlFilters'
+import useCounts from './lib/hooks/useCounts'
+import useInitialLoader from './lib/hooks/useInitialLoader'
 
 import './styles/theme.scss'
 import './App.css'
@@ -34,58 +34,16 @@ library.add( faBell, faSun, faTimesCircle, faCode, faAngleUp, faAngleDown )
 // --------------------------------------------------------------
 
 const App = () => {
-  const dispatch = useDispatch()
   const state = useGlobalState()
   const {alerts, categories, labelFilters} = state
   const contentRef = useRef(null)
   const {modalIsShowing, toggleModal} = useModal()
   const [modalContent, setModalContent] = useState([])
   const initialURLFilters = useUrlFilters({"category": categories.active, "label": labelFilters.settings})
+  const counts = useCounts({counts: alerts.counts, categories: categories.items})
 
+  useInitialLoader({initialURLFilters})
 
-  useEffect(() => {
-    // load default values
-    const loadConfig = () => {
-      dispatch({type: 'REQUEST_CATEGORIES'})
-      dispatch({type: 'REQUEST_FILTERS'})
-      axios.get('/api/config')
-        .then(response => response.data)
-        .then(config => {
-          // extend default values with values from URL
-          if(initialURLFilters.category) {
-            config.categories.forEach(c => c.active = (initialURLFilters.category.indexOf(c.name) > -1))
-          }
-          if(initialURLFilters.label) { 
-            config.labelFilters = Object.assign(config.labelFilters, initialURLFilters.label)
-            //dispatch({type: 'SET_EXTRA_FILTERS_VISIBLE', visible: true}) // if we have initial filters via URL ensure that extra filter panel is visible (ideally we would toggle it only if the url-provided filter is one of the hidden ones but I haven't figured out a way to get past the race condition of the useFilters hook with the loadConfig process)
-          }
-          return config
-        })
-        .then(config => {
-          dispatch({type:'RECEIVE_CATEGORIES', items: config.categories})
-          dispatch({type:'RECEIVE_LABEL_FILTERS', settings: config.labelFilters})
-        })
-        .catch(error => { 
-          dispatch({type: 'REQUEST_CATEGORIES_FAILURE'})
-          dispatch({type: 'REQUEST_LABEL_FILTERS_FAILURE'})
-        })
-    }
-
-    const loadAlerts = () => {
-      dispatch({type: 'REQUEST_ALERTS'})
-      let socket = openSocket('/')
-      socket.on('alerts update', alerts => {
-        const {items,counts,labelValues} = alerts
-        if(alerts) dispatch({type: 'RECEIVE_ALERTS', items,counts,labelValues})
-      })
-    }   
-
-    loadConfig()
-    loadAlerts()
-    
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
- 
   return (
     <div className="container-fluid page">
       <div className="sidebar ">
@@ -93,7 +51,7 @@ const App = () => {
         <ul className="sidebar-nav">
           <li className="sidebar-folder">
             <span className="sidebar-link active"><FontAwesomeIcon icon="bell" fixedWidth />Alerts</span>
-            <Categories categories={categories} counts={alerts.counts.category}/>
+            <Categories categories={categories} counts={counts.category}/>
           </li>
         </ul>  
       </div>  
@@ -108,7 +66,7 @@ const App = () => {
             categories={categories}
             labelFilters={labelFilters} 
             items={alerts.labelValues ? alerts.labelValues['region'] : null} 
-            counts={alerts.counts.region}
+            counts={counts.region}
           />
           <Filters labelFilters={labelFilters} labelValues={alerts.labelValues} />
           <Alerts 

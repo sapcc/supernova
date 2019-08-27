@@ -5,7 +5,7 @@
       "area": "landscape",
       "name": "Productive",
       "match_re": {
-        "region": "^(?!staging)",
+        "region": "^(?!staging|admin)",
         "tier": "^(?!k8s|kks)"
       },
       "active": true
@@ -14,7 +14,7 @@
       "area": "landscape",
       "name": "LAB",
       "match_re": {
-        "region": "^(?:staging|qa-de-2)$"
+        "region": "^(?:staging|qa-de-2|admin)$"
       }
     },
     {

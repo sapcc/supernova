@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react'
+import React from 'react'
 import { useDispatch } from '../lib/globalState'
 import  CategorySeverityBadges from './shared/SeverityBadges'
 
@@ -16,26 +16,6 @@ const Categories = ({categories, counts}) => {
     dispatch({type: 'SET_ACTIVE_CATEGORY', name: category.name, active: !category.active})
   }
 
-  const activeLandscapeCategory = useMemo(() => 
-    categories.items.find(c => c.area === 'landscape' && c.active)
-    ,[categories.items]
-  )
-
-  // calculate category counts.
-  // result is the minimum of current category and if selected the landscape category.
-  const categoryCounts = (category) => {
-    if(!activeLandscapeCategory) return counts[category.name]
-
-    const lCounts = counts[activeLandscapeCategory.name]
-    const {critical,warning,info} = counts[category.name]
-    const result = {
-      critical: critical && lCounts.critical && Math.min(critical,lCounts.critical),
-      warning: warning && lCounts.warning && Math.min(warning,lCounts.warning),
-      info: info && lCounts.info && Math.min(info,lCounts.info),
-    }
-    return result
-  }
-
   if(categories.isLoading) return <span>Loading...</span>
 
   return (
@@ -49,7 +29,7 @@ const Categories = ({categories, counts}) => {
               <span 
                 className={category.active === true ? "sidebar-link active" : "sidebar-link"}
                 onClick={() => handleCategoryChange(category)}>
-                {category.name} {counts && counts[category.name] && <CategorySeverityBadges {...counts[category.name]} small/>}
+                {category.name} {counts && counts[category.name] && <CategorySeverityBadges {...counts[category.name].summary} small/>}
               </span>
             </li>
           )}
@@ -66,7 +46,7 @@ const Categories = ({categories, counts}) => {
                 className={category.active === true ? "sidebar-link active" : "sidebar-link"}
                 onClick={() => handleCategoryChange(category)}>
                 {category.name} {counts && counts[category.name] && 
-                  <CategorySeverityBadges small {...categoryCounts(category)}/>
+                  <CategorySeverityBadges small {...counts[category.name].summary}/>
                 }
               </span>
             </li>
@@ -85,7 +65,7 @@ const Categories = ({categories, counts}) => {
                 className={category.active === true ? "sidebar-link active" : "sidebar-link"}
                 onClick={() => handleCategoryChange(category)}>
                 {category.name} {counts && counts[category.name] && 
-                  <CategorySeverityBadges small {...categoryCounts(category)}/>
+                  <CategorySeverityBadges small {...counts[category.name].summary}/>
                 }
               </span>
             </li>
