@@ -1,10 +1,10 @@
 import React, {useMemo} from 'react'
 import RegionSeverityBadges from './shared/SeverityBadges'
 import { useDispatch } from '../lib/globalState'
-import { Button, Badge } from 'reactstrap'
+import { Button } from 'reactstrap'
 
 const REGION_SORT_REGEX = [
-  [/qa-de-.+/,/staging/],
+  [/qa-de-.+/,/staging/,/admin/],
   [/na-ca-.+/,/na-us-.+/,/na-.+/,/la-br-.+/,/la-.+/],
   [/eu-nl-.+/,/eu-de-.+/,/eu-ru-.+/,/eu-.+/],
   [/ap-ae-.+/,/ap-sa-.+/,/ap-cn-.+/],
