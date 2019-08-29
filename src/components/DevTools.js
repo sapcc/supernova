@@ -6,10 +6,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 export default () => {
   const [collapsed,updateCollapsed] = useState(true)
   const state = useGlobalState()
-  const container = useRef(null)
   const [opacity,setOpacity] = useState(0.5)
   const [log,updateLog] = useState([])
   const dispatchLogger = useDispatchLogger()
+  const container = useRef(null)
 
   useEffect(() => {
 

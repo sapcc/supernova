@@ -27,7 +27,7 @@ const hasNewAlerts = (items) => {
 }
 
 
-// EXPEREMENTAL #######################################################
+// This function updates alerts counts 
 const nonLandscapeCategories = config.categories.filter(c => c.area !== 'landscape')
 const updateCounts = (container,alert) => {
   if(alert && alert.labels && alert.labels.severity){
@@ -116,7 +116,7 @@ const loadAlerts = async ({cached = false} = {}) => {
   if(cached === true && _cachedAlerts) return {alerts: _cachedAlerts, hasNew: false}
 
   return axios
-    .get(process.env.ALERTS_API_ENDPOINT)
+    .get(`${process.env.REACT_APP_ALERTMANAGER_API_ENDPOINT}/alerts`)
     .then(response => response.data)
     .then(items => sortAlerts(items))
     .then(items => {

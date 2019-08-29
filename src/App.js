@@ -35,7 +35,7 @@ library.add( faBell, faSun, faTimesCircle, faCode, faAngleUp, faAngleDown )
 
 const App = () => {
   const state = useGlobalState()
-  const {alerts, categories, labelFilters} = state
+  const {alerts, silences, categories, labelFilters} = state
   const contentRef = useRef(null)
   const {modalIsShowing, toggleModal} = useModal()
   const [modalContent, setModalContent] = useState([])
@@ -70,7 +70,8 @@ const App = () => {
           />
           <Filters labelFilters={labelFilters} labelValues={alerts.labelValues} />
           <Alerts 
-            alerts={alerts} 
+            alerts={alerts}
+            silences={silences}
             labelFilters={labelFilters} 
             categories={categories}
             showModal={(content) => { setModalContent(content); toggleModal() }}

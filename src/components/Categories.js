@@ -45,9 +45,7 @@ const Categories = ({categories, counts}) => {
               <span 
                 className={category.active === true ? "sidebar-link active" : "sidebar-link"}
                 onClick={() => handleCategoryChange(category)}>
-                {category.name} {counts && counts[category.name] && 
-                  <CategorySeverityBadges small {...counts[category.name].summary}/>
-                }
+                {category.name} 
               </span>
             </li>
           )}
@@ -64,9 +62,7 @@ const Categories = ({categories, counts}) => {
               <span 
                 className={category.active === true ? "sidebar-link active" : "sidebar-link"}
                 onClick={() => handleCategoryChange(category)}>
-                {category.name} {counts && counts[category.name] && 
-                  <CategorySeverityBadges small {...counts[category.name].summary}/>
-                }
+                {category.name} 
               </span>
             </li>
           )}
