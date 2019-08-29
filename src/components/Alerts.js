@@ -73,6 +73,17 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
     })
   }
 
+  const toggleInhibitedModal = (fingerprint) => { 
+    if(Array.isArray(fingerprint)) fingerprint = fingerprint[0]
+    const alert = alerts.items.find(a => a.fingerprint === fingerprint)
+    if(!alert) return
+    showModal({
+      header: <React.Fragment>Alert</React.Fragment>,
+      body: <ReactJson src={alert} collapsed={2} collapseStringsAfterLength={100} />,
+      cancelButtonText: "Close" 
+    })
+  }
+
   const alertStatus = (status) => {
     return (
       <React.Fragment>
@@ -80,7 +91,7 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
           <div>{status.state}</div>
         }
         {status.inhibitedBy && status.inhibitedBy.length ?
-          <div className="u-text-info">Inhibited by: {status.inhibitedBy}</div>
+            <div className="u-text-info">Inhibited by: <a href="javascript:void(0)" onClick={() => toggleInhibitedModal(status.inhibitedBy)}>{status.inhibitedBy}</a></div>
           :
           ""
         }
