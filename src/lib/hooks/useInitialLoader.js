@@ -42,9 +42,18 @@ export default (initialURLFilters) => {
           if(alerts) dispatch({type: 'RECEIVE_ALERTS', items,counts,labelValues})
         })
       }   
+    
+      const loadSilences = () => {
+        dispatch({type: 'REQUEST_SILENCES'})
+        let socket = openSocket('/')
+        socket.on('silences update', response => {
+          if(response && response.items) dispatch({type: 'RECEIVE_SILENCES', items: response.items})
+        })
+      }   
 
       loadConfig()
       loadAlerts()
+      loadSilences()
     
       // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

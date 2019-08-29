@@ -6,15 +6,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { useDispatch } from '../lib/globalState'
 import useFilters from '../lib/hooks/useFilters'
+import axios from 'axios'
 
 
-const Alerts = ({alerts,categories,labelFilters,showModal}) => {
+const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
 
   const dispatch = useDispatch()  
   const activeLabelFilters = {}
   const labelSettings = labelFilters.settings
   const {primaryFilters, secondaryFilters} = useFilters(labelSettings)
   const activeCategories = useMemo(() => categories.items.filter(c => c.active), [categories.items])
+  const silencesKeyPayload = useMemo(() => 
+    silences.items.reduce((hash,silence) => {hash[silence.id] = silence; return hash}, {})
+    , [silences.items]
+  )
 
   for(let name in labelSettings) { 
     if(labelSettings[name] && labelSettings[name].length>0) activeLabelFilters[name] = labelSettings[name] 
@@ -58,6 +63,15 @@ const Alerts = ({alerts,categories,labelFilters,showModal}) => {
       body: <ReactJson src={alert} collapsed={2} collapseStringsAfterLength={100} />,
       cancelButtonText: "Close" 
     })
+  
+  const toggleSilenceModal = (silenceId) => { 
+    if(!silencesKeyPayload[silenceId]) return
+    showModal({
+      header: <React.Fragment>Silence</React.Fragment>,
+      body: <ReactJson src={silencesKeyPayload[silenceId]} collapsed={2} collapseStringsAfterLength={100} />,
+      cancelButtonText: "Close" 
+    })
+  }
 
   const alertStatus = (status) => {
     return (
@@ -71,7 +85,19 @@ const Alerts = ({alerts,categories,labelFilters,showModal}) => {
           ""
         }
         {status.silencedBy && status.silencedBy.length ?
-          <div className="u-text-info u-text-small">Silenced by: {status.silencedBy}</div>
+            <div className="u-text-info u-text-small">
+              Silenced by: {silencesKeyPayload[status.silencedBy] 
+                  ? <span>
+                    <br/>
+                      <a href="javascript:void(0)"  onClick={() => toggleSilenceModal(status.silencedBy)}>
+                        {silencesKeyPayload[status.silencedBy].createdBy}
+                      </a>
+                      <br/>
+                        
+                    </span>    
+                  : status.silencedBy
+              }
+            </div>
           :
           ""
         }
