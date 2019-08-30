@@ -23,8 +23,8 @@ module.exports = (server) => {
   // INITIAL LOAD. 
   // Every time a new client connects, send current alerts this client. 
   wsServer.on('connection', socket => { 
-    alertsLoader.get().then(alerts => socket.emit(ALERTS_UPDATE, alerts))
-    silencesLoader.get().then(silences => socket.emit(SILENCES_UPDATE, silences))
+    alertsLoader.get().then(alerts => alerts ? socket.emit(ALERTS_UPDATE, alerts) : null)
+    silencesLoader.get().then(silences => silences ? socket.emit(SILENCES_UPDATE, silences) : null)
   })
 }
 
