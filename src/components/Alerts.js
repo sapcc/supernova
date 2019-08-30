@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { useDispatch } from '../lib/globalState'
 import useFilters from '../lib/hooks/useFilters'
-import axios from 'axios'
 
 
 const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {

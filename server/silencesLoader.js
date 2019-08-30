@@ -28,7 +28,7 @@ const loadItems = async ({cached = false} = {}) => {
       return { items: _cachedItems, hasNew}
     })
     .catch(error => {
-      console.error('SILENCES LOADER API ERROR: ', error)
+      console.error('SILENCES LOADER API ERROR: ', error.message)
       return null
     })
 }

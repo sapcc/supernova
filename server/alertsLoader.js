@@ -127,7 +127,7 @@ const loadAlerts = async ({cached = false} = {}) => {
       return { alerts: _cachedAlerts, hasNew}
     })
     .catch(error => {
-      console.error('ALERTS LOADER API ERROR: ', error)
+      console.error('ALERTS LOADER API ERROR: ', error.message)
       return null
     })
 }
@@ -159,7 +159,7 @@ const start = (intervalInSeconds = 30, immediate = true) => {
 const AlertsLoader = {
   start, 
   onUpdate,
-  get: async () => loadAlerts({cached: true}).then(result => result.alerts) 
+  get: async () => loadAlerts({cached: true}).then(result => result ? result.alerts : null) 
 }
 
 Object.freeze(AlertsLoader)
