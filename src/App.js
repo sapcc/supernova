@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo, useEffect } from 'react';
 
 import { GlobalStateProvider, useGlobalState } from './lib/globalState'
 import reducers from './reducers'
@@ -18,8 +18,11 @@ import useInitialLoader from './lib/hooks/useInitialLoader'
 
 import './styles/theme.scss'
 import './App.css'
+
 // import AlertsChart from './AlertsChart'
 // import AlertDurationChart from './AlertDurationChart'
+import MapDisplay from './components/display/Map'
+import ListDisplay from './components/display/List'
 
 // Icons --------------------------------------------------------
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -33,16 +36,36 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 library.add( faBell, faSun, faTimesCircle, faCode, faAngleUp, faAngleDown )
 // --------------------------------------------------------------
 
+
 const App = () => {
   const state = useGlobalState()
   const {alerts, silences, categories, labelFilters} = state
   const contentRef = useRef(null)
   const {modalIsShowing, toggleModal} = useModal()
   const [modalContent, setModalContent] = useState([])
-  const initialURLFilters = useUrlFilters({"category": categories.active, "label": labelFilters.settings})
+  const [display,updateDisplay] = useState('dashboard')
+
+  const initialURLFilters = useUrlFilters({"category": categories.active, "label": labelFilters.settings, "display": [display]})
+
+  const currentDisplayMode = useMemo(() => {
+    if(Array.isArray(initialURLFilters.display) && initialURLFilters.display.length>0) {
+      if(initialURLFilters.display[0] !== display) return initialURLFilters.display[0]
+    }
+    return display
+  },[display])
+
+  useEffect(() => {
+    if(Array.isArray(initialURLFilters.display) && initialURLFilters.display.length>0) {
+      if(initialURLFilters.display[0] !== display) updateDisplay(initialURLFilters.display[0])
+    }
+  })
+
   const counts = useCounts({counts: alerts.counts, categories: categories.items})
 
   useInitialLoader({initialURLFilters})
+
+  if( currentDisplayMode === 'list') return <ListDisplay regionSeverities={counts.region}/>
+  if( currentDisplayMode === 'map') return <MapDisplay regionSeverities={counts.region}/>
 
   return (
     <div className="container-fluid page">
@@ -68,21 +91,21 @@ const App = () => {
             items={alerts.labelValues ? alerts.labelValues['region'] : null} 
             counts={counts.region}
           />
-          <Filters labelFilters={labelFilters} labelValues={alerts.labelValues} />
-          <Alerts 
-            alerts={alerts}
-            silences={silences}
-            labelFilters={labelFilters} 
-            categories={categories}
-            showModal={(content) => { setModalContent(content); toggleModal() }}
-          />
-        </div>
-      </div> 
-      
-      <SuperModal isShowing={modalIsShowing} hide={toggleModal} header={modalContent.header} footer={modalContent.footer} cancelButtonText={modalContent.cancelButtonText}>{modalContent.body}</SuperModal>
+            <Filters labelFilters={labelFilters} labelValues={alerts.labelValues} />
+            <Alerts 
+              alerts={alerts}
+              silences={silences}
+              labelFilters={labelFilters} 
+              categories={categories}
+              showModal={(content) => { setModalContent(content); toggleModal() }}
+            />
+            </div>
+          </div> 
 
-      {process.env.NODE_ENV === 'development' && <DevTools/>}
-    </div>
+          <SuperModal isShowing={modalIsShowing} hide={toggleModal} header={modalContent.header} footer={modalContent.footer} cancelButtonText={modalContent.cancelButtonText}>{modalContent.body}</SuperModal>
+
+            {process.env.NODE_ENV === 'development' && <DevTools/>}
+          </div>
   )
 }
 
