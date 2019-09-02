@@ -19,7 +19,7 @@ const receiveItems = (state,{items}) => (
 // toggles active status of a category
 const setActive = (state,{name,active}) => {
   const names = Array.isArray(name) ? name : [name]
-  let items; 
+  let items = []
   const activeItems = []
 
   if(!active) {
@@ -32,10 +32,22 @@ const setActive = (state,{name,active}) => {
     return {...state, items, active: activeItems}
   }
 
+
   const categoryAreas = state.items.filter(c => names.indexOf(c.name) >= 0).map(c => c.area)
+
+  // Landscape category can be combined with other categories. 
+  // However, within the Landscape group or all other group 
+  // types the selection is exclusive.
   items = state.items.map(category => {
     const newCategory = {...category}
-    if(categoryAreas.indexOf(category.area) >= 0) newCategory.active = names.indexOf(category.name) >= 0
+    // Extra treatment of the landscape category
+    if(category.area === 'landscape') {
+      if(categoryAreas.indexOf('landscape') >= 0) newCategory.active = names.indexOf(category.name) >= 0
+    } else {
+      if(categoryAreas.indexOf('landscape') < 0 && categoryAreas.length > 0) {
+        newCategory.active = names.indexOf(category.name) >= 0
+      }
+    }
     if(newCategory.active) activeItems.push(newCategory.name)
     return newCategory
   })
