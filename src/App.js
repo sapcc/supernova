@@ -52,20 +52,20 @@ const App = () => {
       if(initialURLFilters.display[0] !== display) return initialURLFilters.display[0]
     }
     return display
-  },[display])
+  },[initialURLFilters.display,display])
 
   useEffect(() => {
     if(Array.isArray(initialURLFilters.display) && initialURLFilters.display.length>0) {
       if(initialURLFilters.display[0] !== display) updateDisplay(initialURLFilters.display[0])
     }
-  })
+  },[])
 
   const counts = useCounts({counts: alerts.counts, categories: categories.items})
 
-  useInitialLoader({initialURLFilters})
+  useInitialLoader(initialURLFilters)
 
-  if( currentDisplayMode === 'list') return <ListDisplay regionSeverities={counts.region}/>
-  if( currentDisplayMode === 'map') return <MapDisplay regionSeverities={counts.region}/>
+  if( currentDisplayMode === 'list') return <ListDisplay regionCounts={counts.region}/>
+  if( currentDisplayMode === 'map') return <MapDisplay regionCounts={counts.region}/>
 
   return (
     <div className="container-fluid page">
