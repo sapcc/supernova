@@ -6,7 +6,8 @@ export default () => {
   const {alerts, categories} = state
 
   return useMemo(() => {
-    let tmpItems = alerts.labelValues && alerts.labelValues.region ? alerts.labelValues.region.slice() : []
+    let items = alerts.counts && alerts.counts.region ? Object.keys(alerts.counts.region).slice() : []
+    items = items.filter((item,index) => items.indexOf(item) === index)
 
     // if a landscape category is active then filter regions
     const landscapeCategories = categories.items.filter(c => 
@@ -14,7 +15,7 @@ export default () => {
     )
 
     if(landscapeCategories.length > 0) {
-      tmpItems = tmpItems.filter(region => {
+      items = items.filter(region => {
         return landscapeCategories.reduce((insideLandscape,category) => {
           const regex = new RegExp(category.match_re.region)
           return insideLandscape && regex.test(region)
@@ -22,6 +23,6 @@ export default () => {
       })
     }
     // END
-    return tmpItems
+    return items
   }, [categories.items,alerts.labelValues])
 }
