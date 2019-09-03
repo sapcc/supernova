@@ -101,10 +101,10 @@ const AnnotationContent = ({region,dx,dy,counts}) => {
 export default ({regionCounts}) => {
   const activeRegions = useRegionFilter()
   const counts = {}
-  activeRegions.forEach(region => {
-    if(regionCounts[region]) counts[region] = {...regionCounts[region]}
-  })
-
+  activeRegions.forEach(region => 
+    counts[region] = regionCounts[region] || {}
+  )
+    
   return (
     <div style={wrapperStyles}>
     <ComposableMap

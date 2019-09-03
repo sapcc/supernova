@@ -46,13 +46,12 @@ const updateCounts = (container,alert) => {
     }
     
     if(alert.status && alert.status.state === 'suppressed') {
-      container.summary[`${alert.labels.severity}Acked`] = container.summary[`${alert.labels.severity}Acked`] || 0
-      container.summary[`${alert.labels.severity}Acked`] += 1
+      container.summary[`${alert.labels.severity}Silenced`] = container.summary[`${alert.labels.severity}Silenced`] || 0
+      container.summary[`${alert.labels.severity}Silenced`] += 1
       
-      container.region[alert.labels.region][`${alert.labels.severity}Acked`] = container.region[alert.labels.region][`${alert.labels.severity}Acked`] || 0
-      container.region[alert.labels.region][`${alert.labels.severity}Acked`] += 1
+      container.region[alert.labels.region][`${alert.labels.severity}Silenced`] = container.region[alert.labels.region][`${alert.labels.severity}Silenced`] || 0
+      container.region[alert.labels.region][`${alert.labels.severity}Silenced`] += 1
     }
-
   }
 }
 // END ################################################################
@@ -60,6 +59,12 @@ const updateCounts = (container,alert) => {
 
 const extendAlerts = (items) => {
   const result = {items, counts: {}, labelValues: {}}
+
+  // load default regions
+  config.defaultRegions.forEach(region => {
+    result.counts.region = result.counts.region || {}
+    result.counts.region[region] = {critical: 0, warning: 0, info: 0, criticalSilenced: 0, warningSilenced: 0, infoSilenced: 0}
+  })
 
   //counts -> category -> NAME -> SEVERITY -> number
   items.forEach(alert => {
@@ -110,6 +115,7 @@ const extendAlerts = (items) => {
     }
     // END 
   })
+  
   Object.keys(result.labelValues).forEach(k => result.labelValues[k] = result.labelValues[k].sort())
 
   return result
