@@ -25,7 +25,13 @@ describe('useUrlFilters', () => {
 
   describe('currentUrlFilters', () => {
     beforeEach(() => {
-      window.location.hash = '#category=All&filter_severity=critical&filter_severity=warning&test=value'
+      global.window = Object.create(window);
+      Object.defineProperty(window, 'location', {
+        value: {
+          search: '?category=All&filter_severity=critical&filter_severity=warning&test=value'
+        }
+      })
+      
       testHook(() => initialURLFilters = useUrlFilters({'category': [],'filter': []}))
     })
 
@@ -36,7 +42,12 @@ describe('useUrlFilters', () => {
     
   describe('returns current URL filters', () => {
     beforeEach(() => {
-      window.location.hash = '#category=All&filter_severity=critical&filter_severity=warning&test=value'
+      global.window = Object.create(window);
+      Object.defineProperty(window, 'location', {
+        value: {
+          search: '?category=All&filter_severity=critical&filter_severity=warning&test=value'
+        }
+      })
       testHook(() => initialURLFilters = useUrlFilters({'category': ['API'],'filter': []}))
     })
 
