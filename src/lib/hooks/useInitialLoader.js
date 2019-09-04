@@ -11,7 +11,6 @@ export default (initialURLFilters) => {
     const loadConfig = () => {
       dispatch({type: 'REQUEST_CATEGORIES'})
       dispatch({type: 'REQUEST_FILTERS'})
-      dispatch({type: 'REQUEST_LOCATIONS'})
       axios.get('/api/config')
         .then(response => response.data)
         .then(config => {
@@ -26,12 +25,10 @@ export default (initialURLFilters) => {
           return config
         })
         .then(config => {
-          dispatch({type:'RECEIVE_LOCATIONS', items: config.locations})
           dispatch({type:'RECEIVE_CATEGORIES', items: config.categories})
           dispatch({type:'RECEIVE_LABEL_FILTERS', settings: config.labelFilters})
         })
         .catch(error => { 
-          dispatch({type: 'REQUEST_LOCATIONS_FAILURE'})
           dispatch({type: 'REQUEST_CATEGORIES_FAILURE'})
           dispatch({type: 'REQUEST_LABEL_FILTERS_FAILURE'})
         })
