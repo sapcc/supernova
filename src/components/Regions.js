@@ -3,13 +3,19 @@ import React, {useMemo} from 'react'
 // import RegionSeverityBadges from './shared/SeverityBadges'
 import { useDispatch } from '../lib/globalState'
 import RegionSeverityCount from './shared/RegionSeverityCount'
+import useActiveRegionFilter from '../lib/hooks/useActiveRegionFilter'
 
 
 export default ({items, counts, labelFilters, categories}) => {
   if(!items) return null
   
   const dispatch = useDispatch()
-  const sortedRegions = useMemo(() => items.slice().sort((a,b) => a.localeCompare(b)), [items])
+  const activeRegions = useActiveRegionFilter()
+
+  const sortedRegions = useMemo(() => {
+    const tmpItems = items.slice().sort((a,b) => a.localeCompare(b))
+    return tmpItems.filter(r => activeRegions.indexOf(r) >= 0)
+  }, [items,activeRegions])
 
   const handleClick = (region) => {
     if(labelFilters.settings.region.includes(region)) {
