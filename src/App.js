@@ -28,12 +28,15 @@ import ListDisplay from './components/display/List'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { 
   faBell, faSun, faTimesCircle, faCode, 
-  faAngleUp, faAngleDown 
+  faAngleUp, faAngleDown
 } from '@fortawesome/free-solid-svg-icons'
+import {
+  faBellSlash as faBellSlashRegular
+} from '@fortawesome/free-regular-svg-icons'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // build icon library, only needs to be done once, then the icon will be available everywhere, only the FontAwesomeIcon import is necessary in other components
-library.add( faBell, faSun, faTimesCircle, faCode, faAngleUp, faAngleDown )
+library.add( faBell, faBellSlashRegular, faSun, faTimesCircle, faCode, faAngleUp, faAngleDown )
 // --------------------------------------------------------------
 
 

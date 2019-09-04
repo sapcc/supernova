@@ -43,8 +43,9 @@ $border-light:      #E5E9F2;
 $theme-colors: (
     "primary":    $bright-blue,
     "success":    $bright-green,
-    "info":       $bright-blue,
-    "warning":    $light-sapgold
+    "info":       rgb(101, 197, 219),
+    "warning":    $light-sapgold,
+    "danger":     rgb(191, 27, 0)
 );
 
 @import "../../node_modules/bootstrap/scss/bootstrap";
@@ -167,11 +168,11 @@ $theme-colors: (
 
     // ADDED BY ANDREAS
     &.head {
-      display: block;
-      color: #808080;
-      margin-top: 20px;
-      margin-bottom: 5px;
-      text-transform: uppercase;
+        display: block;
+        color: #808080;
+        margin-top: 20px;
+        margin-bottom: 5px;
+        text-transform: uppercase;
     }
 }
 
@@ -296,6 +297,81 @@ $theme-colors: (
         padding-left: 0;
     }
 
+}
+
+// --------------------------------------------------------
+
+
+// Regions -------------------------------------------------
+
+.regions-panel {
+    display: flex;
+    flex-wrap: wrap;
+
+    .region-wrapper {
+        flex: 0 1 25%;
+    }
+
+    .region {
+        display: flex;
+        justify-content: space-between;
+        min-width: 380px;
+        background: $bg-dark-active;
+        border: 1px solid $gray-900;
+        border-radius: 3px;
+        color: $gray-100;
+        cursor: pointer;
+        margin: 0 0.75rem 0.75rem 0;
+
+        &.active {
+            background: $gray-400;
+            border-color: $gray-500;
+        }
+
+        &:hover {
+            border-color: $gray-500;
+        }
+
+        .region-name {
+            flex: 1 1 27%;
+            display: flex;
+            align-items: center;
+            font-size: $h4-font-size;
+            padding-left: 0.75rem;
+        }
+
+        .region-severity {
+            flex-basis: 24%;
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+
+            &.allclear {
+                background: $bg-dark;
+            }
+        }
+
+        .region-severity-open {
+            font-size: $h2-font-size;
+        }
+
+        .region-severity-silenced {
+            font-size: $font-size-sm;
+            padding-left: 0.3rem;
+        }
+
+        .region-critical {
+            background: rgb(191, 27, 0);
+        }
+
+        .region-warning {
+            background: $warning;
+        }
+
+        .region-info {
+            background: rgb(101, 197, 219);
+        }
+    }
 }
 
 // --------------------------------------------------------
