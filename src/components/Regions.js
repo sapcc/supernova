@@ -1,15 +1,10 @@
 import React, {useMemo} from 'react'
-import RegionSeverityBadges from './shared/SeverityBadges'
-import { useDispatch } from '../lib/globalState'
-import { Button } from 'reactstrap'
 
-const REGION_SORT_REGEX = [
-  [/qa-de-.+/,/staging/,/admin/],
-  [/na-ca-.+/,/na-us-.+/,/na-.+/,/la-br-.+/,/la-.+/],
-  [/eu-nl-.+/,/eu-de-.+/,/eu-ru-.+/,/eu-.+/],
-  [/ap-ae-.+/,/ap-sa-.+/,/ap-cn-.+/],
-  [/ap-jp-.+/,/ap-au-.+/]
-]
+// import RegionSeverityBadges from './shared/SeverityBadges'
+import { useDispatch } from '../lib/globalState'
+import RegionSeverityCount from './shared/RegionSeverityCount'
+import { isExpressionWrapper } from '@babel/types';
+
 
 export default ({items, counts, labelFilters, categories}) => {
   if(!items) return null
@@ -33,17 +28,20 @@ export default ({items, counts, labelFilters, categories}) => {
       })
     }
     // END
+    
+    // return the filtered items alphabetically
+    return tmpItems.sort((a,b) => a.localeCompare(b))
 
-    return REGION_SORT_REGEX.map(regionRegexList => {
-      let result = []
+    // return REGION_SORT_REGEX.map(regionRegexList => {
+    //   let result = []
 
-      for(let regionRegex of regionRegexList) {
-        const items = tmpItems.filter(region => regionRegex.test(region)).sort()
-        result = result.concat(items)
-        tmpItems = tmpItems.filter(item => !items.includes(item))
-      }  
-      return result
-    })
+    //   for(let regionRegex of regionRegexList) {
+    //     const items = tmpItems.filter(region => regionRegex.test(region)).sort()
+    //     result = result.concat(items)
+    //     tmpItems = tmpItems.filter(item => !items.includes(item))
+    //   }  
+    //   return result
+    // })
   }, [items,categories.items])
 
   const handleClick = (region) => {
@@ -53,24 +51,41 @@ export default ({items, counts, labelFilters, categories}) => {
     dispatch({type: 'SET_VALUES_FOR_FILTER', name: 'region', values: [region]})
   }
 
-  //return null
   return (
-    <div style={{display: 'flex', justifyContent: 'space-around', width: '100%'}}>
-      {sortedRegions.map((regionList,i1) => 
-        <div key={i1} style={{flexGrow: 1}}>{regionList.map((region,i2) => 
-          <div key={i2} style={{width: '100%', padding: '2px 15px'}}>
-            <Button 
-              block 
-              active={labelFilters.settings.region.includes(region)} 
-              color='light' 
-              onClick={() => handleClick(region)}>
-              {region} {' '}
-              <RegionSeverityBadges small {...counts[region]} />
-            </Button>    
+    <div className="regions-panel">
+      {sortedRegions.map(region =>
+        <div className="region-wrapper">
+          <div className={labelFilters.settings.region.includes(region) ? "region active" : "region"} key={region} onClick={() => handleClick(region)} >
+            <div className="region-name">{region}</div>
+            {["critical", "warning", "info"].map(severity =>
+              <RegionSeverityCount severity={severity} count={counts[region][severity]} countSilenced={counts[region][`${severity}Acked`]} />
+            )}
+            
+            
           </div>
-        )}
         </div>
-      )}  
+      )}
     </div>
   )
+
+  //return null
+  // return (
+  //   <div style={{display: 'flex', justifyContent: 'space-around', width: '100%'}}>
+  //     {sortedRegions.map((regionList,i1) => 
+  //       <div key={i1} style={{flexGrow: 1}}>{regionList.map((region,i2) => 
+  //         <div key={i2} style={{width: '100%', padding: '2px 15px'}}>
+  //           <Button 
+  //             block 
+  //             active={labelFilters.settings.region.includes(region)} 
+  //             color='light' 
+  //             onClick={() => handleClick(region)}>
+  //             {region} {' '}
+  //             <RegionSeverityBadges small {...counts[region]} />
+  //           </Button>    
+  //         </div>
+  //       )}
+  //       </div>
+  //     )}  
+  //   </div>
+  // )
 }
