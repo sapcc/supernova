@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React from 'react';
 import {
   ComposableMap,
   ZoomableGroup,
@@ -7,7 +7,6 @@ import {
   Markers,Marker,
   Annotations,Annotation
 } from "react-simple-maps"
-import useRegionFilter from '../../lib/hooks/useRegionFilter'
 
 import LOCATIONS from './locations'
   
@@ -99,11 +98,6 @@ const AnnotationContent = ({region,dx,dy,counts}) => {
 }
 
 export default ({regionCounts}) => {
-  const activeRegions = useRegionFilter()
-  const counts = {}
-  activeRegions.forEach(region => 
-    counts[region] = regionCounts[region] || {}
-  )
     
   return (
     <div style={wrapperStyles}>
@@ -150,7 +144,7 @@ export default ({regionCounts}) => {
             ))}
             </Geographies>
             <Markers>
-              {Object.keys(counts).map((region,index) => LOCATIONS[region] &&  
+              {Object.keys(regionCounts).map((region,index) => LOCATIONS[region] &&  
                 <Marker key={index} marker={{ coordinates: [ LOCATIONS[region].lon, LOCATIONS[region].lat ] }}>
                   <circle stroke='#000' fill='#000' cx={ 0 } cy={ 0 } r={ 1 } />
                 </Marker>
@@ -159,14 +153,14 @@ export default ({regionCounts}) => {
 
 
             <Annotations>
-              {Object.keys(counts).map((region,index) => LOCATIONS[region] &&
+              {Object.keys(regionCounts).map((region,index) => LOCATIONS[region] &&
                 <Annotation 
                   key={index} 
                   stroke='#000' 
                   dx={ LOCATIONS[region].dx } dy={ LOCATIONS[region].dy } 
                   subject={ [ LOCATIONS[region].lon, LOCATIONS[region].lat ] } 
                   strokeWidth={ 1 }>
-                  <AnnotationContent region={region} counts={counts[region]} {...LOCATIONS[region]}/>
+                  <AnnotationContent region={region} counts={regionCounts[region]} {...LOCATIONS[region]}/>
                 </Annotation>
               )}  
               </Annotations>

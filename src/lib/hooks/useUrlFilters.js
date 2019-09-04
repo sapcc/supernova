@@ -80,9 +80,6 @@ const jsonToUrlString = (json) => {
 const urlStringToJson = (urlString) => {
   if(!urlString || urlString.length === 0) return null
 
-  // remove first #
-  if(urlString[0] === '#') urlString = urlString.substr(1)
-
   const values = urlString.split('&')
   const json = {}
   values.forEach(entry => {
@@ -100,10 +97,12 @@ const urlStringToJson = (urlString) => {
  * Returns a json object containing current url filters.
  **/ 
 export default (filters) => {
-  
+  const host = `${window.location.protocol}//${window.location.host}`
+
   const initialUrlFilters = useMemo(() => {
-    const hash = (window.location.hash || '')
-    const json = urlStringToJson(decodeURI(hash))
+    let params = (window.location.search || '')
+    if(params[0] === '?') params = params.substr(1)
+    const json = urlStringToJson(decodeURI(params))
 
     if(!json) return {}
 
@@ -112,19 +111,17 @@ export default (filters) => {
     return result
     // eslint-disable-next-line
   }, []) 
-
-
-  // Update URL every time the filters change
+  
   useEffect(() => {
     if(!filters || Object.keys(filters).length === 0 || Object.values(filters).flat().length === 0) {
-      const noHashURL = window.location.href.replace(/#.*$/, '')
-      window.history.replaceState('', document.title, noHashURL)
+      window.history.replaceState('', document.title, host)
     }
     const filterString = encodeURI(jsonToUrlString(filters))
 
-    if (window.location.hash !== filterString) {
-      window.location.hash = filterString
-    }  
+    if(window.location.search !== filterString) {
+      window.history.pushState('', document.title, `${host}?${filterString}`)
+    }
+  
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters])
 

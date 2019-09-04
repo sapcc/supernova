@@ -1,5 +1,4 @@
 import React from 'react'
-import useRegionFilter from '../../lib/hooks/useRegionFilter'
 
 const styles = {
   wrapper: {
@@ -64,17 +63,12 @@ const RegionSeverity = ({region,critical,warning,info,criticalSilenced,warningSi
 
 
 export default ({regionCounts}) => {
-  const activeRegions = useRegionFilter()
-  const counts = {}
-  activeRegions.forEach(region => {
-    if(regionCounts[region]) counts[region] = {...regionCounts[region]}
-  })
 
   return (
     <div style={styles.wrapper}>
       <div style={styles.container}>
-        {Object.keys(counts).map((region,index) => 
-          <RegionSeverity region={region} {...counts[region]}/>
+        {Object.keys(regionCounts).map((region,index) => 
+          <RegionSeverity region={region} {...regionCounts[region]}/>
         )}
       </div>
     </div>    
