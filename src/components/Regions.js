@@ -4,6 +4,7 @@ import React, {useMemo} from 'react'
 import { useDispatch } from '../lib/globalState'
 import RegionSeverityCount from './shared/RegionSeverityCount'
 
+
 export default ({items, counts, labelFilters, categories}) => {
   if(!items) return null
   
@@ -20,11 +21,11 @@ export default ({items, counts, labelFilters, categories}) => {
   return (
     <div className="regions-panel">
       {sortedRegions.map(region =>
-        <div className="region-wrapper">
+        <div className="region-wrapper" key={region}>
           <div className={labelFilters.settings.region.includes(region) ? "region active" : "region"} key={region} onClick={() => handleClick(region)} >
             <div className="region-name">{region}</div>
-            {["critical", "warning", "info"].map(severity =>
-              <RegionSeverityCount severity={severity} count={counts[region][severity]} countSilenced={counts[region][`${severity}Acked`]} />
+            {["critical", "warning", "info"].map((severity, index) =>
+              <RegionSeverityCount key={`${severity}-${index}`} severity={severity} count={counts[region][severity]} countSilenced={counts[region][`${severity}Silenced`]} />
             )}
           </div>
         </div>

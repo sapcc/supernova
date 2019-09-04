@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 export default ({severity, count, countSilenced}) => {
 
   const openAlertCount = (count, countSilenced) => {
-    if (isNaN(countSilenced)) return count
+    if (isNaN(countSilenced) || countSilenced === 0) return count
 
     return count - countSilenced 
   }
@@ -17,7 +17,7 @@ export default ({severity, count, countSilenced}) => {
   return (
     <div className={`region-severity region-${severity} ${allClearClassName(count)}`}>
       <div className="region-severity-open">{openAlertCount(count, countSilenced)}</div>
-      { !isNaN(countSilenced) &&
+      { (!isNaN(countSilenced) && countSilenced > 0) &&
         <div className="region-severity-silenced"><FontAwesomeIcon icon={["far", "bell-slash"]}/> {countSilenced}</div>}
     </div>
   )
