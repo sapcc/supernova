@@ -1,5 +1,20 @@
 
 export default {
+  "staging": {
+    "country": "Germany",
+    "lat": 52.5289279,
+    "lon": 13.3864339,
+    "dx": -30,
+    "dy": -30
+  },
+  "admin": {
+    "country": "Germany",
+    "lat": 52.5289279,
+    "lon": 13.3864339,
+    "dx": -30,
+    "dy": 0
+  },
+
   "eu-de-1": {
     "country":    "Germany",
     "regionname": "EU-DE-1",
