@@ -5,14 +5,14 @@ export default {
     "lat": 52.5289279,
     "lon": 13.3864339,
     "dx": -30,
-    "dy": -30
+    "dy": -20
   },
   "admin": {
     "country": "Germany",
     "lat": 52.5289279,
     "lon": 13.3864339,
     "dx": -30,
-    "dy": 0
+    "dy": 5
   },
 
   "eu-de-1": {

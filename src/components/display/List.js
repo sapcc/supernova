@@ -43,7 +43,7 @@ const RegionSeverity = ({region,critical,warning,info,criticalSilenced,warningSi
       <div style={styles.box}>
         <div style={{...styles.severity, backgroundColor: critical > 0 ? colors.critical: 'black'}}>
           {criticalSilenced >0 ? critical-criticalSilenced : critical }
-          {criticalSilenced && 
+          {criticalSilenced > 0 && 
             <span style={{fontSize: '1rem'}}>SILENCED {criticalSilenced}</span>
           }
         </div>

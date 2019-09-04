@@ -88,8 +88,8 @@ const AnnotationContent = ({region,dx,dy,counts}) => {
           x={ x+5 } 
           y={ currentY+=10 }
           fontSize={'0.6em'}>
-          <tspan>{counts.warningAcked ? counts.warning-counts.warningAcked : counts.warning}</tspan> 
-          {counts.warningAcked && <tspan style={{fill: 'grey'}} fontSize={'smaller'}>{' '} {counts.warningAcked} silenced</tspan>}
+          <tspan>{counts.warningSilenced ? counts.warning-counts.warningSilenced : counts.warning}</tspan> 
+            {counts.warningSilenced > 0 && <tspan style={{fill: 'grey'}} fontSize={'smaller'}>{' '} {counts.warningSilenced} silenced</tspan>}
         </text>
       }
       { counts.info && counts.info>0 && 
@@ -99,8 +99,8 @@ const AnnotationContent = ({region,dx,dy,counts}) => {
           x={ x+5 } 
           y={ currentY+=10 }
           fontSize={'0.6em'}>
-          <tspan>{counts.infoAcked ? counts.info-counts.infoAcked : counts.info}</tspan> 
-          {counts.infoAcked && <tspan style={{fill: 'grey'}} fontSize={'smaller'}>{' '} {counts.infoAcked} silenced</tspan>}
+          <tspan>{counts.infoSilenced ? counts.info-counts.infoSilenced : counts.info}</tspan> 
+            {counts.infoSilenced >0 && <tspan style={{fill: 'grey'}} fontSize={'smaller'}>{' '} {counts.infoSilenced} silenced</tspan>}
         </text>
       }
     </React.Fragment>
