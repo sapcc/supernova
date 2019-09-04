@@ -13,7 +13,7 @@ import useModal from './lib/hooks/useModal'
 import SuperModal from './components/shared/SuperModal'
 
 import useUrlFilters from './lib/hooks/useUrlFilters'
-import useCounts from './lib/hooks/useCounts'
+import useActiveCategoryCounts from './lib/hooks/useActiveCategoryCounts'
 import useInitialLoader from './lib/hooks/useInitialLoader'
 
 import './styles/theme.scss'
@@ -63,7 +63,7 @@ const App = () => {
     }
   },[])
 
-  const counts = useCounts({counts: alerts.counts, categories: categories.items})
+  const counts = useActiveCategoryCounts({counts: alerts.counts, categories: categories.items})
 
   useInitialLoader(initialURLFilters)
 
