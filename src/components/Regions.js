@@ -23,6 +23,7 @@ export default ({items, counts, labelFilters, categories}) => {
     }
     dispatch({type: 'SET_VALUES_FOR_FILTER', name: 'region', values: [region]})
   }
+  console.log('::::::::::::::',counts)
 
   return (
     <div className="regions-panel">

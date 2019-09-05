@@ -43,14 +43,16 @@ const updateCounts = (container,alert) => {
       container.region[alert.labels.region] = container.region[alert.labels.region] || {}
       container.region[alert.labels.region][alert.labels.severity] = container.region[alert.labels.region][alert.labels.severity] || 0
       container.region[alert.labels.region][alert.labels.severity] += 1
+      
+      if(alert.status && alert.status.state === 'suppressed') {
+        container.region[alert.labels.region][`${alert.labels.severity}Silenced`] = container.region[alert.labels.region][`${alert.labels.severity}Silenced`] || 0
+        container.region[alert.labels.region][`${alert.labels.severity}Silenced`] += 1
+      }
     }
-    
+      
     if(alert.status && alert.status.state === 'suppressed') {
       container.summary[`${alert.labels.severity}Silenced`] = container.summary[`${alert.labels.severity}Silenced`] || 0
       container.summary[`${alert.labels.severity}Silenced`] += 1
-      
-      container.region[alert.labels.region][`${alert.labels.severity}Silenced`] = container.region[alert.labels.region][`${alert.labels.severity}Silenced`] || 0
-      container.region[alert.labels.region][`${alert.labels.severity}Silenced`] += 1
     }
   }
 }
