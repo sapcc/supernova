@@ -5,15 +5,12 @@ import ReactJson from 'react-json-view'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { useDispatch } from '../lib/globalState'
-import useFilters from '../lib/hooks/useFilters'
-
 
 const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
 
   const dispatch = useDispatch()  
   const activeLabelFilters = {}
   const labelSettings = labelFilters.settings
-  const {primaryFilters, secondaryFilters} = useFilters(labelSettings)
   const activeCategories = useMemo(() => categories.items.filter(c => c.active), [categories.items])
   const silencesKeyPayload = useMemo(() => 
     silences.items.reduce((hash,silence) => {hash[silence.id] = silence; return hash}, {})
@@ -36,7 +33,7 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
         },true)
       },true)
     })
-  }, [alerts,categories])
+  }, [alerts,categories,activeCategories])
     
   if(Object.keys(activeLabelFilters).length >= 0) {
     items = items.filter(alert => {
@@ -128,17 +125,13 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
   }
 
   const addFilter = (name, value) => {
-    if (secondaryFilters.includes(name)) {
-      // if the clicked value is a secondary filter ensure that the secondary filter panel is visible
-      dispatch({type: 'SET_EXTRA_FILTERS_VISIBLE', visible: true})
-    }
     dispatch({type: 'ADD_FILTER', name, value})    
   }
 
   // get white-listed filter labels, filter out the ones we show in the list anyway, then check each of the remaining ones if they exist on the given alert. If yes render a filter pill for them
   const alertLabels = (alert) => (
     <React.Fragment>
-      {secondaryFilters.map((labelKey, index) =>
+      {Object.keys(labelSettings).map((labelKey, index) =>
           alert.labels[labelKey] &&
             <span 
               className={`filter-pill ${isFilterActive(labelKey, alert.labels[labelKey]) ? 'active' : ''}`}
