@@ -1,6 +1,8 @@
 import { useMemo } from 'react'
 import { useGlobalState } from '../globalState'
 
+// This module ensures that only the regions from the 
+// currently selected categories are selected.
 export default () => {
   const state = useGlobalState()
   const {alerts, categories} = state
