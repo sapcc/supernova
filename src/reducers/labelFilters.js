@@ -48,16 +48,8 @@ const removeFilter = (state, {name, value}) => {
   return {...state, settings: {...state.settings, [name]: values} }
 }
 
-const setExtraFiltersVisible = (state, {visible}) => (
-  {...state, extraFiltersVisible: visible}
-)
-
-
-
 export default (state = initialState, action) => {
   switch (action.type) {
-    case 'SET_EXTRA_FILTERS_VISIBLE':
-      return setExtraFiltersVisible(state,action)
     case 'SET_VALUES_FOR_FILTER':
       return setValuesForFilter(state,action)
     case 'ADD_FILTER':
