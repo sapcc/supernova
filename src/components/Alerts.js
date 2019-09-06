@@ -180,13 +180,13 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
             <td>
               {alert.annotations.summary}
               <br/>
-              <small className="u-text-info">{alert.annotations.description}</small>
+              <small className="u-text-info">{alert.annotations.description} - <Button className="btn-inline-link" color="link" onClick={() => toggleDetailsModal(alert)}>Show raw data</Button></small>
               <br />
               {alertLabels(alert)}
             </td>
             <td>{moment(alert.startsAt).format('DD.MM.YYYY HH:mm:ss')}</td>
             <td>{alertStatus(alert.status)}</td>
-            <td className="u-v-align-middle"><Button outline size="sm" onClick={() => toggleDetailsModal(alert)}>Raw data</Button></td>
+            <td></td>
           </tr>
         )}
       </tbody> 

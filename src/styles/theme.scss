@@ -51,7 +51,7 @@ $border-danger:     lighten($danger,45);
 $border-warning:    lighten($warning,25);
 $border-info:       lighten($info, 20);
 
-// Bootstrap Overrides ---------------
+// Bootstrap Overrides and Extensions---------------
 
 $theme-colors: (
     "primary":    $bright-blue,
@@ -62,6 +62,11 @@ $theme-colors: (
 );
 
 @import "../../node_modules/bootstrap/scss/bootstrap";
+
+.btn-inline-link {
+    font-size: inherit;
+    padding: 0;
+}
 
 
 
@@ -295,16 +300,70 @@ $theme-colors: (
 .critical .filter-pill {
     border-color: $border-danger;
     color: lighten($danger, 25);
+
+    &:hover, &.active {
+        background: darken($bg-danger, 7);
+        border-color: darken($border-danger, 8);
+        color: lighten($danger, 10);
+    }
+
+    &.active {
+        svg {
+            color: lighten($danger, 25);
+        }
+
+        &:hover {
+            svg {
+                color: lighten($danger, 10)
+            }
+        }
+    }
 }
 
 .warning .filter-pill {
     border-color: $border-warning;
     color: darken($warning, 10);
+
+    &:hover, &.active {
+        background: darken($bg-warning, 7);
+        border-color: darken($border-warning, 10);
+        color: darken($warning, 15);
+    }
+
+    &.active {
+        svg {
+            color: darken($warning, 10);
+        }
+
+        &:hover {
+            svg {
+                color: darken($warning, 16);
+            }
+        }
+    }
 }
 
 .info .filter-pill {
     border-color: $border-info;
     color: darken($info, 10);
+
+    &:hover, &.active {
+        background: darken($bg-info, 5);
+        border-color: darken($border-info, 8);
+        color: darken($info, 15);
+    }
+
+    &.active {
+        svg {
+            color: darken($info, 10);
+        }
+
+        &:hover {
+            svg {
+                color: darken($info, 20);
+            }
+        }
+    }
 }
 
 // --------------------------------------------------------
