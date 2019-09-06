@@ -38,14 +38,27 @@ $bg-dark-active:    #1d232d;
 $light-grey:        #ced4da;
 $border-light:      #E5E9F2;
 
+$danger:            rgb(191, 27, 0);
+$warning:           #ffc107;
+$info:              rgb(101, 197, 219);
+
+
+$bg-danger:         lighten($danger,55);
+$bg-warning:        lighten($warning,42);
+$bg-info:           lighten($info, 30);
+
+$border-danger:     lighten($danger,45);
+$border-warning:    lighten($warning,25);
+$border-info:       lighten($info, 20);
+
 // Bootstrap Overrides ---------------
 
 $theme-colors: (
     "primary":    $bright-blue,
     "success":    $bright-green,
-    "info":       rgb(101, 197, 219),
+    "info":       $info,
     "warning":    $light-sapgold,
-    "danger":     rgb(191, 27, 0)
+    "danger":     $danger
 );
 
 @import "../../node_modules/bootstrap/scss/bootstrap";
@@ -63,7 +76,7 @@ $theme-colors: (
 }
 
 .u-text-info {
-    color: $gray-600;
+    opacity: 0.7;
 }
 
 .u-text-small {
@@ -80,15 +93,18 @@ $theme-colors: (
 // Status elements ----------------------------------------
 
 .critical td {
-    background: lighten($danger, 42);
+    background: $bg-danger;
+    border-color: $border-danger;
 }
 
 .warning td {
-    background: lighten($warning, 42);
+    background: $bg-warning;
+    border-color: $border-warning;
 }
 
 .info td {
-    background: lighten($info, 55);
+    background: $bg-info;
+    border-color: $border-info;
 }
 
 .resolved td {
@@ -108,6 +124,7 @@ $theme-colors: (
 
 .main {
     flex: 0 1 100%;
+    background: #F5F9FC;
 }
 
 .content {
@@ -221,6 +238,7 @@ $theme-colors: (
 .table-main {
     th {
         border-top: none;
+        border-color: #cdd4da !important;
     }
 
     button {
@@ -272,6 +290,21 @@ $theme-colors: (
             }
         }
     }
+}
+
+.critical .filter-pill {
+    border-color: $border-danger;
+    color: lighten($danger, 25);
+}
+
+.warning .filter-pill {
+    border-color: $border-warning;
+    color: darken($warning, 10);
+}
+
+.info .filter-pill {
+    border-color: $border-info;
+    color: darken($info, 10);
 }
 
 // --------------------------------------------------------
@@ -361,7 +394,7 @@ $theme-colors: (
         }
 
         .region-critical {
-            background: rgb(191, 27, 0);
+            background: $danger;
         }
 
         .region-warning {
@@ -369,7 +402,7 @@ $theme-colors: (
         }
 
         .region-info {
-            background: rgb(101, 197, 219);
+            background: $info;
         }
     }
 }
