@@ -302,7 +302,7 @@ $theme-colors: (
     color: lighten($danger, 25);
 
     &:hover, &.active {
-        background: darken($bg-danger, 7);
+        background: darken($bg-danger, 5);
         border-color: darken($border-danger, 8);
         color: lighten($danger, 10);
     }
