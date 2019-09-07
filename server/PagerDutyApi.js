@@ -17,19 +17,15 @@ const incidentAlerts = async (incidentId,params = {}) =>
 
 const alertsWithIncidentStatus = async (incidentStatus) => {
   const tmpIncidents = await incidents({ "statuses[]": incidentStatus})
-  const alertPromises = tmpIncidents.map(i => incidentAlerts(i.id))
+  const alertPromises = tmpIncidents.map(i => 
+    incidentAlerts(i.id).then(alerts => alerts.map(a => {
+      a.incident = i
+      return a
+    }))
+  )
   return Promise
     .all(alertPromises)
     .then(array => array.flat())
-  //    .then(alerts => 
-  //      alerts.map(a => {
-  //        a.acknowledgeInfo = {
-  //          acknowledgements: i.acknowledgements,
-  //          teams: i.teams
-  //        }
-  //        return a  
-  //      })
-  //    )
 }
 
 const PagerDutyApi = {
