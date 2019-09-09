@@ -22,7 +22,7 @@ import './App.css'
 // import AlertsChart from './AlertsChart'
 // import AlertDurationChart from './AlertDurationChart'
 import MapDisplay from './components/display/Map'
-import ListDisplay from './components/display/List'
+import OverviewDisplay from './components/display/Overview'
 
 // Icons --------------------------------------------------------
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -67,7 +67,7 @@ const App = () => {
 
   useInitialLoader(initialURLFilters)
 
-  if( currentDisplayMode === 'list') return <ListDisplay regionCounts={counts.region}/>
+  if( currentDisplayMode === 'overview') return <OverviewDisplay regionCounts={counts.region}/>
   if( currentDisplayMode === 'map') return <MapDisplay regionCounts={counts.region}/>
 
   return (
