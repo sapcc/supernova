@@ -25,39 +25,89 @@ const styles = {
     flexGrow: 1,
     padding: 5,
     textAlign: 'center',
+  },
+  content: {
     height: 100,
-    lineHeight: '100px'
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'stretch'
+
   },
   severity: {
+    lineHeight: '100px',
     fontSize: '3.5rem',
+  },
+  regionName: {
+    lineHeight: '100px',
+  },
+  infos: {
+    display: 'flex',
+    flexFlow: 'column',
+    justifyContent: 'center'
+  },
+  info: {
+    fontSize: '1rem',
+    textTransform: 'uppercase'
   }
 }
 const colors = { critical: 'red', warning: 'rgb(234,184,57)', info: 'rgb(101,197,219)'}
 
-const RegionSeverity = ({region,critical,warning,info,criticalSilenced,warningSilenced,infoSilenced}) => 
+const RegionSeverity = ({
+  region,critical,warning,info,
+  criticalSilenced,warningSilenced,infoSilenced,
+  criticalAcked,warningAcked,infoAcked,
+  criticalHandled,warningHandled,infoHandled}) => 
+
     <div style={styles.region}>
       <div style={styles.box}>
-        <div style={{backgroundColor: '#212124'}}>{region}</div>
+        <div style={{...styles.content,backgroundColor: '#212124'}}><div style={styles.regionName}>{region}</div></div>
       </div>    
       
       <div style={styles.box}>
-        <div style={{...styles.severity, backgroundColor: critical > 0 ? colors.critical: 'black'}}>
-          {criticalSilenced >0 ? critical-criticalSilenced : critical }
-          {criticalSilenced > 0 && 
-            <span style={{fontSize: '1rem'}}>SILENCED {criticalSilenced}</span>
-          }
+        <div style={{...styles.content, backgroundColor: critical > 0 ? colors.critical: 'black'}}>
+          <div style={styles.severity}>
+            {criticalHandled >0 ? critical-criticalHandled : critical }
+          </div>
+          <div style={styles.infos}>  
+            {criticalAcked > 0 && 
+              <div style={styles.info}>acked - {criticalAcked}</div>
+            }
+            {criticalSilenced > 0 && 
+              <div style={styles.info}>silenced - {criticalSilenced}</div>
+            } 
+          </div>         
         </div>
       </div>    
       
       <div style={styles.box}>
-        <div style={{...styles.severity,backgroundColor: warning > 0 ? colors.warning: 'black'}}>
-          {warning}
+        <div style={{...styles.content,backgroundColor: warning > 0 ? colors.warning: 'black'}}>
+          <div style={styles.severity}>
+            {warningHandled >0 ? warning-warningHandled : warning }
+          </div>
+          <div style={styles.infos}>  
+            {warningAcked > 0 && 
+              <div style={styles.info}>acked - {warningAcked}</div>
+            }
+            {warningSilenced > 0 && 
+              <div style={styles.info}>silenced - {warningSilenced}</div>
+            } 
+          </div>         
         </div>
       </div>    
       
       <div style={styles.box}>
-        <div style={{...styles.severity,backgroundColor: info > 0 ? colors.info: 'black'}}>
-          {info}
+        <div style={{...styles.content,backgroundColor: info > 0 ? colors.info: 'black'}}>
+          <div style={styles.severity}>
+            {infoHandled >0 ? info-infoHandled : info }
+          </div>
+          <div style={styles.infos}>  
+            {infoAcked > 0 && 
+              <div style={styles.info}>acked - {infoAcked}</div>
+            }
+            {infoSilenced > 0 && 
+              <div style={styles.info}>silenced - {infoSilenced}</div>
+            } 
+          </div>         
         </div>
       </div>    
     </div>

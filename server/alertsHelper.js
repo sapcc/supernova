@@ -1,12 +1,9 @@
-const io= require('socket.io') 
-const axios = require('axios')
 const config = require('./configLoader')
 
-// This function sorts alerts by severity 
-// critical > warning > info
+// This function sorts alerts by severity critical > warning > info
 // then by state
 // then alphabetically
-const sortAlerts = (items) => 
+const sort = (items) => 
   items.sort((a,b) => {
     if((a.labels.severity==='critical' && b.labels.severity!=='critical') || 
       (a.labels.severity==='warning' && ['critical','warning'].indexOf(b.labels.severity) < 0)) return -1  
@@ -16,60 +13,92 @@ const sortAlerts = (items) =>
   })
 ;
 
-let _cachedAlerts
-let _cacheString 
 
-const hasNewAlerts = (items) => {
-  const newCacheString = JSON.stringify(items)
-  
-  if(!_cacheString || _cacheString !== newCacheString) {
-    _cacheString = newCacheString
-    return true
-  }
-  return false
-}
-
-
-// This function updates alerts counts 
 const nonLandscapeCategories = config.categories.filter(c => c.area !== 'landscape')
+// This function calculates alerts counts 
+// Adds to container 
+//   summary: {
+//     critical: INTEGER,warning: INTEGER,info:INTEGER,
+//     criticalSilenced: INTEGER,warningSilenced: INTEGER,infoSilenced: INTEGER,
+//     criticalAcked:INTEGER,warningAcked:INTEGER,infoAcked: INTEGER
+//     criticalHandled:INTEGER,warningHandled:INTEGER,infoHandled: INTEGER
+//   } , 
+//   region: { 
+//     REGION: {
+//       critical: INTEGER,warning: INTEGER,info: INTEGER,
+//       criticalSilenced: INTEGER,warningSilenced: INTEGER,infoSilenced: INTEGER,
+//       criticalAcked: INTEGER,warningAcked: INTEGER,infoAcked: INTEGER
+//       criticalHandled:INTEGER,warningHandled:INTEGER,infoHandled: INTEGER
+//     }
+//   }
 const updateCounts = (container,alert) => {
   if(alert && alert.labels && alert.labels.severity){
-    container.summary = container.summary || {}
-    container.summary[alert.labels.severity] = container.summary[alert.labels.severity] || 0
-    container.summary[alert.labels.severity] += 1
+    const {region,severity} = alert.labels
 
-    if(alert.labels.region){
-      container.region = container.region || {}
-      container.region[alert.labels.region] = container.region[alert.labels.region] || {}
-      container.region[alert.labels.region][alert.labels.severity] = container.region[alert.labels.region][alert.labels.severity] || 0
-      container.region[alert.labels.region][alert.labels.severity] += 1
-      
-      if(alert.status && alert.status.state === 'suppressed') {
-        container.region[alert.labels.region][`${alert.labels.severity}Silenced`] = container.region[alert.labels.region][`${alert.labels.severity}Silenced`] || 0
-        container.region[alert.labels.region][`${alert.labels.severity}Silenced`] += 1
-      }
-    }
-      
+    // SUMMARY
+    container.summary = container.summary || {}
+    container.summary[severity] = container.summary[severity] || 0
+    container.summary[severity] += 1
+    
+    container.summary[`${severity}Silenced`] = container.summary[`${severity}Silenced`] || 0
+    container.summary[`${severity}Acked`] = container.summary[`${severity}Acked`] || 0
+    container.summary[`${severity}Handled`] = container.summary[`${severity}Handled`] || 0
+
+    let handled = false
+    
     if(alert.status && alert.status.state === 'suppressed') {
-      container.summary[`${alert.labels.severity}Silenced`] = container.summary[`${alert.labels.severity}Silenced`] || 0
-      container.summary[`${alert.labels.severity}Silenced`] += 1
+      container.summary[`${severity}Silenced`] += 1
+      handled = true
     }
+    
+    if(alert.status && alert.status.acknowledgements && alert.status.acknowledgements.length>0) {
+      container.summary[`${severity}Acked`] += 1
+      handled = true
+    }
+
+    if(handled) container.summary[`${severity}Handled`] += 1
+
+    // REGION
+    if(region){
+      container.region = container.region || {}
+      container.region[region] = container.region[region] || {}
+      container.region[region][severity] = container.region[region][severity] || 0
+      container.region[region][severity] += 1
+      
+      container.region[region][`${severity}Handled`] = container.region[region][`${severity}Handled`] || 0
+
+      let regionHandled = false
+      if(alert.status && alert.status.state === 'suppressed') {
+        container.region[region][`${severity}Silenced`] = container.region[region][`${severity}Silenced`] || 0
+        container.region[region][`${severity}Silenced`] += 1
+        regionHandled = true
+      }
+      
+      if(alert.status && alert.status.acknowledgements && alert.status.acknowledgements.length>0) {
+        container.region[region][`${severity}Acked`] = container.region[region][`${severity}Acked`] || 0
+        container.region[region][`${severity}Acked`] += 1
+        regionHandled = true
+      }
+
+      if(regionHandled) container.region[region][`${severity}Handled`] += 1
+    }
+      
   }
 }
 // END ################################################################
 
+// Calculate and ectend alerts with severity counts and available label values
+const extend = (alerts) => {
+  const result = {items: alerts, counts: {}, labelValues: {}}
 
-const extendAlerts = (items) => {
-  const result = {items, counts: {}, labelValues: {}}
-
-  // load default regions
+  // load default regions and prefil counts with zero
   config.defaultRegions.forEach(region => {
     result.counts.region = result.counts.region || {}
     result.counts.region[region] = {critical: 0, warning: 0, info: 0, criticalSilenced: 0, warningSilenced: 0, infoSilenced: 0}
   })
 
   //counts -> category -> NAME -> SEVERITY -> number
-  items.forEach(alert => {
+  alerts.forEach(alert => {
 
     // get all available values fro label filters
     for(let name in alert.labels) {
@@ -80,6 +109,12 @@ const extendAlerts = (items) => {
         }
       }
     }
+
+    // add status to labels. This will allow to apply filters in UI
+    alert.labels.status = alert.status
+    result.labelValues.status = result.labelValues.status || []
+    result.labelValues.status.push(alert.status)
+    // END
 
     // calculate severity counts dependent on categories
     updateCounts(result.counts,alert)
@@ -123,55 +158,7 @@ const extendAlerts = (items) => {
   return result
 }
 
-const loadAlerts = async ({cached = false} = {}) => {
-  if(cached === true && _cachedAlerts) return {alerts: _cachedAlerts, hasNew: false}
-
-  return axios
-    .get(`${process.env.REACT_APP_ALERTMANAGER_API_ENDPOINT}/alerts`)
-    .then(response => response.data)
-    .then(items => sortAlerts(items))
-    .then(items => {
-      const hasNew = hasNewAlerts(items)
-      if(hasNew) {
-        _cachedAlerts = extendAlerts(items)
-      }
-      return { alerts: _cachedAlerts, hasNew}
-    })
-    .catch(error => {
-      console.error('ALERTS LOADER API ERROR: ', error.message)
-      return null
-    })
+module.exports = {
+  sort,
+  extend
 }
-
-const _onUpdateCallbacks = []
-
-const onUpdate = (fn) => _onUpdateCallbacks.push(fn)
-
-const start = (intervalInSeconds = 30, immediate = true) => {
-  if(!intervalInSeconds || intervalInSeconds < 20) intervalInSeconds = 30
-  let interval = intervalInSeconds * 1000
-
-  const periodicalLoad = () => {
-    let start = Date.now()
-    loadAlerts().then(result => {
-      if(result && result.hasNew) _onUpdateCallbacks.forEach(fn => fn(result.alerts))
-      console.log(`ALERTS LOADER [${new Date()}]: receive new alerts from API`)
-    })
-
-    let timeout = start + interval - Date.now()
-    if(timeout < 0) timeout = 0
-    return setTimeout(periodicalLoad, timeout)
-  }
-
-  return setTimeout(periodicalLoad, immediate ? 0 : interval)
-}
-
-
-const AlertsLoader = {
-  start, 
-  onUpdate,
-  get: async () => loadAlerts({cached: true}).then(result => result ? result.alerts : null) 
-}
-
-Object.freeze(AlertsLoader)
-module.exports = AlertsLoader
