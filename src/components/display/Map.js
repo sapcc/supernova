@@ -26,7 +26,7 @@ const colors = {
 }
 
 const AnnotationContent = ({region,dx,dy,counts}) => {
-  const width = 80
+  const width = 90
   let factor = 0
   if(counts.critical && counts.critical>0) factor += 1
   if(counts.warning && counts.warning>0) factor += 1
@@ -50,7 +50,7 @@ const AnnotationContent = ({region,dx,dy,counts}) => {
         height={height} 
         rx={radius} 
         ry={radius}/>
-      <FontAwesomeIcon width="10" x={x+60} y={y-266} style={{fill: '#fff',  color:  counts.critical-counts.criticalSilenced > 0 ? colors.critical : counts.warning > 0 ? colors.warning : counts.info > 0 ? colors.info : colors.ok}}  size="xs" icon="bell"/>
+      <FontAwesomeIcon width="10" x={x+75} y={y-266} style={{fill: '#fff',  color:  counts.critical-counts.criticalTreated > 0 ? colors.critical : counts.warning > 0 ? colors.warning : counts.info > 0 ? colors.info : colors.ok}}  size="xs" icon="bell"/>
       <text 
         style={{fill: 'white'}} 
         textAnchor="start" 
@@ -76,7 +76,8 @@ const AnnotationContent = ({region,dx,dy,counts}) => {
           x={ x+5 } 
           y={ currentY+=10 }
           fontSize={'0.6em'}>
-        <tspan>{counts.criticalSilenced > 0 ? counts.critical-counts.criticalSilenced : counts.critical}</tspan> 
+        <tspan>{counts.criticalTreated > 0 ? counts.critical-counts.criticalTreated : counts.critical}</tspan> 
+          {counts.criticalAcked >0 && <tspan style={{fill: 'grey'}} fontSize={'smaller'}>{' '} {counts.criticalAcked} acked</tspan>}
           {counts.criticalSilenced >0 && <tspan style={{fill: 'grey'}} fontSize={'smaller'}>{' '} {counts.criticalSilenced} silenced</tspan>}
 
         </text>
@@ -88,7 +89,8 @@ const AnnotationContent = ({region,dx,dy,counts}) => {
           x={ x+5 } 
           y={ currentY+=10 }
           fontSize={'0.6em'}>
-          <tspan>{counts.warningSilenced ? counts.warning-counts.warningSilenced : counts.warning}</tspan> 
+          <tspan>{counts.warningTreated ? counts.warning-counts.warningTreated : counts.warning}</tspan> 
+            {counts.warningAcked >0 && <tspan style={{fill: 'grey'}} fontSize={'smaller'}>{' '} {counts.warningAcked} acked</tspan>}
             {counts.warningSilenced > 0 && <tspan style={{fill: 'grey'}} fontSize={'smaller'}>{' '} {counts.warningSilenced} silenced</tspan>}
         </text>
       }
@@ -100,6 +102,7 @@ const AnnotationContent = ({region,dx,dy,counts}) => {
           y={ currentY+=10 }
           fontSize={'0.6em'}>
           <tspan>{counts.infoSilenced ? counts.info-counts.infoSilenced : counts.info}</tspan> 
+            {counts.infoAcked >0 && <tspan style={{fill: 'grey'}} fontSize={'smaller'}>{' '} {counts.infoAcked} acked</tspan>}
             {counts.infoSilenced >0 && <tspan style={{fill: 'grey'}} fontSize={'smaller'}>{' '} {counts.infoSilenced} silenced</tspan>}
         </text>
       }
