@@ -56,7 +56,7 @@ const RegionSeverity = ({
   region,critical,warning,info,
   criticalSilenced,warningSilenced,infoSilenced,
   criticalAcked,warningAcked,infoAcked,
-  criticalTreated,warningTreated,infoTreated}) => 
+  criticalHandled,warningHandled,infoHandled}) => 
 
     <div style={styles.region}>
       <div style={styles.box}>
@@ -64,10 +64,9 @@ const RegionSeverity = ({
       </div>    
       
       <div style={styles.box}>
-          {console.log('critical,criticalTreated,criticalSilenced,criticalAcked',critical,criticalTreated,criticalSilenced,criticalAcked)}
         <div style={{...styles.content, backgroundColor: critical > 0 ? colors.critical: 'black'}}>
           <div style={styles.severity}>
-            {criticalTreated >0 ? critical-criticalTreated : critical }
+            {criticalHandled >0 ? critical-criticalHandled : critical }
           </div>
           <div style={styles.infos}>  
             {criticalAcked > 0 && 
@@ -83,7 +82,7 @@ const RegionSeverity = ({
       <div style={styles.box}>
         <div style={{...styles.content,backgroundColor: warning > 0 ? colors.warning: 'black'}}>
           <div style={styles.severity}>
-            {warningTreated >0 ? warning-warningTreated : warning }
+            {warningHandled >0 ? warning-warningHandled : warning }
           </div>
           <div style={styles.infos}>  
             {warningAcked > 0 && 
@@ -99,7 +98,7 @@ const RegionSeverity = ({
       <div style={styles.box}>
         <div style={{...styles.content,backgroundColor: info > 0 ? colors.info: 'black'}}>
           <div style={styles.severity}>
-            {infoTreated >0 ? info-infoTreated : info }
+            {infoHandled >0 ? info-infoHandled : info }
           </div>
           <div style={styles.infos}>  
             {infoAcked > 0 && 
