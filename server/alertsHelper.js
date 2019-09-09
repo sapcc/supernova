@@ -21,14 +21,14 @@ const nonLandscapeCategories = config.categories.filter(c => c.area !== 'landsca
 //     critical: INTEGER,warning: INTEGER,info:INTEGER,
 //     criticalSilenced: INTEGER,warningSilenced: INTEGER,infoSilenced: INTEGER,
 //     criticalAcked:INTEGER,warningAcked:INTEGER,infoAcked: INTEGER
-//     criticalTreated:INTEGER,warningTreated:INTEGER,infoTreated: INTEGER
+//     criticalHandled:INTEGER,warningHandled:INTEGER,infoHandled: INTEGER
 //   } , 
 //   region: { 
 //     REGION: {
 //       critical: INTEGER,warning: INTEGER,info: INTEGER,
 //       criticalSilenced: INTEGER,warningSilenced: INTEGER,infoSilenced: INTEGER,
 //       criticalAcked: INTEGER,warningAcked: INTEGER,infoAcked: INTEGER
-//       criticalTreated:INTEGER,warningTreated:INTEGER,infoTreated: INTEGER
+//       criticalHandled:INTEGER,warningHandled:INTEGER,infoHandled: INTEGER
 //     }
 //   }
 const updateCounts = (container,alert) => {
@@ -42,21 +42,21 @@ const updateCounts = (container,alert) => {
     
     container.summary[`${severity}Silenced`] = container.summary[`${severity}Silenced`] || 0
     container.summary[`${severity}Acked`] = container.summary[`${severity}Acked`] || 0
-    container.summary[`${severity}Treated`] = container.summary[`${severity}Treated`] || 0
+    container.summary[`${severity}Handled`] = container.summary[`${severity}Handled`] || 0
 
-    let treated = false
+    let handled = false
     
     if(alert.status && alert.status.state === 'suppressed') {
       container.summary[`${severity}Silenced`] += 1
-      treated = true
+      handled = true
     }
     
     if(alert.status && alert.status.acknowledgements && alert.status.acknowledgements.length>0) {
       container.summary[`${severity}Acked`] += 1
-      treated = true
+      handled = true
     }
 
-    if(treated) container.summary[`${severity}Treated`] += 1
+    if(handled) container.summary[`${severity}Handled`] += 1
 
     // REGION
     if(region){
@@ -65,22 +65,22 @@ const updateCounts = (container,alert) => {
       container.region[region][severity] = container.region[region][severity] || 0
       container.region[region][severity] += 1
       
-      container.region[region][`${severity}Treated`] = container.region[region][`${severity}Treated`] || 0
+      container.region[region][`${severity}Handled`] = container.region[region][`${severity}Handled`] || 0
 
-      let regionTreated = false
+      let regionHandled = false
       if(alert.status && alert.status.state === 'suppressed') {
         container.region[region][`${severity}Silenced`] = container.region[region][`${severity}Silenced`] || 0
         container.region[region][`${severity}Silenced`] += 1
-        regionTreated = true
+        regionHandled = true
       }
       
       if(alert.status && alert.status.acknowledgements && alert.status.acknowledgements.length>0) {
         container.region[region][`${severity}Acked`] = container.region[region][`${severity}Acked`] || 0
         container.region[region][`${severity}Acked`] += 1
-        regionTreated = true
+        regionHandled = true
       }
 
-      if(regionTreated) container.region[region][`${severity}Treated`] += 1
+      if(regionHandled) container.region[region][`${severity}Handled`] += 1
     }
       
   }
