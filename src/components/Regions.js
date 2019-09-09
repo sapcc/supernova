@@ -18,25 +18,29 @@ export default ({items, counts, labelFilters, categories}) => {
   }, [items,activeRegions])
 
   const handleClick = (region) => {
-    console.log(activeRegions);
     if(labelFilters.settings.region.includes(region)) {
-      // dispatch({type: 'REGION_FILTER_ACTIVE', isActive: false})
       return dispatch({type: 'REMOVE_FILTER', name: 'region', value: region})
     }
-    // dispatch({type: 'REGION_FILTER_ACTIVE', isActive: true})
-    dispatch({type: 'SET_VALUES_FOR_FILTER', name: 'region', values: [region]})
+    // dispatch({type: 'SET_VALUES_FOR_FILTER', name: 'region', values: [region]})
+    dispatch({type: 'ADD_FILTER', name: 'region', value: region})
+
   }
 
-  const wrapperClassName = (region) => {
-    return labelFilters.settings.region.includes(region) ? "region-wrapper active" : "region-wrapper"
+  const wrapperActive = (region) => {
+    // check if region is currently selected
+    return labelFilters.settings.region.includes(region) ? "active" : ""
   }
 
+  const regionSelectionActive = () => {
+    // return active only if at least one region is selected
+    return ((!Array.isArray(labelFilters.settings.region) || !labelFilters.settings.region.length)) ? "" : "active"
+  }
 
 
   return (
-    <div className="regions-panel">
+    <div className={`regions-panel ${regionSelectionActive()}`}>
       {sortedRegions.map(region =>
-        <div className={wrapperClassName(region)} key={region}>
+        <div className={`region-wrapper ${wrapperActive(region)}`} key={region}>
           <div className="region" key={region} onClick={() => handleClick(region)} >
             <div className="region-name">{region}</div>
             {["critical", "warning", "info"].map((severity, index) =>
