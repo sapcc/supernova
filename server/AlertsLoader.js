@@ -58,19 +58,20 @@ const updateCachedAlerts = (alerts) => {
 }
 
 // This function loads alerts from Alert Manager and caches them.
-const loadAlerts = (onUpdate) => 
+const loadAlerts = () => 
   AlertManagerApi.alerts()
     .then(alerts => {
       console.log(`ALERT MANAGER->ALERTS LOADER [${new Date()}]: receive new alerts from API`)
 
       const newCacheString = JSON.stringify(alerts)
-
+      let hasNew = false
       // cache alerts
       if(!_cachedAlerts.cacheString || _cachedAlerts.cacheString !== newCacheString) {
         _cachedAlerts.cacheString = newCacheString
         updateCachedAlerts(alerts)
+        hasNew = true
       }
-      return getCachedAlerts()
+      return { hasNew, alerts: getCachedAlerts() }
     }) 
     .catch(error => {
       console.error('ALERT MANAGER->ALERTS LOADER API ERROR: ', error.message)
@@ -99,13 +100,14 @@ const loadAcknowledgements = () => {
 
 // This function starts periodical the alert loader for Alert Manager and Pager Duty.
 const start = (onUpdate) => {
-  // run loadAlerts every 30 seconds
-  utils.doPeriodical(
-    {intervalInSeconds: 30, immediate: true}, 
-    () => loadAlerts().then(alerts => alerts ? onUpdate(alerts) : null)
-  )
   // run loadAcknowledgements every 5 minutes
   utils.doPeriodical({intervalInSeconds: 300, immediate: true}, loadAcknowledgements)
+
+  // run loadAlerts every 30 seconds
+  utils.doPeriodical(
+    {intervalInSeconds: 30, immediate: true}, () => 
+      loadAlerts().then( ({hasNew,alerts}) => hasNew && onUpdate(alerts) )
+  )
 }
 
 const get = () => 

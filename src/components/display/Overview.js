@@ -1,5 +1,7 @@
 import React from 'react'
 import useActiveRegionFilter from '../../lib/hooks/useActiveRegionFilter'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { UncontrolledTooltip } from 'reactstrap'
 
 const styles = {
   wrapper: {
@@ -46,11 +48,31 @@ const styles = {
     justifyContent: 'center'
   },
   info: {
-    fontSize: '1rem',
+    fontSize: '1.5rem',
     textTransform: 'uppercase'
   }
 }
 const colors = { critical: 'red', warning: 'rgb(234,184,57)', info: 'rgb(101,197,219)'}
+
+const Handled = ({acked,silenced,handled,region,severity}) => 
+  <div style={styles.infos}>  
+      { handled >0 && 
+      <React.Fragment>
+        <div style={styles.info} id={`${region}-${severity}`}>
+          <FontAwesomeIcon  icon={["far", "bell-slash"]}/> {handled } 
+        </div>    
+        <UncontrolledTooltip placement='right' target={`${region}-${severity}`}>
+          <div style={{...styles.info, fontSize: '1rem'}}>
+            {acked > 0 && `acked - ${acked}`}
+              {acked >0 && silenced >0 && <br/>}
+            {silenced > 0 && `silenced - ${silenced}`}
+         </div>  
+        </UncontrolledTooltip>
+      </React.Fragment>
+    }
+  </div>         
+
+
 
 const RegionSeverity = ({
   region,critical,warning,info,
@@ -68,14 +90,7 @@ const RegionSeverity = ({
           <div style={styles.severity}>
             {criticalHandled >0 ? critical-criticalHandled : critical }
           </div>
-          <div style={styles.infos}>  
-            {criticalAcked > 0 && 
-              <div style={styles.info}>acked - {criticalAcked}</div>
-            }
-            {criticalSilenced > 0 && 
-              <div style={styles.info}>silenced - {criticalSilenced}</div>
-            } 
-          </div>         
+            <Handled region={region} severity='critical' acked={criticalAcked} silenced={criticalSilenced} handled={criticalHandled}/>
         </div>
       </div>    
       
@@ -84,14 +99,7 @@ const RegionSeverity = ({
           <div style={styles.severity}>
             {warningHandled >0 ? warning-warningHandled : warning }
           </div>
-          <div style={styles.infos}>  
-            {warningAcked > 0 && 
-              <div style={styles.info}>acked - {warningAcked}</div>
-            }
-            {warningSilenced > 0 && 
-              <div style={styles.info}>silenced - {warningSilenced}</div>
-            } 
-          </div>         
+          <Handled region={region} severity='warning' acked={warningAcked} silenced={warningSilenced} handled={warningHandled}/> 
         </div>
       </div>    
       
@@ -100,14 +108,7 @@ const RegionSeverity = ({
           <div style={styles.severity}>
             {infoHandled >0 ? info-infoHandled : info }
           </div>
-          <div style={styles.infos}>  
-            {infoAcked > 0 && 
-              <div style={styles.info}>acked - {infoAcked}</div>
-            }
-            {infoSilenced > 0 && 
-              <div style={styles.info}>silenced - {infoSilenced}</div>
-            } 
-          </div>         
+          <Handled region={region} severity='info' acked={infoAcked} silenced={infoSilenced} handled={infoHandled}/> 
         </div>
       </div>    
     </div>
@@ -123,7 +124,7 @@ export default ({regionCounts}) => {
     <div style={styles.wrapper}>
       <div style={styles.container}>
         {Object.keys(counts).map((region,index) => 
-          <RegionSeverity region={region} {...counts[region]}/>
+          <RegionSeverity key={index} region={region} {...counts[region]}/>
         )}
       </div>
     </div>    
