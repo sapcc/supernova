@@ -1,5 +1,5 @@
 const axios = require('axios')
-const alertsLoader = require('./alertsLoader')
+const AlertsLoader = require('./AlertsLoader')
 
 jest.mock('axios')
 
@@ -52,11 +52,11 @@ describe('get', () => {
   let alerts
   beforeEach( async () => { 
     axios.get.mockResolvedValue({data:testAlerts})
-    alerts = await alertsLoader.get()
+    alerts = await AlertsLoader.get()
   })
 
   it('returns a promise object', () => {
-    expect(alertsLoader.get() instanceof Promise).toBe(true) 
+    expect(AlertsLoader.get() instanceof Promise).toBe(true) 
   })
 
   it('resolves promise to json', () => {
@@ -82,7 +82,10 @@ describe('get', () => {
     })
 
     it('returns test alerts', () => {
-      expect(items).toMatchObject(testAlerts)     
+      items.forEach(item => {
+        const testItem = testAlerts.find(a => a.annotations.summary === item.annotations.summary)
+        expect(testItem).not.toBe(null)
+      })     
     })
   })
   
@@ -123,7 +126,7 @@ describe('get', () => {
     })
 
     it('contains white listed labels', () => {
-      expect(Object.keys(labelValues).sort()).toMatchObject(['cluster','region','service','severity','tier'])  
+      expect(Object.keys(labelValues).sort()).toMatchObject(['cluster','region','service','severity','status','tier'])  
     })
     
     it('returns values of labels',() => {
