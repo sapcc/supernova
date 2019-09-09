@@ -13,40 +13,76 @@ const sort = (items) =>
   })
 ;
 
-// This function updates alerts counts 
+
 const nonLandscapeCategories = config.categories.filter(c => c.area !== 'landscape')
+// This function calculates alerts counts 
+// Adds to container 
+//   summary: {
+//     critical: INTEGER,warning: INTEGER,info:INTEGER,
+//     criticalSilenced: INTEGER,warningSilenced: INTEGER,infoSilenced: INTEGER,
+//     criticalAcked:INTEGER,warningAcked:INTEGER,infoAcked: INTEGER
+//     criticalTreated:INTEGER,warningTreated:INTEGER,infoTreated: INTEGER
+//   } , 
+//   region: { 
+//     REGION: {
+//       critical: INTEGER,warning: INTEGER,info: INTEGER,
+//       criticalSilenced: INTEGER,warningSilenced: INTEGER,infoSilenced: INTEGER,
+//       criticalAcked: INTEGER,warningAcked: INTEGER,infoAcked: INTEGER
+//       criticalTreated:INTEGER,warningTreated:INTEGER,infoTreated: INTEGER
+//     }
+//   }
 const updateCounts = (container,alert) => {
   if(alert && alert.labels && alert.labels.severity){
-    container.summary = container.summary || {}
-    container.summary[alert.labels.severity] = container.summary[alert.labels.severity] || 0
-    container.summary[alert.labels.severity] += 1
+    const {region,severity} = alert.labels
 
-    if(alert.labels.region){
-      container.region = container.region || {}
-      container.region[alert.labels.region] = container.region[alert.labels.region] || {}
-      container.region[alert.labels.region][alert.labels.severity] = container.region[alert.labels.region][alert.labels.severity] || 0
-      container.region[alert.labels.region][alert.labels.severity] += 1
-      
-      if(alert.status && alert.status.state === 'suppressed') {
-        container.region[alert.labels.region][`${alert.labels.severity}Silenced`] = container.region[alert.labels.region][`${alert.labels.severity}Silenced`] || 0
-        container.region[alert.labels.region][`${alert.labels.severity}Silenced`] += 1
-      }
-      
-      if(alert.status && alert.status.acknowledgements && alert.status.acknowledgements.length>0) {
-        container.region[alert.labels.region][`${alert.labels.severity}Acked`] = container.region[alert.labels.region][`${alert.labels.severity}Acked`] || 0
-        container.region[alert.labels.region][`${alert.labels.severity}Acked`] += 1
-      }
-    }
-      
+    // SUMMARY
+    container.summary = container.summary || {}
+    container.summary[severity] = container.summary[severity] || 0
+    container.summary[severity] += 1
+    
+    container.summary[`${severity}Silenced`] = container.summary[`${severity}Silenced`] || 0
+    container.summary[`${severity}Acked`] = container.summary[`${severity}Acked`] || 0
+    container.summary[`${severity}Treated`] = container.summary[`${severity}Treated`] || 0
+
+    let treated = false
+    
     if(alert.status && alert.status.state === 'suppressed') {
-      container.summary[`${alert.labels.severity}Silenced`] = container.summary[`${alert.labels.severity}Silenced`] || 0
-      container.summary[`${alert.labels.severity}Silenced`] += 1
+      container.summary[`${severity}Silenced`] += 1
+      treated = true
     }
     
     if(alert.status && alert.status.acknowledgements && alert.status.acknowledgements.length>0) {
-      container.summary[`${alert.labels.severity}Acked`] = container.summary[`${alert.labels.severity}Acked`] || 0
-      container.summary[`${alert.labels.severity}Acked`] += 1
+      container.summary[`${severity}Acked`] += 1
+      treated = true
     }
+
+    if(treated) container.summary[`${severity}Treated`] += 1
+
+    // REGION
+    if(region){
+      container.region = container.region || {}
+      container.region[region] = container.region[region] || {}
+      container.region[region][severity] = container.region[region][severity] || 0
+      container.region[region][severity] += 1
+      
+      container.region[region][`${severity}Treated`] = container.region[region][`${severity}Treated`] || 0
+
+      let regionTreated = false
+      if(alert.status && alert.status.state === 'suppressed') {
+        container.region[region][`${severity}Silenced`] = container.region[region][`${severity}Silenced`] || 0
+        container.region[region][`${severity}Silenced`] += 1
+        regionTreated = true
+      }
+      
+      if(alert.status && alert.status.acknowledgements && alert.status.acknowledgements.length>0) {
+        container.region[region][`${severity}Acked`] = container.region[region][`${severity}Acked`] || 0
+        container.region[region][`${severity}Acked`] += 1
+        regionTreated = true
+      }
+
+      if(regionTreated) container.region[region][`${severity}Treated`] += 1
+    }
+      
   }
 }
 // END ################################################################
@@ -55,7 +91,7 @@ const updateCounts = (container,alert) => {
 const extend = (alerts) => {
   const result = {items: alerts, counts: {}, labelValues: {}}
 
-  // load default regions
+  // load default regions and prefil counts with zero
   config.defaultRegions.forEach(region => {
     result.counts.region = result.counts.region || {}
     result.counts.region[region] = {critical: 0, warning: 0, info: 0, criticalSilenced: 0, warningSilenced: 0, infoSilenced: 0}
@@ -73,6 +109,12 @@ const extend = (alerts) => {
         }
       }
     }
+
+    // add status to labels. This will allow to apply filters in UI
+    alert.labels.status = alert.status
+    result.labelValues.status = result.labelValues.status || []
+    result.labelValues.status.push(alert.status)
+    // END
 
     // calculate severity counts dependent on categories
     updateCounts(result.counts,alert)
