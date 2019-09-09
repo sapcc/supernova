@@ -87,7 +87,7 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
           <div>{status.state}</div>
         }
         {status.inhibitedBy && status.inhibitedBy.length ?
-            <div className="u-text-info">Inhibited by: <a href="javascript:void(0)" onClick={() => toggleInhibitedModal(status.inhibitedBy)}>{status.inhibitedBy}</a></div>
+            <div className="u-text-info u-text-small">Inhibited by: <a href="javascript:void(0)" onClick={() => toggleInhibitedModal(status.inhibitedBy)}>{status.inhibitedBy}</a></div>
           :
           ""
         }
