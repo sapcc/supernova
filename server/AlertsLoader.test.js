@@ -1,4 +1,3 @@
-const axios = require('axios')
 const AlertsLoader = require('./AlertsLoader')
 const AlertManagerApi = require('./AlertManagerApi')
 const PagerDutyApi = require('./PagerDutyApi')

@@ -6,7 +6,7 @@ const url = (path) => `${process.env.REACT_APP_PAGERDUTY_API_ENDPOINT}/${path}`
 const incidents = async (params = {}) => 
   axios
     .get(url('incidents'), {headers,params})
-    .then(response => response.data && response.data.incidents)
+    .then(response => (response.data && response.data.incidents) || [])
 ;
 
 const incidentAlerts = async (incidentId,params = {}) =>
