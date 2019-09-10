@@ -5,7 +5,7 @@ export default ({
   critical,warning,info,
   criticalAcked,warningAcked,infoAcked,
   criticalHandled,warningHandled,infoHandled,
-  only, onClick, small}) => {
+  only, onClick, className}) => {
 
   if(only && only.indexOf('critical') < 0) critical = false
   if(only && only.indexOf('warning') < 0) warning = false
@@ -19,7 +19,7 @@ export default ({
   }
 
   return (
-    <span className={small ? 'small' : ''}>
+    <span className={className}>
       {critical > 0 && 
         <Badge color='danger' style={style} pill onClick={() => onClick('critical')}>
           {critical}
@@ -28,7 +28,7 @@ export default ({
       {warning >0 && ' '}  
       {warning >0 && 
         <Badge color='warning' style={style} pill onClick={() => onClick('warning')}>
-            {warning}
+          {warning}
         </Badge>
       }
       {info>0 && ' '}  

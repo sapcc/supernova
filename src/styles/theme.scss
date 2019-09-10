@@ -92,6 +92,10 @@ $theme-colors: (
     vertical-align: middle !important;
 }
 
+.u-display-flex {
+    display: flex !important;
+}
+
 // --------------------------------------------------------
 
 
@@ -199,6 +203,7 @@ $theme-colors: (
 }
 
 
+
 .sidebar-link {
     display: block;
     padding: 0.5rem 0.6rem;
@@ -211,6 +216,10 @@ $theme-colors: (
 
     svg {
         margin-right: 0.5rem;
+    }
+
+    .severity-badges {
+        margin-left: auto;
     }
 }
 
@@ -404,7 +413,7 @@ $theme-colors: (
         flex: 0 1 25%;
 
         &:hover {
-            opacity: 0.8;
+            opacity: 0.8
         }
     }
 
@@ -415,58 +424,59 @@ $theme-colors: (
             opacity: 1;
         }
     }
+}
 
-    .region {
+.region {
+    display: flex;
+    justify-content: space-between;
+    min-width: 380px;
+    background: $bg-dark-active;
+    border: 1px solid $gray-900;
+    border-radius: 3px;
+    color: $gray-100;
+    cursor: pointer;
+    margin: 0 0.75rem 0.75rem 0;
+
+    .region-name {
+        flex: 1 1 27%;
         display: flex;
-        justify-content: space-between;
-        min-width: 380px;
-        background: $bg-dark-active;
-        border: 1px solid $gray-900;
-        border-radius: 3px;
-        color: $gray-100;
-        cursor: pointer;
-        margin: 0 0.75rem 0.75rem 0;
+        align-items: center;
+        font-size: $h4-font-size;
+        padding-left: 0.75rem;
+    }
 
-        .region-name {
-            flex: 1 1 27%;
-            display: flex;
-            align-items: center;
-            font-size: $h4-font-size;
-            padding-left: 0.75rem;
-        }
+    .region-severity {
+        flex-basis: 24%;
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
 
-        .region-severity {
-            flex-basis: 24%;
-            display: flex;
-            align-items: baseline;
-            justify-content: center;
-
-            &.allclear {
-                background: $bg-dark;
-            }
-        }
-
-        .region-severity-open {
-            font-size: $h2-font-size;
-        }
-
-        .region-severity-silenced {
-            font-size: $font-size-sm;
-            padding-left: 0.3rem;
-        }
-
-        .region-critical {
-            background: $danger;
-        }
-
-        .region-warning {
-            background: $warning;
-        }
-
-        .region-info {
-            background: $info;
+        &.allclear {
+            background: $bg-dark;
         }
     }
+
+    .region-severity-open {
+        font-size: $h2-font-size;
+    }
+
+    .region-severity-silenced {
+        font-size: $font-size-sm;
+        padding-left: 0.3rem;
+    }
+
+    .region-critical {
+        background: $danger;
+    }
+
+    .region-warning {
+        background: $warning;
+    }
+
+    .region-info {
+        background: $info;
+    }
 }
+
 
 // --------------------------------------------------------

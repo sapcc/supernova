@@ -27,9 +27,9 @@ const Categories = ({categories, counts}) => {
           {categories.items.filter(c => c.area === 'landscape').map((category,index) => 
             <li className="sidebar-item" key={index}>
               <span 
-                className={category.active === true ? "sidebar-link active" : "sidebar-link"}
+                className={`sidebar-link u-display-flex ${category.active === true ? "active" : ""}`}
                 onClick={() => handleCategoryChange(category)}>
-                {category.name} {counts && counts[category.name] && <CategorySeverityBadges {...counts[category.name].summary} small/>}
+                {category.name} {counts && counts[category.name] && <CategorySeverityBadges {...counts[category.name].summary} className="severity-badges"/>}
               </span>
             </li>
           )}
@@ -43,7 +43,7 @@ const Categories = ({categories, counts}) => {
           {categories.items.filter(c => c.area === 'support').map((category,index) => 
             <li className="sidebar-item" key={index}>
               <span 
-                className={category.active === true ? "sidebar-link active" : "sidebar-link"}
+                className={`sidebar-link ${category.active === true ? "active" : ""}`}
                 onClick={() => handleCategoryChange(category)}>
                 {category.name} 
               </span>
@@ -60,7 +60,7 @@ const Categories = ({categories, counts}) => {
           {categories.items.filter(c => c.area === 'service').map((category,index) => 
             <li className="sidebar-item" key={index}>
               <span 
-                className={category.active === true ? "sidebar-link active" : "sidebar-link"}
+                className={`sidebar-link ${category.active === true ? "active" : ""}`}
                 onClick={() => handleCategoryChange(category)}>
                 {category.name} 
               </span>
