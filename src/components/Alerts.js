@@ -60,7 +60,8 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
       cancelButtonText: "Close" 
     })
   
-  const toggleSilenceModal = (silenceId) => { 
+  const toggleSilenceModal = (e,silenceId) => {
+    e.preventDefault()
     if(!silencesKeyPayload[silenceId]) return
     showModal({
       header: <React.Fragment>Silence</React.Fragment>,
@@ -79,6 +80,15 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
       cancelButtonText: "Close" 
     })
   }
+  
+  const toggleAckedModal = (e,payload) => { 
+    e.preventDefault()
+    showModal({
+      header: <React.Fragment>Acknowledgement</React.Fragment>,
+      body: <ReactJson src={payload} collapsed={2} collapseStringsAfterLength={100} />,
+      cancelButtonText: "Close" 
+    })
+  }
 
   const alertStatus = (status) => {
     return (
@@ -94,20 +104,32 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
         {status.silencedBy && status.silencedBy.length ?
             <div className="u-text-info u-text-small">
               Silenced by: {silencesKeyPayload[status.silencedBy] 
-                  ? <span>
-                    <br/>
-                      <a href="javascript:void(0)"  onClick={() => toggleSilenceModal(status.silencedBy)}>
-                        {silencesKeyPayload[status.silencedBy].createdBy}
-                      </a>
-                      <br/>
-                        
-                    </span>    
-                  : status.silencedBy
+              ? <span>
+                <br/>
+                  <a href="#" onClick={(e) => toggleSilenceModal(e,status.silencedBy)}>
+                    {silencesKeyPayload[status.silencedBy].createdBy}
+                  </a>
+                  <br/>
+                    
+                </span>    
+              : status.silencedBy
               }
             </div>
           :
           ""
         }
+        {status.acknowledgements && status.acknowledgements.length>0 &&
+          status.acknowledgements.map((ack,i) => 
+            <div className="u-text-info u-text-small" key={i}>Acknowledged by: 
+              <span>
+                <br/>
+                <a href="#" onClick={(e) => toggleAckedModal(e,ack)}>
+                  {ack.acknowledger.summary}
+                </a>
+              </span>
+            </div>
+          )          
+        }      
       </React.Fragment>
     )
   }
