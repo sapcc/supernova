@@ -1,7 +1,7 @@
 import React from 'react'
 import useActiveRegionFilter from '../../lib/hooks/useActiveRegionFilter'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { UncontrolledTooltip } from 'reactstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const styles = {
   wrapper: {
