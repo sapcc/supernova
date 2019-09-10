@@ -8,6 +8,8 @@ import useActiveRegionFilter from '../lib/hooks/useActiveRegionFilter'
 
 export default ({items, counts, labelFilters, categories}) => {
   if(!items) return null
+
+  console.log(counts["eu-de-2"]);
   
   const dispatch = useDispatch()
   const activeRegions = useActiveRegionFilter()
@@ -44,7 +46,7 @@ export default ({items, counts, labelFilters, categories}) => {
           <div className="region" key={region} onClick={() => handleClick(region)} >
             <div className="region-name">{region}</div>
             {["critical", "warning", "info"].map((severity, index) =>
-              <RegionSeverityCount key={`${severity}-${index}`} severity={severity} count={counts[region][severity]} countSilenced={counts[region][`${severity}Silenced`]} />
+              <RegionSeverityCount key={`${severity}-${index}`} severity={severity} count={counts[region][severity]} countHandled={counts[region][`${severity}Handled`]} />
             )}
           </div>
         </div>
