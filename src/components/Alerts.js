@@ -97,21 +97,21 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
           <div>{status.state}</div>
         }
         {status.inhibitedBy && status.inhibitedBy.length ?
-            <div className="u-text-info u-text-small">Inhibited by: <a href="javascript:void(0)" onClick={() => toggleInhibitedModal(status.inhibitedBy)}>{status.inhibitedBy}</a></div>
+            <div className="u-text-info u-text-small">
+              Inhibited by: 
+              <Button color="link" className="btn-inline-link" onClick={() => toggleInhibitedModal(status.inhibitedBy)}>
+                {status.inhibitedBy}
+              </Button>
+            </div>
           :
           ""
         }
         {status.silencedBy && status.silencedBy.length ?
             <div className="u-text-info u-text-small">
               Silenced by: {silencesKeyPayload[status.silencedBy] 
-              ? <span>
-                <br/>
-                  <a href="#" onClick={(e) => toggleSilenceModal(e,status.silencedBy)}>
+              ? <Button color="link" className="btn-inline-link" onClick={(e) => toggleSilenceModal(e,status.silencedBy)}>
                     {silencesKeyPayload[status.silencedBy].createdBy}
-                  </a>
-                  <br/>
-                    
-                </span>    
+                  </Button>
               : status.silencedBy
               }
             </div>
@@ -120,13 +120,11 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
         }
         {status.acknowledgements && status.acknowledgements.length>0 &&
           status.acknowledgements.map((ack,i) => 
-            <div className="u-text-info u-text-small" key={i}>Acknowledged by: 
-              <span>
-                <br/>
-                <a href="#" onClick={(e) => toggleAckedModal(e,ack)}>
-                  {ack.acknowledger.summary}
-                </a>
-              </span>
+            <div className="u-text-info u-text-small" key={i}>
+              Acknowledged by: 
+              <Button color="link" className="btn-inline-link" onClick={(e) => toggleAckedModal(e,ack)}>
+                {ack.acknowledger.summary}
+              </Button>
             </div>
           )          
         }      
