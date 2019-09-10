@@ -1,7 +1,11 @@
 const axios = require('axios')
 const AlertsLoader = require('./AlertsLoader')
+const AlertManagerApi = require('./AlertManagerApi')
+const PagerDutyApi = require('./PagerDutyApi')
 
 jest.mock('axios')
+jest.mock('./AlertManagerApi')
+jest.mock('./PagerDutyApi')
 
 const testAlerts = [
   {
@@ -51,7 +55,9 @@ const testAlerts = [
 describe('get', () => {
   let alerts
   beforeEach( async () => { 
-    axios.get.mockResolvedValue({data:testAlerts})
+    AlertManagerApi.alerts.mockResolvedValue(testAlerts)
+    PagerDutyApi.incidents.mockResolvedValue([])
+    PagerDutyApi.incidentAlerts.mockResolvedValue([])
     alerts = await AlertsLoader.get()
   })
 
