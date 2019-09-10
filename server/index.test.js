@@ -1,9 +1,12 @@
 const request = require('supertest')
 const config = require('./configLoader')
+const axios = require('axios')
+jest.mock('axios')
 
 describe('Server', () => {
   let server
   beforeEach(() => {
+    axios.get.mockResolvedValue({data: []})
     server = require('./index')
   })
 
