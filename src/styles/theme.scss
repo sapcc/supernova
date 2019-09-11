@@ -120,6 +120,18 @@ $theme-colors: (
     background: none;
 }
 
+.severity-critical {
+    background: $danger;
+}
+
+.severity-warning {
+    background: $warning;
+}
+
+.severity-info {
+    background: $info;
+}
+
 // --------------------------------------------------------
 
 
@@ -214,6 +226,11 @@ $theme-colors: (
         color: #fff;
     }
 
+    &:hover {
+        background: darken($bg-dark, 3);
+        color: #fff;
+    }
+
     svg {
         margin-right: 0.5rem;
     }
@@ -239,6 +256,10 @@ $theme-colors: (
 
         &.active {
             background: darken($bg-dark, 5);
+
+            &:hover {
+                background: darken($bg-dark, 5);
+            }
         }
     }
 }
@@ -447,6 +468,7 @@ $theme-colors: (
 
     .region-severity {
         flex-basis: 24%;
+        border-left: 1px solid lighten($bg-dark, 7);
         display: flex;
         align-items: baseline;
         justify-content: center;
@@ -464,19 +486,53 @@ $theme-colors: (
         font-size: $font-size-sm;
         padding-left: 0.3rem;
     }
+}
 
-    .region-critical {
-        background: $danger;
-    }
+.region-severity {
+    border-left: 1px solid lighten($bg-dark, 7);
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
 
-    .region-warning {
-        background: $warning;
-    }
-
-    .region-info {
-        background: $info;
+    &.allclear {
+        background: $bg-dark;
     }
 }
+
+
+// --------------------------------------------------------
+
+
+// Severity Badges ----------------------------------------
+
+.severity-badges {
+    .badge {
+        margin-left: 0.5rem;
+    }
+}
+
+// severity counts as a minimalized view
+.severity-counts-mini {
+    display: flex;
+    border: 1px solid $gray-900;
+    border-radius: 1px;
+    font-size: $small-font-size;
+    min-width: 60px;
+
+    .region-severity {
+        flex: 1 1 50%;
+        color: #fff;
+
+        &:first-child {
+            border: none;
+        }
+
+        &.allclear {
+            background: $bg-dark-active;
+        }
+    }
+}
+
 
 
 // --------------------------------------------------------
