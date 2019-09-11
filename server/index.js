@@ -12,6 +12,16 @@ if (process.env.NODE_ENV === 'production') {
   app.use(metrics({path: '/system/metrics'}))
 }
 
+
+app.use((req,res,next) => {
+  console.log('::::::::::::::::::::::::::::::')
+  console.log(req.header('ssl-client-verify'), req.header('ssl-client-cert'))
+  console.log(req.headers)
+  console.log('------------------------------')
+  next()
+})
+
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
