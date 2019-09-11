@@ -12,13 +12,13 @@ if (process.env.NODE_ENV === 'production') {
   app.use(metrics({path: '/system/metrics'}))
 }
 
-
+// Check SSO
 app.use((req,res,next) => {
-  console.log('::::::::::::::::::::::::::::::')
-  console.log(req.header('ssl-client-verify'), req.header('ssl-client-cert'))
-  console.log(req.headers)
-  console.log('------------------------------')
-  next()
+  if(!req.headers('ssl-client-verify') || req.headers('ssl-client-verify').toUpperCase() !== 'SUCCESS') {
+    return res.sendStatus(401)
+  } else {
+    next()
+  }
 })
 
 
