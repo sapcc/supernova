@@ -44,15 +44,6 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
     })
   }
 
-  const severityOrResolved = (alert) => {
-    // console.log(alert);
-    if (moment(alert.endsAt).valueOf() < Date.now()) {
-      return "resolved"
-    } else {
-      return alert.labels.severity
-    }
-  }
-
   const toggleDetailsModal = (alert) => 
     showModal({
       header: <React.Fragment>Raw Data for <span className="u-text-info">&quot;{alert.annotations.summary}&quot;</span></React.Fragment>,
@@ -192,7 +183,7 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
       <tbody>
         {/* IF NO ALERTS -> YAY */}
         {items.map((alert,index) =>
-          <tr key={index} className={severityOrResolved(alert)} >
+          <tr key={index} className={alert.labels.severity} >
             <td className="text-nowrap">{alert.labels.region}</td>
             <td>
               {alert.labels.service}

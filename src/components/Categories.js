@@ -29,7 +29,7 @@ const Categories = ({categories, counts}) => {
               <span 
                 className={`sidebar-link u-display-flex ${category.active === true ? "active" : ""}`}
                 onClick={() => handleCategoryChange(category)}>
-                {category.name} {counts && counts[category.name] && <CategorySeverityBadges {...counts[category.name].summary} className="severity-badges"/>}
+                {category.name} {counts && counts[category.name] && <CategorySeverityBadges {...counts[category.name].summary} />}
               </span>
             </li>
           )}
