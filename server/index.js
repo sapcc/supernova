@@ -9,26 +9,28 @@ const port = process.env.NODE_ENV === 'production' ? 80 : process.env.PORT || 50
 const metrics = require('./metrics')
 
 if (process.env.NODE_ENV === 'production') { 
-  // Check SSO
-  app.use((req,res,next) => {
-    if(!req.header('ssl-client-verify') || req.header('ssl-client-verify').toUpperCase() !== 'SUCCESS') {
-      res.sendStatus(401)
-    } else {
-      next()
-    }
-  }) 
   app.use(metrics({path: '/system/metrics'}))
 }
-
-
-
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use('/system/readiness', (req,res) => res.sendStatus(200))
 app.use('/system/liveliness', (req,res) => res.sendStatus(200))
-//app.use(require('./metrics'))
+
+if (process.env.NODE_ENV === 'production') { 
+  // Check SSO
+  app.use((req,res,next) => {
+    if(req.path.startsWith('/system')) return next()
+
+    if(!req.header('ssl-client-verify') || req.header('ssl-client-verify').toUpperCase() !== 'SUCCESS') {
+      res.sendStatus(401)
+    } else {
+      next()
+    }
+  }) 
+}
+
 
 app.use('/api', require('./api'))
 
