@@ -62,7 +62,7 @@ const Handled = ({acked,silenced,handled,region,severity}) =>
           <FontAwesomeIcon  icon={["far", "bell-slash"]}/> {handled } 
         </div>    
         <UncontrolledTooltip placement='right' target={`${region}-${severity}`}>
-          <div style={{...styles.info, fontSize: '1rem'}}>
+          <div className="severity-tooltip">
             {acked > 0 && `acked - ${acked}`}
               {acked >0 && silenced >0 && <br/>}
             {silenced > 0 && `silenced - ${silenced}`}
