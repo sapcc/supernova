@@ -17,7 +17,7 @@ export default ({counts, categories}) =>
       }
     }
 
-    const activeCategories = categories.filter(c => c.active)
+    const activeCategories = categories.filter(c => c.active && c.area !== 'landscape')
 
     // determine current active category's counts
     activeCategories.forEach(c => {
@@ -28,19 +28,35 @@ export default ({counts, categories}) =>
           critical: 0, 
           warning: 0, 
           info: 0, 
+          criticalHandled: 0,
           criticalSilenced: 0,
+          criticalAcked: 0,
           warningSilenced: 0,
-          infoSilenced: 0
+          warningHandled: 0,
+          warningAcked: 0,
+          infoSilenced: 0,
+          infoHandled: 0,
+          infoAcked: 0
         } 
         const categoryRegion = {...(categoryRegions[regionName] || {})};
 
         // Since Landscape Category can be combined with other 
         // categories (AND combination), use the smallest counts of all active categories.
-        ['critical','warning','info','criticalSilenced','warningSilenced','infoSilenced'].forEach(severity => {
-          region[regionName][severity] = Math.min(region[regionName][severity] || 0,categoryRegion[severity] || 0)
-        })
+        //['critical','warning','info','criticalSilenced','warningSilenced','infoSilenced'].forEach(severity => {
+        //  region[regionName][severity] = Math.min(region[regionName][severity] || 0,categoryRegion[severity] || 0)
+        //})
+
+        ['critical','warning','info'].forEach(severity => {
+          region[regionName][severity] = Math.min(region[regionName][severity] || 0, categoryRegion[severity] || 0);
+          [`${severity}Handled`,`${severity}Silenced`,`${severity}Acked`].forEach(handledSeverity => {
+            region[regionName][handledSeverity] = Math.min(region[regionName][handledSeverity] || 0, categoryRegion[handledSeverity] || 0, region[regionName][severity])
+          })
+        }) 
       }
     })
+    console.log('................',counts)
+    console.log(':::::::::::::::::',category,region)
 
     return {category,region}
+
   }, [counts,categories])
