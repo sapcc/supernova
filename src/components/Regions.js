@@ -44,7 +44,15 @@ export default ({items, counts, labelFilters, categories}) => {
           <div className="region" key={region} onClick={() => handleClick(region)} >
             <div className="region-name">{region}</div>
             {["critical", "warning", "info"].map((severity, index) =>
-              <RegionSeverityCount key={`${severity}-${index}`} severity={severity} count={counts[region][severity]} countHandled={counts[region][`${severity}Handled`]} />
+              <RegionSeverityCount 
+                key={`${severity}-${index}`} 
+                severity={severity} 
+                region={region}
+                count={counts[region][severity]} 
+                countSilenced={counts[region][`${severity}Silenced`]}
+                countAcked={counts[region][`${severity}Acked`]}
+                countHandled={counts[region][`${severity}Handled`]} 
+              />
             )}
           </div>
         </div>
