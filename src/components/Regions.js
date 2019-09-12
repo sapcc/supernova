@@ -8,8 +8,6 @@ import useActiveRegionFilter from '../lib/hooks/useActiveRegionFilter'
 
 export default ({items, counts, labelFilters, categories}) => {
   if(!items) return null
-
-  console.log(counts["eu-de-2"]);
   
   const dispatch = useDispatch()
   const activeRegions = useActiveRegionFilter()
