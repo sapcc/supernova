@@ -19,7 +19,8 @@ const testAlerts = [
       "service": "neutron",
       "severity": "info",
       "tier": "os"
-    }
+    },
+    "status": {"state": "active"}
   },
   {
     "annotations": {
