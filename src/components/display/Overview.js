@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const styles = {
   wrapper: {
-    height: '100%',
     width: '100%',
     backgroundColor: '#161719'
   },
@@ -20,13 +19,15 @@ const styles = {
     display: 'flex', 
     height: 110, 
     padding: '0 10px',
-    fontSize: '2rem'
+    fontSize: '2rem',
+    alignItems: 'stretch',
   },
   box: {
     flexBasis: '100%',
     flexGrow: 1,
     padding: 5,
     textAlign: 'center',
+    minWidth: 130
   },
   content: {
     height: 100,
