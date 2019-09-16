@@ -111,9 +111,12 @@ const extend = (alerts) => {
     }
 
     // add status to labels. This will allow to apply filters in UI
-    alert.labels.status = alert.status
-    result.labelValues.status = result.labelValues.status || []
-    result.labelValues.status.push(alert.status)
+    const state = (alert.status || {})['state']
+    if(state) {
+      alert.labels.status = state
+      result.labelValues.status = result.labelValues.status || []
+      if(result.labelValues.status.indexOf(state) < 0) result.labelValues.status.push(state)
+    }
     // END
 
     // calculate severity counts dependent on categories

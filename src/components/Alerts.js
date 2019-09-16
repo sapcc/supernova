@@ -141,8 +141,8 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
   }
 
   // get white-listed filter labels, filter out the ones we show in the list anyway, then check each of the remaining ones if they exist on the given alert. If yes render a filter pill for them
-  const alertLabels = (alert) => (
-    <React.Fragment>
+  const alertLabels = (alert) => {
+    return <React.Fragment>
       {Object.keys(labelSettings).map((labelKey, index) =>
           alert.labels[labelKey] &&
             <span 
@@ -156,7 +156,7 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
             </span>
       )}
     </React.Fragment>
-  )
+  }
 
 
   return (
