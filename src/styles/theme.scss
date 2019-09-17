@@ -1,55 +1,5 @@
-// VARIABLES ----------------------------------------------
+@import "./variables.scss";
 
-// Brand Colors ---------------
-$sapgold:        #f0ab00;
-$light-sapgold:  #fcb913;
-$dark-sapgold:   #fc8613;
-
-$light-gray:     #ccc;
-$medium-gray:    #999;
-$dark-gray:      #666;
-
-$bright-blue:    #008fcc;
-$medium-blue:    #226ca9;
-$deep-blue:      #2b3f7b;
-
-$bright-purple:  #9c277b;
-$medium-purple:  #6b2982;
-$deep-purple:    #522a67;
-
-$bright-orange:  #de8a2e;
-$medium-orange:  #d4652d;
-$deep-orange:    #b34a2a;
-
-$bright-green:   #b4ca48;
-$medium-green:   #8ab54e;
-$deep-green:     #2a7b44;
-
-// Other Colors
-$hover-blue:       #00a1e5;
-$hover-light-blue: #e5f4fa;
-$hover-orange:     #FFECCD;
-$white-gray:       #eee;
-$alarm-red:        #e22;
-$help-info-blue:   lighten($medium-blue, 10%);
-
-$bg-dark:           #354052;
-$bg-dark-active:    #1d232d;
-$light-grey:        #ced4da;
-$border-light:      #E5E9F2;
-
-$danger:            rgb(191, 27, 0);
-$warning:           #ffc107;
-$info:              rgb(101, 197, 219);
-
-
-$bg-danger:         lighten($danger,55);
-$bg-warning:        lighten($warning,42);
-$bg-info:           lighten($info, 30);
-
-$border-danger:     lighten($danger,45);
-$border-warning:    lighten($warning,25);
-$border-info:       lighten($info, 20);
 
 // Bootstrap Overrides and Extensions---------------
 
@@ -145,14 +95,17 @@ $theme-colors: (
 
 .severity-critical {
     background: $danger;
+    fill: $danger;
 }
 
 .severity-warning {
     background: $warning;
+    fill: $warning;
 }
 
 .severity-info {
     background: $info;
+    fill: $info;
 }
 
 

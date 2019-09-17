@@ -11,6 +11,9 @@ import {
 import LOCATIONS from './locations'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import useActiveRegionFilter from '../../lib/hooks/useActiveRegionFilter'
+import '../../styles/theme.scss'
+import '../../styles/map.scss'
+
 
 const wrapperStyles = {
   width: "100%",
@@ -18,94 +21,120 @@ const wrapperStyles = {
   backgroundColor: '#1d232d'
 }
 
-const colors = {
-  critical: 'rgb(243,56,81)',
-  warning:'rgb(255,183,11)', 
-  info: 'rgb(53,196,252)',
-  ok: 'rgb(116,207,15)'
+const openAlertCount = (count, countHandled) => {
+  if (!count > 0) return 0 // in case count is undefined ensure that 0 is returned
+  if (isNaN(countHandled) || countHandled < 1) return count
+
+  return count - countHandled 
+}
+
+const calculateRegionXY = (dx, dy, width, height) => { 
+  // if both x and y are 0 the marker will hit the box at the top left edge
+  let x = 0 
+  let y = 0
+  
+  // if both x and y have only a small deviation, ensure the marker gets put on one of the corners
+  if (dx >= -10 && dx <= 10 && dy >= -10 && dy <= 10) {
+    if (dx < 0) {
+      x = -width // x deviation to the left, move box so that marker is at right edge
+    }
+    if (dy < 0) {
+      y = -height // y deviation to the top, move box so that marker is at bottom edge
+    }
+    if (dx === 0) {
+      x = -width/2 // no x deviation, put marker in the middle of the horizontal edge
+    }
+    if (dy === 0) {
+      y = -height/2 // no y deviation, put marker in the middle of the vertical edge
+    }
+    return {x: x, y: y}
+  }
+
+  if (dx >= -10 && dx <= 10) {
+    x = -width/2 // in cases of a small difference of x put the marker in the middle of the box by moving the x coordinate by half the width
+  } else if (dx < -10) {
+    x = -width // if the x difference is larger and negative put the marker on the right edge by moving the x coordinate by the full width
+  }
+
+  if (dy >= -10 && dy <= 10) {
+    y = -height/2 // in cases of a small difference of y put the marker in the middle of the box by moving the y coordinate by half the height
+  } else if (dy < -10) {
+    y = -height // if the y difference is larger and negative put the marker on the bottom edge by moving the y coordinate by the full height
+  }
+
+  return {x: x, y: y}
+
 }
 
 const AnnotationContent = ({region,dx,dy,counts}) => {
-  const width = 90
-  let factor = 0
-  if(counts.critical && counts.critical>0) factor += 1
-  if(counts.warning && counts.warning>0) factor += 1
-  if(counts.info && counts.info>0) factor += 1
-  let height = 20 + 10*(factor || 1)
 
-  const radius = 4
-  const x = dx === 0 ? -width/2 : dx < 0 ? -width+radius/2 : -radius/2
-  const y = dy === 0 ? -height/2 : dy < 0 ? -height+radius/2 : -radius/2
+  const severityWidth       = 30
+  const totalWidth          = severityWidth * 3
+  const regionInfoHeight    = 20
+  const extraInfoHeight     = 7
+  const severityInfoHeight  = regionInfoHeight + extraInfoHeight
+  const totalRegionHeight   = regionInfoHeight + severityInfoHeight
 
-  let currentY = y+15
+  const xy = calculateRegionXY(dx, dy, totalWidth, totalRegionHeight)
 
   return (
     <React.Fragment> 
-      <rect 
-        style={{fill: 'rgb(0,0,0)'}} 
-        fillOpacity="0.5" 
-        x={ x } 
-        y={ y }
-        width={width} 
-        height={height} 
-        rx={radius} 
-        ry={radius}/>
-      <FontAwesomeIcon width="10" x={x+75} y={y-266} style={{fill: '#fff',  color:  counts.critical-counts.criticalTreated > 0 ? colors.critical : counts.warning > 0 ? colors.warning : counts.info > 0 ? colors.info : colors.ok}}  size="xs" icon="bell"/>
-      <text 
-        style={{fill: 'white'}} 
-        textAnchor="start" 
-        x={ x+5 } 
-        y={ y+12 } 
-        fontSize={'0.6em'}>
-        {region} 
-      </text> 
-      {factor === 0 && 
-        <text 
-          style={{fill: colors.ok}} 
-          textAnchor="start" 
-          x={ x+5 } 
-          y={ currentY+=10 }
-          fontSize={'0.6em'}>
-          No alerts!
-        </text>
-      }
-      { counts.critical && counts.critical>0 && 
-        <text 
-          style={{fill: colors.critical}} 
-          textAnchor="start" 
-          x={ x+5 } 
-          y={ currentY+=10 }
-          fontSize={'0.6em'}>
-        <tspan>{counts.criticalTreated > 0 ? counts.critical-counts.criticalTreated : counts.critical}</tspan> 
-          {counts.criticalAcked >0 && <tspan style={{fill: 'grey'}} fontSize={'smaller'}>{' '} {counts.criticalAcked} acked</tspan>}
-          {counts.criticalSilenced >0 && <tspan style={{fill: 'grey'}} fontSize={'smaller'}>{' '} {counts.criticalSilenced} silenced</tspan>}
+      <svg 
+        className="map-region"
+        x={ xy.x } 
+        y={ xy.y }
+        height={totalRegionHeight}
+        >
 
-        </text>
-      }
-      { counts.warning && counts.warning>0 && 
-        <text 
-          style={{fill: colors.warning}} 
-          textAnchor="start" 
-          x={ x+5 } 
-          y={ currentY+=10 }
-          fontSize={'0.6em'}>
-          <tspan>{counts.warningTreated ? counts.warning-counts.warningTreated : counts.warning}</tspan> 
-            {counts.warningAcked >0 && <tspan style={{fill: 'grey'}} fontSize={'smaller'}>{' '} {counts.warningAcked} acked</tspan>}
-            {counts.warningSilenced > 0 && <tspan style={{fill: 'grey'}} fontSize={'smaller'}>{' '} {counts.warningSilenced} silenced</tspan>}
-        </text>
-      }
-      { counts.info && counts.info>0 && 
-        <text 
-          style={{fill: colors.info}} 
-          textAnchor="start" 
-          x={ x+5 } 
-          y={ currentY+=10 }
-          fontSize={'0.6em'}>
-          <tspan>{counts.infoSilenced ? counts.info-counts.infoSilenced : counts.info}</tspan> 
-            {counts.infoAcked >0 && <tspan style={{fill: 'grey'}} fontSize={'smaller'}>{' '} {counts.infoAcked} acked</tspan>}
-            {counts.infoSilenced >0 && <tspan style={{fill: 'grey'}} fontSize={'smaller'}>{' '} {counts.infoSilenced} silenced</tspan>}
-        </text>
-      }
+        <rect
+          className="map-region-name"
+          width= {totalWidth}
+          height={regionInfoHeight}/>
+      
+        <text
+          textAnchor="middle" 
+          x={ totalWidth/2 } 
+          y={ regionInfoHeight/2 + 5 }>
+          {region} 
+        </text> 
+
+        {["critical", "warning", "info"].map((severity, index) =>
+
+          <svg x = {index*severityWidth} y = {regionInfoHeight} height={severityInfoHeight} className={counts[severity] > 0 ? "" : "allclear"} key={severity}> 
+            <rect
+              className ={`map-region-severity severity-${severity}`}
+              width = {severityWidth}
+              height = {regionInfoHeight}/>
+
+            <rect
+              className="map-region-extra-info"
+              width= {severityWidth}
+              height={extraInfoHeight}
+              y={regionInfoHeight}/>
+
+            <text
+              textAnchor="middle" 
+              x={ severityWidth/2 } 
+              y={ regionInfoHeight/2 + 5 }>
+            <tspan>{openAlertCount(counts[severity], counts[`${severity}Handled`])}</tspan> 
+            </text>
+
+            { counts[`${severity}Handled`] > 0 &&
+              <g>
+                <text
+                  className="map-info-text"
+                  textAnchor="middle" 
+                  x={ severityWidth/2 } 
+                  y={ severityInfoHeight - 1.5 }>
+                <tspan>{counts[`${severity}Handled`]}</tspan> 
+                </text>
+
+                <FontAwesomeIcon width="5" x={ 5 } y={ severityInfoHeight/2 - 3.5 } style={{color: 'white'}} size="xs" icon={["far", "bell-slash"]}/>
+              </g>
+            }
+          </svg>
+        )}
+      </svg>
     </React.Fragment>
   )
 }
@@ -120,19 +149,13 @@ export default ({regionCounts}) => {
   return (
     <div style={wrapperStyles}>
     <ComposableMap
+      className="map-wrapper"
       projectionConfig={{
-        scale: 205,
-        rotation: [-11,0,0],
-      }}
-      width={980}
-      height={551}
-      style={{
-        width: "100%",
-        height: "auto",
+        rotation: [-10,0,0]
       }}
     >
       <ZoomableGroup center={[0,20]} disablePanning>
-        <Geographies geography={require("./world-50m.json")}>
+        <Geographies geography={require("./world-110m.json")}>
             {(geographies, projection) => geographies.map((geography, i) => geography.id !== "ATA" && (
               <Geography
                 key={i}
@@ -148,15 +171,15 @@ export default ({regionCounts}) => {
                   hover: {
                     fill: "354052",
                     stroke: "grey",
-                    strokeWidth: 0.2,
+                    strokeWidth: 0.1,
                     outline: "none",
                   },
                   pressed: {
-                    fill: "#FF5722",
+                    fill: "#fcb913",
                     stroke: "#607D8B",
                     strokeWidth: 0.75,
                     outline: "none",
-                  },
+                  }
                 }}
               />
             ))}

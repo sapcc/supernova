@@ -1,0 +1,30 @@
+@import "./variables.scss";
+
+.map-wrapper {
+  width: 100%;
+  height: auto;
+}
+
+text {
+  fill: #fff;
+  font-size: 1em;
+}
+
+.map-info-text {
+  font-size: 0.4em; 
+}
+
+.map-region-name {
+  fill: #000;
+  fill-opacity: 0.6;
+}
+
+.allclear .map-region-severity {
+  fill: darken($bg-dark, 10);
+}
+
+.map-region-extra-info {
+  fill: #000;
+  fill-opacity: 0.6;
+}
+
