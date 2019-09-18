@@ -32,3 +32,15 @@ text {
   fill-opacity: 0.6;
 }
 
+.map-marker {
+  fill: #000;
+  stroke: #000;
+}
+
+.map-geography {
+  fill: $bg-dark;
+  stroke: darken($bg-dark, 12);
+  stroke-width: 0.2;
+  outline: none;
+}
+
