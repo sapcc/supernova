@@ -1,5 +1,9 @@
 @import "./variables.scss";
 
+body {
+  background: $bg-dark-active;
+}
+
 .map-wrapper {
   width: 100%;
   height: auto;

@@ -85,38 +85,38 @@ export default {
     "lat":        -23.56,
     "lon":        -46.63,
     "dx":         -20,
-    "dy":         10  
+    "dy":         0  
   },
   "ap-ae-1":{
     "country":    "United Arab Emirates",
     "regionname": "AP-AE-1",
     "lat":        25.09,
     "lon":        55.17,
-    "dx":         11,
-    "dy":         30  
+    "dx":         10,
+    "dy":         40  
   },
   "ap-sa-1":{
     "country":    "Saudi Arabia",
     "regionname": "AP-SA-1",
     "lat":        24.70,
     "lon":        46.68,
-    "dx":         -11,
-    "dy":         20  
+    "dx":         -30,
+    "dy":         30  
   },
   "ap-cn-1":{
     "country":    "China",
     "regionname": "AP-CN-1",
     "lat":        31.20,
     "lon":        121.47,
-    "dx":         -11,
-    "dy":         -15  
+    "dx":         -10,
+    "dy":         0  
   },
   "ap-jp-1":{
     "country":    "Japan",
     "regionname": "AP-JP-1",
     "lat":        35.66,
     "lon":        139.77,
-    "dx":         25,
+    "dx":         10,
     "dy":         -20  
   },
   "ap-jp-2":{
@@ -124,15 +124,15 @@ export default {
     "regionname": "AP-JP-2",
     "lat":        34.68,
     "lon":        135.50,
-    "dx":         15,
-    "dy":         20  
+    "dx":         11,
+    "dy":         11  
   },
   "ap-au-1":{
     "country":    "Australia",
     "regionname": "AP-AU-1",
     "lat":        -33.86,
     "lon":        151.20,
-    "dx":         10,
+    "dx":         0,
     "dy":         -20  
   }
 }

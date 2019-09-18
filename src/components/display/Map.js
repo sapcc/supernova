@@ -154,7 +154,7 @@ export default ({regionCounts}) => {
         rotation: [-10,0,0]
       }}
     >
-      <ZoomableGroup center={[0,20]} disablePanning>
+      <ZoomableGroup center={[0,55]} zoom={1.1} disablePanning>
         <Geographies geography={require("./world-110m.json")}>
             {(geographies, projection) => geographies.map((geography, i) => geography.id !== "ATA" && (
               <Geography
