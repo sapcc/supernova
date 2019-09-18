@@ -33,7 +33,7 @@ const calculateRegionXY = (dx, dy, width, height) => {
   let x = 0 
   let y = 0
   
-  // if both x and y have only a small deviation, ensure the marker gets put on one of the corners
+  // if both dx and dy have only a small deviation, ensure the marker gets put on one of the corners
   if (dx >= -10 && dx <= 10 && dy >= -10 && dy <= 10) {
     if (dx < 0) {
       x = -width // x deviation to the left, move box so that marker is at right edge
@@ -161,33 +161,14 @@ export default ({regionCounts}) => {
                 key={i}
                 geography={geography}
                 projection={projection}
-                style={{
-                  default: {
-                    fill: "#354052",
-                    stroke: "grey",
-                    strokeWidth: 0.1,
-                    outline: "none",
-                  },
-                  hover: {
-                    fill: "354052",
-                    stroke: "grey",
-                    strokeWidth: 0.1,
-                    outline: "none",
-                  },
-                  pressed: {
-                    fill: "#fcb913",
-                    stroke: "#607D8B",
-                    strokeWidth: 0.75,
-                    outline: "none",
-                  }
-                }}
+                className="map-geography"
               />
             ))}
             </Geographies>
             <Markers>
               {Object.keys(counts).map((region,index) => LOCATIONS[region] &&  
                 <Marker key={index} marker={{ coordinates: [ LOCATIONS[region].lon, LOCATIONS[region].lat ] }}>
-                  <circle stroke='#000' fill='#000' cx={ 0 } cy={ 0 } r={ 1 } />
+                  <circle className="map-marker" cx={ 0 } cy={ 0 } r={ 1.4 } />
                 </Marker>
               )}
             </Markers>
