@@ -39,7 +39,7 @@
     },
     {
       "area": "support",
-      "name": "VmWare",
+      "name": "VMware",
       "match_re": {
         "tier": "^(?:vmware)$"
       }
