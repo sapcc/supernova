@@ -2,17 +2,24 @@
 export default {
   "staging": {
     "country": "Germany",
-    "lat": 52.5289279,
-    "lon": 13.3864339,
-    "dx": -30,
-    "dy": -20
+    "lat": 52.52,
+    "lon": 26.38,
+    "dx":  0,
+    "dy":  0
   },
   "admin": {
     "country": "Germany",
-    "lat": 52.5289279,
-    "lon": 13.3864339,
-    "dx": -30,
-    "dy": 5
+    "lat": 52.52,
+    "lon": -30.38,
+    "dx":  0,
+    "dy":  0
+  },
+  "qa-de-1": {
+    "country": "Germany",
+    "lat": 77.55,
+    "lon": 185.60,
+    "dx": 0,
+    "dy": 0
   },
 
   "eu-de-1": {
