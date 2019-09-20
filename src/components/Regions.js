@@ -6,7 +6,7 @@ import RegionSeverityCount from './shared/RegionSeverityCount'
 import useActiveRegionFilter from '../lib/hooks/useActiveRegionFilter'
 
 
-export default ({items, counts, labelFilters, categories}) => {
+export default ({items, counts, labelFilters, isFullScreen}) => {
   if(!items) return null
   
   const dispatch = useDispatch()
@@ -38,7 +38,7 @@ export default ({items, counts, labelFilters, categories}) => {
 
 
   return (
-    <div className={`regions-panel ${regionSelectionActive()}`}>
+    <div className={`regions-panel ${regionSelectionActive()} ${isFullScreen ? "fullscreen" : ""}`}>
       {sortedRegions.map(region =>
         <div className={`region-wrapper ${wrapperActive(region)}`} key={region}>
           <div className="region" key={region} onClick={() => handleClick(region)} >

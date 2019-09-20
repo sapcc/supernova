@@ -428,6 +428,10 @@ td.snug {
         }
     }
 
+    &.fullscreen .region-wrapper {
+        flex-basis: 50%;
+    }
+
     &.active .region-wrapper {
         opacity: 0.5;
 
@@ -454,6 +458,7 @@ td.snug {
         align-items: center;
         font-size: $h4-font-size;
         padding-left: 0.75rem;
+        white-space: nowrap;
     }
 
     .region-severity {
@@ -475,6 +480,31 @@ td.snug {
     .region-severity-silenced {
         font-size: $font-size-sm;
         padding-left: 0.3rem;
+    }
+}
+
+.fullscreen .region {
+    min-width: 750px;
+
+    .region-name, .region-severity {
+        margin: 0 0.4rem;
+    }
+
+    .region-severity {
+        border: 1px solid lighten($bg-dark, 5);
+    }
+
+    .region-name {
+        background: #000;
+        font-size: $h1-font-size * 1.2;
+    }
+
+    .region-severity-open {
+        font-size: $h1-font-size * 1.5;
+    }
+
+    .region-severity-silenced {
+        font-size: $h4-font-size;
     }
 }
 
