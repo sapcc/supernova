@@ -201,7 +201,7 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
             <td>
               {alert.annotations.summary}
               <br/>
-              <small className="u-text-info"><Markup content={descriptionParsed(alert.annotations.description)} /> - <Button className="btn-inline-link" color="link" onClick={() => toggleDetailsModal(alert)}>Show raw data</Button></small>
+              <small className="u-text-info"><Markup content={descriptionParsed(alert.annotations.description)} tagName="span"/> - <Button className="btn-inline-link" color="link" onClick={() => toggleDetailsModal(alert)}>Show raw data</Button></small>
               <br />
               {alertLabels(alert)}
             </td>
