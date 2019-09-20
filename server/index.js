@@ -23,6 +23,8 @@ if (process.env.NODE_ENV === 'production') {
   app.use((req,res,next) => {
     if(req.path.startsWith('/system')) return next()
 
+    console.log(':::::::::',req.headers)
+
     if(!req.header('ssl-client-verify') || req.header('ssl-client-verify').toUpperCase() !== 'SUCCESS') {
       res.sendStatus(401)
     } else {
