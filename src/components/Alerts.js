@@ -3,6 +3,7 @@ import { Button } from 'reactstrap'
 import moment from 'moment'
 import ReactJson from 'react-json-view'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Markup } from 'interweave'
 
 import { useDispatch } from '../lib/globalState'
 import AlertActionButtons from './AlertActionButtons'
@@ -158,6 +159,14 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
     </React.Fragment>
   }
 
+  const descriptionParsed = (description) => {
+    // urls in descriptions follow the schema: <URL|URL-NAME>
+    const regex = /<(http[^>|]+)\|([^>]+)>/g
+    const subst = `<a href="$1">$2</a>`
+    // Parse description and replace urls with a-tags
+    return description.replace(regex, subst);
+  }
+
 
   return (
     <table className="table table-main">
@@ -192,7 +201,7 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
             <td>
               {alert.annotations.summary}
               <br/>
-              <small className="u-text-info">{alert.annotations.description} - <Button className="btn-inline-link" color="link" onClick={() => toggleDetailsModal(alert)}>Show raw data</Button></small>
+              <small className="u-text-info"><Markup content={descriptionParsed(alert.annotations.description)} /> - <Button className="btn-inline-link" color="link" onClick={() => toggleDetailsModal(alert)}>Show raw data</Button></small>
               <br />
               {alertLabels(alert)}
             </td>
