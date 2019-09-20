@@ -67,8 +67,8 @@ const App = () => {
 
   useInitialLoader(initialURLFilters)
 
-  if( currentDisplayMode === 'overview') return <OverviewDisplay regionCounts={counts.region}/>
   if( currentDisplayMode === 'map') return <MapDisplay regionCounts={counts.region}/>
+  if (currentDisplayMode === 'overview') return <OverviewDisplay labelFilters={labelFilters} items={alerts.labelValues ? alerts.labelValues['region'] : null} counts={counts.region} />
 
   return (
     <div className="container-fluid page">
@@ -89,7 +89,6 @@ const App = () => {
 
         <div className="content" ref={contentRef}>
           <Regions
-            categories={categories}
             labelFilters={labelFilters} 
             items={alerts.labelValues ? alerts.labelValues['region'] : null} 
             counts={counts.region}
