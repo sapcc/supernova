@@ -1,6 +1,6 @@
-const utils = require('./utils')
+const utils = require('../helpers/utils')
 
-const AlertManagerApi = require('./AlertManagerApi')
+const AlertManagerApi = require('../lib/AlertManagerApi')
 
 let _cachedSilences = {items: null}
 

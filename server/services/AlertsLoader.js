@@ -1,10 +1,10 @@
 //const config = require('./configLoader')
 
-const utils = require('./utils')
+const utils = require('../helpers/utils')
 const alertsHelper = require('./alertsHelper')
 
-const AlertManagerApi = require('./AlertManagerApi')
-const PagerDutyApi = require('./PagerDutyApi')
+const AlertManagerApi = require('../lib/AlertManagerApi')
+const PagerDutyApi = require('../lib/PagerDutyApi')
 
 let _cachedAlerts = { items: null, counts: {}, labelValues: {} }
 let _cachedAcknowledgements = {}
