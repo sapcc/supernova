@@ -1,5 +1,5 @@
-const AlertsLoader = require('./AlertsLoader')
-const SilencesLoader = require('./SilencesLoader')
+const AlertsLoader = require('./services/AlertsLoader')
+const SilencesLoader = require('./services/SilencesLoader')
 const io= require('socket.io') 
 
 const ALERTS_UPDATE = 'alerts update'

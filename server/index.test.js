@@ -1,5 +1,5 @@
 const request = require('supertest')
-const config = require('./configLoader')
+const config = require('./services/configLoader')
 const axios = require('axios')
 jest.mock('axios')
 
