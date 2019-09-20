@@ -161,10 +161,15 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
 
   const descriptionParsed = (description) => {
     // urls in descriptions follow the schema: <URL|URL-NAME>
-    const regex = /<(http[^>|]+)\|([^>]+)>/g
-    const subst = `<a href="$1">$2</a>`
+    const regexUrl  = /<(http[^>|]+)\|([^>]+)>/g
+    const subst     = `<a href="$1">$2</a>`
     // Parse description and replace urls with a-tags
-    return description.replace(regex, subst);
+    const urlParsed = description.replace(regexUrl, subst)
+
+    const regexBold = /\*(.*)\*/g
+    const sub       = `<strong>$1</strong>`
+
+    return urlParsed.replace(regexBold, sub)
   }
 
 
