@@ -54,8 +54,6 @@ export default ({counts, categories}) =>
         }) 
       }
     })
-    console.log('................',counts)
-    console.log(':::::::::::::::::',category,region)
 
     return {category,region}
 
