@@ -7,8 +7,8 @@ export default () => {
 
   useEffect(() => {
     axios.get('/api/auth/profile').then(response => {
-      console.log('::::::::::::::::::::::',response.data)
-    })
+      dispatch({type: 'RECEIVE_USER_PROFILE', profile: response.data})
+    }).catch(error => dispatch({type: 'REQUEST_USER_PROFILE_FAILURE', error}))
    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

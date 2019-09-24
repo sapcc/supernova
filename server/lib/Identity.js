@@ -15,20 +15,20 @@ const mapUser = (data = {}) => {
 
 const authenticateByPassword = (userId, password) => {
   return new Promise((resolve, reject) => {
-    const client = ldap.createClient({url})
-
-    client.bind(`CN=${userId},${base}`, password, (err, res, next) => {
-      if (err) return reject(err)
-      client.unbind()
-      resolve(getUserData(userId))
-    })
+    const client = ldap.createClient({url, timeout: 1000, connectTimeout: 1000})
+    try {
+      client.bind(`CN=${userId},${base}`, password, (err, res, next) => {
+        if (err) return reject(err)
+        client.unbind()
+        resolve(getUserData(userId))
+      })
+    } catch(err) {resolve(null)}
   })
 }
 
 const getUserData = (userId) => {
   return new Promise((resolve,reject) => {
     const client = ldap.createClient({url})
-
     client.bind(`CN=${admin},${base}`, secret, (err,res) => {
       if(err) return reject(err)
       client.search(base,{filter: `cn=${userId}`, scope: 'sub'}, (err,res) => {
