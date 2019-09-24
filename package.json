@@ -10,6 +10,7 @@
     "axios": "^0.18.1",
     "bootstrap": "^4.3.1",
     "concurrently": "^4.1.0",
+    "cookie-parser": "^1.4.4",
     "express": "^4.16.4",
     "express-prom-bundle": "^5.1.5",
     "jsonwebtoken": "^8.5.1",

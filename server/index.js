@@ -4,6 +4,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const path = require('path')
 const configureWesocket = require('./socket')
+const cookieParser = require('cookie-parser')
 const app = express()
 const port = process.env.NODE_ENV === 'production' ? 80 : process.env.PORT || 5000
 const metrics = require('./middlewares/metrics')
@@ -18,6 +19,8 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/system/readiness', (req,res) => res.sendStatus(200))
 app.use('/system/liveliness', (req,res) => res.sendStatus(200))
 
+app.use(express.json())
+app.use(cookieParser())
 app.use('/',require('./routes'))
 
 const server = require('http').createServer(app)

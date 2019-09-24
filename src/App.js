@@ -7,6 +7,9 @@ import Categories from './components/Categories'
 import Alerts from './components/Alerts'
 import Filters from './components/Filters'
 import Regions from './components/Regions'
+import UserProfile from './components/UserProfile'
+import LoginForm from './components/LoginForm'
+import LoadingIndicator from './components/LoadingIndicator'
 import DevTools from './components/DevTools'
 
 import useModal from './lib/hooks/useModal'
@@ -83,53 +86,62 @@ const App = () => {
   if( currentDisplayMode === 'map') return <MapDisplay regionCounts={counts.region}/>
 
   return (
-    {(!user.profile || user.isLoading) && <div>Loading...</div>}
-    {user.profile && 
-      <div className="container-fluid page">
-        <div className="sidebar ">
-          <div className="sidebar-brand"><FontAwesomeIcon icon="sun" className="logo" />Supernova</div>
-          <ul className="sidebar-nav">
-            <li className="sidebar-folder">
-              <span className="sidebar-link active"><FontAwesomeIcon icon="bell" fixedWidth />Alerts</span>
-              <Categories categories={categories} counts={counts.category}/>
-            </li>
-          </ul>  
-        </div>  
+    <React.Fragment>
+      {user.isLoading 
+      ? <LoadingIndicator/>
+      : user.profile === null 
+        ?
+        <LoginForm/>
+        :   
+        <div className="container-fluid page">
+          <div className="sidebar ">
+            <div className="sidebar-brand"><FontAwesomeIcon icon="sun" className="logo" />Supernova</div>
+            <ul className="sidebar-nav">
+              <li><UserProfile user={user.profile}/></li>
+
+              <li className="sidebar-folder">
+                <span className="sidebar-link active"><FontAwesomeIcon icon="bell" fixedWidth />Alerts</span>
+                <Categories categories={categories} counts={counts.category}/>
+              </li>
+            </ul>  
+          </div>  
 
 
-        <div className="main">
-          <nav className="navbar"/>
+          <div className="main">
+            <nav className="navbar"></nav>  
 
-          <div className="content" ref={contentRef}>
-            <Regions
-              categories={categories}
-              labelFilters={labelFilters} 
-              items={alerts.labelValues ? alerts.labelValues['region'] : null} 
-              counts={counts.region}
-            />
-            <Filters labelFilters={labelFilters} labelValues={alerts.labelValues} />
-            <Alerts 
-              alerts={alerts}
-              silences={silences}
-              labelFilters={labelFilters} 
-              categories={categories}
-              showModal={(content) => { setModalContent(content); toggleModal() }}
-            />
-          </div>
-        </div> 
+            <div className="content" ref={contentRef}>
+              <Regions
+                categories={categories}
+                labelFilters={labelFilters} 
+                items={alerts.labelValues ? alerts.labelValues['region'] : null} 
+                counts={counts.region}
+              />
+              <Filters labelFilters={labelFilters} labelValues={alerts.labelValues} />
+              <Alerts 
+                alerts={alerts}
+                silences={silences}
+                labelFilters={labelFilters} 
+                categories={categories}
+                showModal={(content) => { setModalContent(content); toggleModal() }}
+              />
+            </div>
+          </div> 
 
-        <SuperModal 
-          isShowing={modalIsShowing} 
-          hide={toggleModal} 
-          header={modalContent.header} 
-          footer={modalContent.footer} 
-          cancelButtonText={modalContent.cancelButtonText}>
-            {modalContent.body}
-        </SuperModal>
+          <SuperModal 
+            isShowing={modalIsShowing} 
+            hide={toggleModal} 
+            header={modalContent.header} 
+            footer={modalContent.footer} 
+            cancelButtonText={modalContent.cancelButtonText}>
+              {modalContent.body}
+          </SuperModal>
 
-        {process.env.NODE_ENV === 'development' && <DevTools/>}
-      </div>
-    }
+        </div>
+      }
+      {process.env.NODE_ENV === 'development' && <DevTools/>}
+      </React.Fragment>
+      
   )
 }
 
