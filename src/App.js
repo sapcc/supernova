@@ -63,6 +63,7 @@ const App = () => {
     }
   },[])
 
+
   const counts = useActiveCategoryCounts({counts: alerts.counts, categories: categories.items})
 
   useInitialLoader(initialURLFilters)
@@ -89,8 +90,7 @@ const App = () => {
 
         <div className="content" ref={contentRef}>
           <Regions
-            labelFilters={labelFilters} 
-            items={alerts.labelValues ? alerts.labelValues['region'] : null} 
+            labelFilters={labelFilters}
             counts={counts.region}
           />
             <Filters labelFilters={labelFilters} labelValues={alerts.labelValues} />
