@@ -1,9 +1,10 @@
 const ldap = require('ldapjs');
-const url = 'ldaps://ldap.global.cloud.sap:636'
-const base = 'OU=Identities,DC=ad,DC=global,DC=cloud,DC=sap'
-const admin = 'D064310'
-const secret = "*****"
+const url = process.env.LDAP_ENDPOINT
+const base = process.env.LDAP_BASE
+const admin = process.env.LDAP_SERVICE_USER
+const secret = process.env.LDAP_SERVICE_PASSWORD
 
+console.log(':::::::::::::',url,base,admin,secret)
 const mapUser = (data = {}) => {
   return {
     id: data.name,
