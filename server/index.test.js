@@ -1,7 +1,9 @@
 const request = require('supertest')
-const config = require('./services/configLoader')
 const axios = require('axios')
+const auth = require('./middlewares/auth')
+
 jest.mock('axios')
+jest.mock('./middlewares/auth')
 
 describe('Server', () => {
   let server
@@ -26,22 +28,31 @@ describe('Server', () => {
     })
   })
   
-  describe('/api/config', () => {
-    test('should return 200', (done) => {
-      request(server).get('/api/config').expect(200, done)
+  describe('/api/auth/profile', () => {
+    describe('not logged in', () => {
+      beforeEach(() => {
+        auth.mockImplementation(async (req,res,next) => {
+          res.status(401).send("Access denied. No token provided.")
+        })
+      })
+      test('should return 401', (done) => {
+        request(server).get('/api/auth/profile').expect(401, done)
+      })
     })
 
-    it('returns a json object', (done) => {
-      request(server)
-        .get('/api/config')
-        .expect('Content-Type', /json/)
-        .expect(200, done)
-    })
-    
-    it('returns config', (done) => {
-      request(server)
-        .get('/api/config')
-        .expect(200, config, done)
-    })
+    describe('logged in', () => {
+      beforeEach(() => {
+        auth.mockImplementation(async (req,res,next) => {
+          req.user = {id: 'test', fullName: 'Test Test', groups: []}
+          next()
+        })
+      })
+      it('returns a json object', (done) => {
+        request(server)
+          .get('/api/auth/profile')
+          .expect('Content-Type', /json/)
+          .expect(200, done)
+      })
+    })    
   })
 })
