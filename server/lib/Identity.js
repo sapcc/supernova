@@ -6,7 +6,7 @@ const admin = process.env.LDAP_SERVICE_USER
 const secret = process.env.LDAP_SERVICE_PASSWORD
 const clientOptions = {url, timeout: 5000, connectTimeout: 5000}
 
-console.log(':::::::::::::::::::::',url,serviceUserBase,base,secret)
+console.log(':::::::::::::::::::::',url,serviceUserBase,base)
 const mapUser = (data = {}) => {
   return {
     id: data.name,
