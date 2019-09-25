@@ -98,8 +98,11 @@ const urlStringToJson = (urlString) => {
  **/ 
 export default (filters) => {
   const host = `${window.location.protocol}//${window.location.host}`
+  let initial = false
 
   const initialUrlFilters = useMemo(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    initial = true
     let params = (window.location.search || '')
     if(params[0] === '?') params = params.substr(1)
     const json = urlStringToJson(decodeURI(params))
@@ -113,6 +116,9 @@ export default (filters) => {
   }, []) 
   
   useEffect(() => {
+    // do nothing in initial call
+    if(initial) return
+     
     if(!filters || Object.keys(filters).length === 0 || Object.values(filters).flat().length === 0) {
       window.history.replaceState('', document.title, host)
     }

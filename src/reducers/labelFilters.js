@@ -1,19 +1,14 @@
+import {labelFilters} from '../config.json'
+
 const initialState = {
-  settings: {},
-  extraFiltersVisible: false,
-  isLoading: false,
-  updatedAt: null,
-  error: null
+  settings: labelFilters,
+  extraFiltersVisible: false
 }
 
-const receive = (state,{settings}) => (
-  {...state, 
-    isLoading: false, 
-    error: null, 
-    settings, 
-    updatedAt: Date.now()
-  }
-)
+const initLabelFilters = (state,{settings}) => {
+  return {...state, settings: Object.assign(state.settings,settings)}
+}
+
 const setFilters = (state,{settings}) => ({...state, settings: {...settings}})
 
 const resetAll = (state) => {
@@ -58,12 +53,10 @@ export default (state = initialState, action) => {
       return removeFilter(state,action) 
     case 'REQUEST_LABEL_FILTERS':
       return {...state, isLoading: true, error: null}
-    case 'RECEIVE_LABEL_FILTERS':
-      return receive(state,action)
-    case 'REQUEST_LABEL_FILTERS_FAILURE':
-      return {...state, isLoading: false, error: action.error}
     case 'SET_LABEL_FILTERS':
       return setFilters(state,action)
+    case 'INIT_LABEL_FILTERS':
+      return initLabelFilters(state,action)  
     
     case 'RESET_LABEL_FILTERS':
       return resetAll(state,action)

@@ -1,10 +1,10 @@
 const AlertsLoader = require('./AlertsLoader')
-const AlertManagerApi = require('./AlertManagerApi')
-const PagerDutyApi = require('./PagerDutyApi')
+const AlertManagerApi = require('../lib/AlertManagerApi')
+const PagerDutyApi = require('../lib/PagerDutyApi')
 
 jest.mock('axios')
-jest.mock('./AlertManagerApi')
-jest.mock('./PagerDutyApi')
+jest.mock('../lib/AlertManagerApi')
+jest.mock('../lib/PagerDutyApi')
 
 const testAlerts = [
   {
