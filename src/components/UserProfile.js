@@ -1,5 +1,4 @@
 import React from 'react'
-import {Dropdown,DropdownItem,DropdownMenu,DropdownToggle} from 'reactstrap'
 
 const styles = {
   profileContainer: {
