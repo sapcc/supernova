@@ -1,10 +1,11 @@
-const ldap = require('ldapjs');
+const ldap = require('ldapjs')
 const url = process.env.LDAP_ENDPOINT
-const base = process.env.LDAP_BASE
+const serviceUserBase = process.env.LDAP_BASE
+const base = process.env.LDAP_USER_BASE
 const admin = process.env.LDAP_SERVICE_USER
 const secret = process.env.LDAP_SERVICE_PASSWORD
+const clientOptions = {url, timeout: 5000, connectTimeout: 5000}
 
-console.log(':::::::::::::',url,base,admin,secret)
 const mapUser = (data = {}) => {
   return {
     id: data.name,
@@ -16,8 +17,8 @@ const mapUser = (data = {}) => {
 
 const authenticateByPassword = (userId, password) => {
   return new Promise((resolve, reject) => {
-    const client = ldap.createClient({url, timeout: 1000, connectTimeout: 1000})
     try {
+      const client = ldap.createClient(clientOptions)
       client.bind(`CN=${userId},${base}`, password, (err, res, next) => {
         if (err) return reject(err)
         client.unbind()
@@ -29,8 +30,8 @@ const authenticateByPassword = (userId, password) => {
 
 const getUserData = (userId) => {
   return new Promise((resolve,reject) => {
-    const client = ldap.createClient({url})
-    client.bind(`CN=${admin},${base}`, secret, (err,res) => {
+    const client = ldap.createClient(clientOptions)
+    client.bind(`CN=${admin},${serviceUserBase}`, secret, (err,res) => {
       if(err) return reject(err)
       client.search(base,{filter: `cn=${userId}`, scope: 'sub'}, (err,res) => {
         res.on('error', (err) => reject(err))
