@@ -15,12 +15,8 @@ describe('useUrlFilters', () => {
     expect(initialURLFilters instanceof Object).toBe(true)   
   })
 
-  it('contains url filter keys', () => {
-    ['test1','test2'].forEach(key => expect(Object.keys(initialURLFilters).indexOf(key) > -1).toBe(true))
-  })
-
-  it('contains url filter values', () => {
-    expect(initialURLFilters).toEqual({"test1": ["value1"], "test2": ["value21","value22"]})
+  it('initial url filters object is empty', () => {
+    expect(initialURLFilters).toEqual({})
   })
 
   describe('currentUrlFilters', () => {
