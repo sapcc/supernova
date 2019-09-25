@@ -90,10 +90,10 @@ const updateCounts = (container,alert) => {
 // Calculate and ectend alerts with severity counts and available label values
 const extend = (alerts) => {
   const result = {items: alerts, counts: {}, labelValues: {}}
+  result.counts.region = result.counts.region || {}
 
   // load default regions and prefil counts with zero
   config.defaultRegions.forEach(region => {
-    result.counts.region = result.counts.region || {}
     result.counts.region[region] = {critical: 0, warning: 0, info: 0, criticalSilenced: 0, warningSilenced: 0, infoSilenced: 0}
   })
 

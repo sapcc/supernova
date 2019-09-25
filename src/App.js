@@ -77,13 +77,14 @@ const App = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
+
   const counts = useActiveCategoryCounts({counts: alerts.counts, categories: categories.items})
 
   useAlertsLoader(initialURLFilters)
   useUserProfileLoader()
 
-  if( currentDisplayMode === 'overview') return <OverviewDisplay regionCounts={counts.region}/>
   if( currentDisplayMode === 'map') return <MapDisplay regionCounts={counts.region}/>
+  if (currentDisplayMode === 'overview') return <OverviewDisplay labelFilters={labelFilters} items={alerts.labelValues ? alerts.labelValues['region'] : null} counts={counts.region} />
 
   return (
     <React.Fragment>
@@ -92,7 +93,7 @@ const App = () => {
       : user.profile === null 
         ?
         <LoginForm/>
-        :   
+        :     
         <div className="container-fluid page">
           <div className="sidebar ">
             <div className="sidebar-brand"><FontAwesomeIcon icon="sun" className="logo" />Supernova</div>
@@ -108,15 +109,13 @@ const App = () => {
 
 
           <div className="main">
-            <nav className="navbar"></nav>  
+            <nav className="navbar"/>
 
             <div className="content" ref={contentRef}>
               <Regions
-                categories={categories}
-                labelFilters={labelFilters} 
-                items={alerts.labelValues ? alerts.labelValues['region'] : null} 
-                counts={counts.region}
-              />
+                labelFilters={labelFilters}
+                counts={counts.region}/>
+
               <Filters labelFilters={labelFilters} labelValues={alerts.labelValues} />
               <Alerts 
                 alerts={alerts}
