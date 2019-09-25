@@ -6,16 +6,14 @@ import RegionSeverityCount from './shared/RegionSeverityCount'
 import useActiveRegionFilter from '../lib/hooks/useActiveRegionFilter'
 
 
-export default ({items, counts, labelFilters, categories}) => {
-  if(!items) return null
+export default ({counts, labelFilters, isFullScreen}) => {
   
   const dispatch = useDispatch()
   const activeRegions = useActiveRegionFilter()
 
   const sortedRegions = useMemo(() => {
-    const tmpItems = items.slice().sort((a,b) => a.localeCompare(b))
-    return tmpItems.filter(r => activeRegions.indexOf(r) >= 0)
-  }, [items,activeRegions])
+    return activeRegions.slice().sort((a,b) => a.localeCompare(b))
+  }, [activeRegions])
 
   const handleClick = (region) => {
     if(labelFilters.settings.region.includes(region)) {
@@ -38,7 +36,7 @@ export default ({items, counts, labelFilters, categories}) => {
 
 
   return (
-    <div className={`regions-panel ${regionSelectionActive()}`}>
+    <div className={`regions-panel ${regionSelectionActive()} ${isFullScreen ? "fullscreen" : ""}`}>
       {sortedRegions.map(region =>
         <div className={`region-wrapper ${wrapperActive(region)}`} key={region}>
           <div className="region" key={region} onClick={() => handleClick(region)} >
