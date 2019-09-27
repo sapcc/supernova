@@ -8,8 +8,8 @@ import Alerts from './components/Alerts'
 import Filters from './components/Filters'
 import Regions from './components/Regions'
 import UserProfile from './components/UserProfile'
-import LoginForm from './components/LoginForm'
 import LoadingIndicator from './components/LoadingIndicator'
+import AuthError from './components/AuthError'
 import DevTools from './components/DevTools'
 
 import useModal from './lib/hooks/useModal'
@@ -17,8 +17,7 @@ import SuperModal from './components/shared/SuperModal'
 
 import useUrlFilters from './lib/hooks/useUrlFilters'
 import useActiveCategoryCounts from './lib/hooks/useActiveCategoryCounts'
-import useAlertsLoader from './lib/hooks/useAlertsLoader'
-import useUserProfileLoader from './lib/hooks/useUserProfileLoader'
+import useInitialLoader from './lib/hooks/useInitialLoader'
 
 import './styles/theme.scss'
 import './App.css'
@@ -39,6 +38,7 @@ import {
 } from '@fortawesome/free-regular-svg-icons'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 // build icon library, only needs to be done once, then the icon will be available everywhere, only the FontAwesomeIcon import is necessary in other components
 library.add( faBell, faBellSlashRegular, faSun, faTimesCircle, faCode, faAngleUp, faAngleDown )
 // --------------------------------------------------------------
@@ -80,67 +80,66 @@ const App = () => {
 
   const counts = useActiveCategoryCounts({counts: alerts.counts, categories: categories.items})
 
-  useAlertsLoader(initialURLFilters)
-  useUserProfileLoader()
+  //useAlertsLoader(initialURLFilters)
+  //useUserProfileLoader()
+  useInitialLoader({urlFilters: initialURLFilters, userProfile: user.profile})
 
   if( currentDisplayMode === 'map') return <MapDisplay regionCounts={counts.region}/>
   if (currentDisplayMode === 'overview') return <OverviewDisplay labelFilters={labelFilters} items={alerts.labelValues ? alerts.labelValues['region'] : null} counts={counts.region} />
 
   return (
     <React.Fragment>
-      {user.isLoading 
-      ? <LoadingIndicator/>
-      : user.profile === null 
-        ?
-        <LoginForm/>
-        :     
-        <div className="container-fluid page">
-          <div className="sidebar ">
-            <div className="sidebar-brand"><FontAwesomeIcon icon="sun" className="logo" />Supernova</div>
-            <ul className="sidebar-nav">
-              <li><UserProfile user={user.profile}/></li>
+      {user.isLoading
+        ? <LoadingIndicator/>
+        : user.error 
+          ? <AuthError error={user.error}/>
+          :
+          <div className="container-fluid page">
+            <div className="sidebar ">
+              <div className="sidebar-brand"><FontAwesomeIcon icon="sun" className="logo" />Supernova</div>
+              <ul className="sidebar-nav">
+              {user.profile  && <li><UserProfile user={user.profile}/></li>}
 
-              <li className="sidebar-folder">
-                <span className="sidebar-link active"><FontAwesomeIcon icon="bell" fixedWidth />Alerts</span>
-                <Categories categories={categories} counts={counts.category}/>
-              </li>
-            </ul>  
-          </div>  
+                <li className="sidebar-folder">
+                  <span className="sidebar-link active"><FontAwesomeIcon icon="bell" fixedWidth />Alerts</span>
+                  <Categories categories={categories} counts={counts.category}/>
+                </li>
+              </ul>  
+            </div>  
 
 
-          <div className="main">
-            <nav className="navbar"/>
+            <div className="main">
+              <nav className="navbar"/>
 
-            <div className="content" ref={contentRef}>
-              <Regions
-                labelFilters={labelFilters}
-                counts={counts.region}/>
+              <div className="content" ref={contentRef}>
+                <Regions
+                  labelFilters={labelFilters}
+                  counts={counts.region}/>
 
-              <Filters labelFilters={labelFilters} labelValues={alerts.labelValues} />
-              <Alerts 
-                alerts={alerts}
-                silences={silences}
-                labelFilters={labelFilters} 
-                categories={categories}
-                showModal={(content) => { setModalContent(content); toggleModal() }}
-              />
-            </div>
-          </div> 
+                <Filters labelFilters={labelFilters} labelValues={alerts.labelValues} />
+                <Alerts 
+                  alerts={alerts}
+                  silences={silences}
+                  labelFilters={labelFilters} 
+                  categories={categories}
+                  showModal={(content) => { setModalContent(content); toggleModal() }}
+                />
+              </div>
+            </div> 
 
-          <SuperModal 
-            isShowing={modalIsShowing} 
-            hide={toggleModal} 
-            header={modalContent.header} 
-            footer={modalContent.footer} 
-            cancelButtonText={modalContent.cancelButtonText}>
-              {modalContent.body}
-          </SuperModal>
+            <SuperModal 
+              isShowing={modalIsShowing} 
+              hide={toggleModal} 
+              header={modalContent.header} 
+              footer={modalContent.footer} 
+              cancelButtonText={modalContent.cancelButtonText}>
+                {modalContent.body}
+            </SuperModal>
 
-        </div>
+          </div>
       }
       {process.env.NODE_ENV === 'development' && <DevTools/>}
-      </React.Fragment>
-      
+    </React.Fragment>
   )
 }
 

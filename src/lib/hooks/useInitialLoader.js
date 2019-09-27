@@ -1,11 +1,24 @@
 import {useEffect} from 'react'
 import { useDispatch } from '../globalState'
+import axios from 'axios'
 import openSocket from 'socket.io-client'
 
-export default (initialURLFilters) => {
+export default ({urlFilters,userProfile}) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
+    axios.get('/api/auth/profile').then(response => {
+      dispatch({type: 'RECEIVE_USER_PROFILE', profile: response.data})
+    }).catch(error => dispatch({
+      type: 'REQUEST_USER_PROFILE_FAILURE', 
+      error: {status: error.response.status, name: error.response.statusText, message: error.response.data}
+    }))
+   
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    if(!userProfile) return
     // load default values
     const loadAlerts = () => {
       dispatch({type: 'REQUEST_ALERTS'})
@@ -29,5 +42,5 @@ export default (initialURLFilters) => {
     loadSilences()
         
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [userProfile])
 }

@@ -34,8 +34,7 @@ export default ({user}) => {
     <div style={styles.profileContainer}>
       <img style={styles.avatar} src={`https://avatars.wdf.sap.corp/avatar/${user.id}?size=48x48`} alt="User Image"/>
       <div>
-        <p style={styles.userName}>{user.fullName}</p>
-        <p style={styles.userName}>Groups</p>
+        <p style={styles.userName}>{user.fullName || user.id}</p>
       </div>
     </div>
   )
