@@ -35,6 +35,7 @@ export default ({user}) => {
       <img style={styles.avatar} src={`https://avatars.wdf.sap.corp/avatar/${user.id}?size=48x48`} alt="User Image"/>
       <div>
         <p style={styles.userName}>{user.fullName || user.id}</p>
+        <p style={styles.userName}>{user.editor ? 'Editor': 'Viewer'}</p>
       </div>
     </div>
   )
