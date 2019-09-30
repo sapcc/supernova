@@ -1,4 +1,16 @@
-const superUsers = require('../../config/users/editors.json')
+const fs = require('fs'),
+      path = require('path'),
+      filePath = path.join(__dirname,'/../../config/users/editors.json')
+
+//let superUsers = require('../../config/users/editors.json')
+
+const loadSuperUsers = () => JSON.parse(fs.readFileSync(filePath))
+let superUsers = loadSuperUsers()
+
+// This is the fs watch function.
+fs.watch(__dirname+'/../../config/users/editors.json', (event, filename) => {
+  if(event === 'change') superUsers = loadSuperUsers()
+})
 
 const map = (id, attributes = {}) => {
   let user = {...attributes, id, editor: false}
