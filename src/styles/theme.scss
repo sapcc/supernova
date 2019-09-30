@@ -51,6 +51,10 @@ $theme-colors: (
     display: flex !important;
 }
 
+.u-break-all {
+    word-break: break-all;
+}
+
 // --------------------------------------------------------
 
 
@@ -138,6 +142,7 @@ code {
 
 // Layout components --------------------------------------
 
+
 .page {
     display: flex;
     padding-left: 0;
@@ -146,7 +151,7 @@ code {
 
 .main {
     flex: 0 1 100%;
-    background: #F5F9FC;
+    background: $bg-light;
 }
 
 .content {
@@ -154,12 +159,20 @@ code {
 }
 
 .navbar {
+    @supports (position: sticky) {
+        position: sticky;
+        top: 0;
+        z-index: 999;
+    }
+    background: $bg-light;
     border-bottom: 1px solid $border-light;
     box-shadow: 0 0 1px 1px rgba(100, 100, 100, 0.05);
     height: 55px;
 }
 
 // --------------------------------------------------------
+
+
 
 
 // SIDEBAR ------------------------------------------------
@@ -173,7 +186,7 @@ code {
     background: $bg-dark;
     border-right: 1px solid rgba(0, 0, 0, .1);    
     color: $light-grey;
-    flex: 0 1 320px;
+    flex: 0 1 23rem;
 
     ul {
         list-style: none;
@@ -298,6 +311,10 @@ td.snug {
     }
 }
 
+.alerts td.alert-main {
+    word-break: break-word;
+}
+
 // --------------------------------------------------------
 
 
@@ -318,7 +335,6 @@ td.snug {
     border-radius: 12px;
     margin: 0.5rem 1rem 0 0;
     padding: 0.1rem 0.4rem;
-    white-space: nowrap;
 
     &:hover, &.active {
         background: rgba(0,0,0,0.05);
@@ -426,8 +442,12 @@ td.snug {
     }
 
     .form-group {
-        padding-right: 2rem;
-        flex-basis: 25%;
+        flex: 0 1 25%;
+    }
+
+    .filter {
+        min-width: 370px;
+        margin: 0 0.75rem 0.75rem 0;
     }
 
     .toggle-show {
@@ -471,7 +491,7 @@ td.snug {
 .region {
     display: flex;
     justify-content: space-between;
-    min-width: 380px;
+    min-width: 370px;
     background: $bg-dark-active;
     border: 1px solid $gray-900;
     border-radius: 3px;
@@ -581,5 +601,33 @@ td.snug {
 }
 
 
+
+// --------------------------------------------------------
+
+
+
+// Layout responsive --------------------------------------
+
+@include media-breakpoint-down(md) {
+    .sidebar {
+        display: none;
+    }
+
+    .regions-panel {
+        display: none;
+    }
+
+    .alerts {
+        th, td {
+            display: none;
+        }
+
+        td.alert-main {
+            display: table-cell;
+            word-break: break-all;
+        }
+    }
+
+}
 
 // --------------------------------------------------------
