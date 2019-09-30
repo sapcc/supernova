@@ -1,4 +1,4 @@
-const superUsers = require('../../config/editors.json')
+const superUsers = require('../../config/users/editors.json')
 
 const map = (id, attributes = {}) => {
   let user = {...attributes, id, editor: false}
