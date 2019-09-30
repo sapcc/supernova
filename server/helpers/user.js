@@ -9,7 +9,7 @@ const map = (id, attributes = {}) => {
   return user
 }
 
-const developer = {id: "DEV", fullName: "Developer", editor: true}
+const developer = {id: "DEV", fullName: "User Developer", email: 'developer@dev.com', editor: true}
 
 module.exports = {
   map,

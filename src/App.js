@@ -3,11 +3,12 @@ import React, { useState, useRef, useMemo, useEffect } from 'react';
 import { GlobalStateProvider, useGlobalState, useDispatch } from './lib/globalState'
 import reducers from './reducers'
 
+import {Navbar, Nav, UncontrolledDropdown, DropdownToggle, DropdownMenu} from 'reactstrap'
+
 import Categories from './components/Categories'
 import Alerts from './components/Alerts'
 import Filters from './components/Filters'
 import Regions from './components/Regions'
-import UserProfile from './components/UserProfile'
 import LoadingIndicator from './components/LoadingIndicator'
 import AuthError from './components/AuthError'
 import DevTools from './components/DevTools'
@@ -31,7 +32,7 @@ import OverviewDisplay from './components/display/Overview'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { 
   faBell, faSun, faTimesCircle, faCode, 
-  faAngleUp, faAngleDown
+  faAngleUp, faAngleDown, faUser
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faBellSlash as faBellSlashRegular
@@ -40,7 +41,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 // build icon library, only needs to be done once, then the icon will be available everywhere, only the FontAwesomeIcon import is necessary in other components
-library.add( faBell, faBellSlashRegular, faSun, faTimesCircle, faCode, faAngleUp, faAngleDown )
+library.add( faBell, faBellSlashRegular, faSun, faTimesCircle, faCode, faAngleUp, faAngleDown, faUser )
 // --------------------------------------------------------------
 
 const App = () => {
@@ -98,8 +99,6 @@ const App = () => {
             <div className="sidebar ">
               <div className="sidebar-brand"><FontAwesomeIcon icon="sun" className="logo" />Supernova</div>
               <ul className="sidebar-nav">
-              {user.profile  && <li><UserProfile user={user.profile}/></li>}
-
                 <li className="sidebar-folder">
                   <span className="sidebar-link active"><FontAwesomeIcon icon="bell" fixedWidth />Alerts</span>
                   <Categories categories={categories} counts={counts.category}/>
@@ -107,9 +106,23 @@ const App = () => {
               </ul>  
             </div>  
 
-
             <div className="main">
-              <nav className="navbar"/>
+              <Navbar color="light" light expand="md">
+                <Nav className="ml-auto" navbar>
+                  <UncontrolledDropdown nav inNavbar>
+                    <DropdownToggle nav caret>
+                      <FontAwesomeIcon icon="user"/> {user.profile.fullName}
+                    </DropdownToggle>
+                    <DropdownMenu right className="p-4 text-muted" style={{maxWidth: 200}}>
+                      <p>                   
+                        {user.profile.fullName}
+                        {user.profile.email && <React.Fragment><br/><span className="small">{user.profile.email}</span></React.Fragment>}
+                        <br/><span className="small">Role: {user.profile.editor ? 'Editor' : 'Viewer'}</span>
+                      </p> 
+                    </DropdownMenu>
+                  </UncontrolledDropdown>
+                </Nav>
+              </Navbar>
 
               <div className="content" ref={contentRef}>
                 <Regions
