@@ -22,6 +22,9 @@ const AlertActionButtons = ({alert}) => {
       {alert.labels.cloudops && 
         <a href={`https://dashboard.${alert.labels.region}.cloud.sap/ccadmin/cloud_admin/cloudops#/universal-search/${alert.labels.cloudops}`} target="_blank" rel="noopener noreferrer" className="btn btn-xs">CloudOps</a>
       }
+      {alert.annotations.mail_subject && 
+        <a href={`mailto:?subject=${encodeURIComponent(alert.annotations.mail_subject)}&body=${encodeURIComponent(alert.annotations.mail_body)}`} rel="noopener noreferrer" className="btn btn-xs">Email Owner</a>
+      }
     </div>
   )
 }
