@@ -1,5 +1,3 @@
-//const config = require('./configLoader')
-
 const utils = require('../helpers/utils')
 const alertsHelper = require('./alertsHelper')
 
@@ -34,13 +32,15 @@ const getAlertAcknowledgements = (alert) => {
 }
 
 // Returns current cached alerts ({items,counts,labelValues})
-const getCachedAlerts = () => (
-  {
-    items: _cachedAlerts.items,
-    counts: _cachedAlerts.counts,
+const getCachedAlerts = () => {
+  // filter out "old" alerts, endsAt is less than an hour from now
+  const items =  _cachedAlerts.items.filter(i => new Date(i.endsAt) > new Date(Date.now()-3600*1000))
+  return{
+    items,
+    counts: items.length > 0 ?_cachedAlerts.counts : {},
     labelValues: _cachedAlerts.labelValues
   }
-)
+}
 
 // Extend alerts withth acknowledgements and counts and label values.
 const updateCachedAlerts = (alerts) => {
