@@ -12,6 +12,7 @@ const testAlerts = [
       "description": "Test Alert1",
       "summary": "Alert1"
     },
+    "endsAt": (new Date()).toString(),
     "labels": {
       "alertname": "OpenstackNeutronIntegrityOutOfFIPs",
       "cluster": "eu-nl-1",
@@ -27,6 +28,7 @@ const testAlerts = [
       "description": "Test Alert2",
       "summary": "Alert2"
     },
+    "endsAt": (new Date()).toString(),
     "labels": {
       "alertname": "KubernetesNodeNotReady",
       "cluster": "qa-de-1",
@@ -41,6 +43,7 @@ const testAlerts = [
       "description": "Test Alert3",
       "summary": "Alert3"
     },
+    "endsAt": (new Date()).toString(),
     "labels": {
       "alertname": "OpenstackVcenterNannyGhostVolume",
       "cluster": "eu-de-1",
