@@ -31,7 +31,7 @@ import OverviewDisplay from './components/display/Overview'
 // Icons --------------------------------------------------------
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { 
-  faBell, faSun, faTimesCircle, faCode, 
+  faBars, faBell, faSun, faTimesCircle, faCode, 
   faAngleUp, faAngleDown, faUser
 } from '@fortawesome/free-solid-svg-icons'
 import {
@@ -41,7 +41,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 // build icon library, only needs to be done once, then the icon will be available everywhere, only the FontAwesomeIcon import is necessary in other components
-library.add( faBell, faBellSlashRegular, faSun, faTimesCircle, faCode, faAngleUp, faAngleDown, faUser )
+library.add( faBars, faBell, faBellSlashRegular, faSun, faTimesCircle, faCode, faAngleUp, faAngleDown, faUser )
 // --------------------------------------------------------------
 
 const App = () => {

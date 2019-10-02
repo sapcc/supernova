@@ -155,7 +155,7 @@ code {
 }
 
 .content {
-    padding: 30px 30px 30px 30px;
+    padding: 2rem;
 }
 
 .navbar {
@@ -313,6 +313,19 @@ td.snug {
 
 .alerts td.alert-main {
     word-break: break-word;
+}
+
+.alert-info-small-screen {
+    display: block;
+    .u-text-info {
+        border-right: 1px solid rgba(0,0,0,0.5);
+        padding-right: 1rem;
+        margin-right: 1rem;
+
+        &:last-child {
+            border: none;
+        }
+    }
 }
 
 // --------------------------------------------------------
@@ -609,6 +622,12 @@ td.snug {
 // Layout responsive --------------------------------------
 
 @include media-breakpoint-down(md) {
+    
+    .content {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+    
     .sidebar {
         display: none;
     }
@@ -624,7 +643,15 @@ td.snug {
 
         td.alert-main {
             display: table-cell;
-            word-break: break-all;
+        }
+    }
+
+    .alert-info-small-screen {
+        display: block;
+        .u-text-info {
+            border-right: 1px solid rgba(0,0,0,0.5);
+            padding-right: 1rem;
+            margin-right: 1rem;
         }
     }
 

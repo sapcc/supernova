@@ -159,14 +159,12 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
     </React.Fragment>
   }
 
-  const alertInfoForMobileView = (alert) => {
+  const alertInfoForSmallScreens = (alert) => {
     return (
-      <div>
-        {alert.labels.region}
-        -
-        {alert.labels.service}
-        - Since: 
-        {moment(alert.startsAt).format('DD.MM.YYYY HH:mm:ss')}
+      <div className="alert-info-small-screen">
+        <span className="u-text-info">{alert.labels.region}</span>
+        <span className="u-text-info">{alert.labels.service}</span>
+        <span className="u-text-info">{moment(alert.startsAt).format('DD.MM. HH:mm')}</span> 
       </div>
     )   
   }
@@ -218,7 +216,7 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
               {alert.labels.service}
             </td>
             <td className="alert-main u-break-all">
-              {alertInfoForMobileView(alert)}
+              {alertInfoForSmallScreens(alert)}
               {alert.annotations.summary}
               <br/>
               <small className="u-text-info"><Markup content={descriptionParsed(alert.annotations.description)} tagName="span"/> - <Button className="btn-inline-link" color="link" onClick={() => toggleDetailsModal(alert)}>Show raw data</Button></small>
