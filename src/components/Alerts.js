@@ -159,6 +159,18 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
     </React.Fragment>
   }
 
+  const alertInfoForMobileView = (alert) => {
+    return (
+      <div>
+        {alert.labels.region}
+        -
+        {alert.labels.service}
+        - Since: 
+        {moment(alert.startsAt).format('DD.MM.YYYY HH:mm:ss')}
+      </div>
+    )   
+  }
+
   const descriptionParsed = (description) => {
     if(!description) return ''
     // urls in descriptions follow the schema: <URL|URL-NAME>
@@ -206,13 +218,7 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
               {alert.labels.service}
             </td>
             <td className="alert-main u-break-all">
-              <div>
-                {alert.labels.region}
-                -
-                {alert.labels.service}
-                - Since: 
-                {alert.startsAt}
-              </div>
+              {alertInfoForMobileView(alert)}
               {alert.annotations.summary}
               <br/>
               <small className="u-text-info"><Markup content={descriptionParsed(alert.annotations.description)} tagName="span"/> - <Button className="btn-inline-link" color="link" onClick={() => toggleDetailsModal(alert)}>Show raw data</Button></small>
