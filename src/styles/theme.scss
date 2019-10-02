@@ -653,6 +653,11 @@ td.snug {
 }
 
 @include media-breakpoint-down(lg) {
+
+    .sidebar {
+        flex-basis: 18rem;
+    }
+    
     .alerts {
         th, td {
             display: none;
