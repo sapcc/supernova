@@ -648,13 +648,24 @@ td.snug {
 
     .alert-info-small-screen {
         display: block;
-        .u-text-info {
-            border-right: 1px solid rgba(0,0,0,0.5);
-            padding-right: 1rem;
-            margin-right: 1rem;
+    }
+
+}
+
+@include media-breakpoint-down(lg) {
+    .alerts {
+        th, td {
+            display: none;
+        }
+
+        td.alert-main, td.alert-buttons {
+            display: table-cell;
         }
     }
 
+    .alert-info-small-screen {
+        display: block;
+    }
 }
 
 // --------------------------------------------------------

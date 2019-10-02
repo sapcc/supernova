@@ -225,7 +225,7 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
             </td>
             <td>{moment(alert.startsAt).format('DD.MM.YYYY HH:mm:ss')}</td>
             <td>{alertStatus(alert.status)}</td>
-            <td className="snug">
+            <td className="alert-buttons snug">
               <AlertActionButtons alert={alert} />
             </td>
           </tr>
