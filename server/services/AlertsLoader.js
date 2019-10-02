@@ -27,7 +27,8 @@ const getAlertAcknowledgements = (alert) => {
   if(!_cachedAcknowledgements.items) return null
 
   const details = alert.labels
-  const key = `${details.severity}-${details.service}-${details.tier}-${details.region}-${details.context}`
+  const key = `${details.severity || ''}-${details.service || ''}-${details.tier || ''}-${details.region || ''}-${details.context || ''}`
+
   return _cachedAcknowledgements.items[key]
 }
 

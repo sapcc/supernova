@@ -160,6 +160,7 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
   }
 
   const descriptionParsed = (description) => {
+    if(!description) return ''
     // urls in descriptions follow the schema: <URL|URL-NAME>
     // Parse description and replace urls with a-tags
     const regexUrl   = /<(http[^>|]+)\|([^>]+)>/g
