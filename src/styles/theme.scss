@@ -174,7 +174,7 @@ code {
     @supports (position: sticky) {
         position: sticky;
         top: 0;
-        z-index: 999;
+        z-index: 1001;
     }
     background: $bg-light;
     border-bottom: 1px solid $border-light;
@@ -663,17 +663,22 @@ td.snug {
     }
     
     .sidebar {
-        display: block;
+        display: flex;
+        flex-direction: column;
         transition: left 1s ease-out;
         position: absolute;
-        top: $navbar-height;
+        top: 0;
         left: -15rem;
         width: 14rem;
 
         &.responsive-visible {
             left: 0;
-        
         }
+    }
+
+    .display-toggle {
+        margin-top: auto;
+        padding: 0 0 0.6rem 0.6rem;
     }
 
     .navbar {
@@ -691,6 +696,32 @@ td.snug {
 
     .regions-panel {
         display: none;
+
+        &.fullscreen {
+            display: flex;
+
+            .region {
+                min-width: 98vmin;
+                margin: 0 0.2rem 0.4rem 0;
+                line-height: 1.8;
+            }
+    
+            .region-name, .region-severity {
+                margin: 0 0.2rem;
+            }
+    
+            .region-name {
+                font-size: $font-size-base * 1.2;
+            }
+        
+            .region-severity-open {
+                font-size: $font-size-base * 1.4;
+            }
+        
+            .region-severity-silenced {
+                font-size: $font-size-base * 0.8;
+            }
+        }
     }
 
     .alerts {

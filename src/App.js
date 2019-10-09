@@ -102,7 +102,7 @@ const App = () => {
         : user.error 
           ? <AuthError error={user.error}/>
           :
-          <div className="container-fluid page">
+          <div className={`container-fluid page ${currentDisplayMode}`}>
             <div className={`sidebar ${responsiveSidebarVisible ? 'responsive-visible' : ''}`} >
               <div className="sidebar-brand"><FontAwesomeIcon icon="sun" className="logo" />Supernova</div>
               <ul className="sidebar-nav">
@@ -110,11 +110,13 @@ const App = () => {
                   <span className="sidebar-link active"><FontAwesomeIcon icon="bell" fixedWidth />Alerts</span>
                   <Categories categories={categories} counts={counts.category}/>
                 </li>
-              </ul>  
-              <ButtonGroup>
-                <Button color="primary">List</Button>
-                <Button color="primary">Overview</Button>
-              </ButtonGroup>
+              </ul> 
+              <div className="display-toggle">
+                <ButtonGroup className="display-toggle">
+                  <Button color="primary" className={currentDisplayMode === 'overview' ? '' : 'active'}>List view</Button>
+                  <Button color="primary" className={currentDisplayMode === 'overview' ? 'active' : ''}>Overview</Button>
+                </ButtonGroup> 
+              </div>
             </div>  
 
             <div className="main">
