@@ -3,7 +3,7 @@ import React, { useState, useRef, useMemo, useEffect } from 'react';
 import { GlobalStateProvider, useGlobalState, useDispatch } from './lib/globalState'
 import reducers from './reducers'
 
-import {Navbar, Nav, UncontrolledDropdown, DropdownToggle, DropdownMenu} from 'reactstrap'
+import {Button, ButtonGroup, Navbar, Nav, UncontrolledDropdown, DropdownToggle, DropdownMenu} from 'reactstrap'
 
 import Categories from './components/Categories'
 import Alerts from './components/Alerts'
@@ -53,6 +53,7 @@ const App = () => {
   const {modalIsShowing, toggleModal} = useModal()
   const [modalContent, setModalContent] = useState([])
   const [display,updateDisplay] = useState('dashboard')
+  const [responsiveSidebarVisible, setResponsiveSidebarVisible] = useState(false) 
 
   const initialURLFilters = useUrlFilters({"category": categories.active, "label": labelFilters.settings, "display": [display]})
 
@@ -81,6 +82,12 @@ const App = () => {
 
   const counts = useActiveCategoryCounts({counts: alerts.counts, categories: categories.items})
 
+  const toggleResponsiveSidebar = () => {
+    console.log("setting sidebar: ", !responsiveSidebarVisible);
+    setResponsiveSidebarVisible(!responsiveSidebarVisible)
+  }
+
+
   //useAlertsLoader(initialURLFilters)
   //useUserProfileLoader()
   useInitialLoader({urlFilters: initialURLFilters, userProfile: user.profile})
@@ -96,7 +103,7 @@ const App = () => {
           ? <AuthError error={user.error}/>
           :
           <div className="container-fluid page">
-            <div className="sidebar ">
+            <div className={`sidebar ${responsiveSidebarVisible ? 'responsive-visible' : ''}`} >
               <div className="sidebar-brand"><FontAwesomeIcon icon="sun" className="logo" />Supernova</div>
               <ul className="sidebar-nav">
                 <li className="sidebar-folder">
@@ -104,10 +111,15 @@ const App = () => {
                   <Categories categories={categories} counts={counts.category}/>
                 </li>
               </ul>  
+              <ButtonGroup>
+                <Button color="primary">List</Button>
+                <Button color="primary">Overview</Button>
+              </ButtonGroup>
             </div>  
 
             <div className="main">
               <Navbar color="light" light expand="md">
+                <Button outline onClick={() => toggleResponsiveSidebar()}><FontAwesomeIcon icon="bars"/></Button>
                 <Nav className="ml-auto" navbar>
                   <UncontrolledDropdown nav inNavbar>
                     <DropdownToggle nav caret>

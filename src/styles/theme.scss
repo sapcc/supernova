@@ -24,6 +24,18 @@ $theme-colors: (
     line-height: 1.2;
 }
 
+// --------------------------------------------------------
+
+
+
+// Layout sizes -------------------------------------------
+
+$navbar-height: 55px;
+
+// --------------------------------------------------------
+
+
+
 
 // Shared Utilities ----------------------------------------
 
@@ -167,7 +179,7 @@ code {
     background: $bg-light;
     border-bottom: 1px solid $border-light;
     box-shadow: 0 0 1px 1px rgba(100, 100, 100, 0.05);
-    height: 55px;
+    height: $navbar-height;
 }
 
 // --------------------------------------------------------
@@ -235,7 +247,7 @@ code {
     padding: 0.5rem 0.6rem;
 
     &.active {
-        background: darken($bg-dark, 12);
+        background: $bg-dark-active;
         font-weight: bold;
         color: #fff;
     }
@@ -621,37 +633,6 @@ td.snug {
 
 // Layout responsive --------------------------------------
 
-@include media-breakpoint-down(md) {
-    
-    .content {
-        padding-left: 0.5rem;
-        padding-right: 0.5rem;
-    }
-    
-    .sidebar {
-        display: none;
-    }
-
-    .regions-panel {
-        display: none;
-    }
-
-    .alerts {
-        th, td {
-            display: none;
-        }
-
-        td.alert-main {
-            display: table-cell;
-        }
-    }
-
-    .alert-info-small-screen {
-        display: block;
-    }
-
-}
-
 @include media-breakpoint-down(lg) {
 
     .sidebar {
@@ -671,6 +652,61 @@ td.snug {
     .alert-info-small-screen {
         display: block;
     }
+}
+
+
+@include media-breakpoint-down(md) {
+    
+    .content {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+    
+    .sidebar {
+        display: block;
+        transition: left 1s ease-out;
+        position: absolute;
+        top: $navbar-height;
+        left: -15rem;
+        width: 14rem;
+
+        &.responsive-visible {
+            left: 0;
+        
+        }
+    }
+
+    .navbar {
+        background: $bg-dark-active !important;
+        border-bottom-color: #000;
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+    }
+
+    .sidebar-toggler {
+        display: block;
+    }
+
+    .regions-panel {
+        display: none;
+    }
+
+    .alerts {
+        th, td, td.alert-buttons {
+            display: none;
+        }
+
+        td.alert-main {
+            display: table-cell;
+        }
+    }
+
+    .alert-info-small-screen {
+        display: block;
+    }
+
 }
 
 // --------------------------------------------------------
