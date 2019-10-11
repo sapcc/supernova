@@ -16,8 +16,8 @@ const Sidebar = ({counts, currentDisplayMode}) => {
   const responsiveSidebarVisible = layout.responsiveSidebarVisible
 
   const setDisplayMode = (mode) => {
-    console.log("set display sidebar: ", mode);
     dispatch({type: 'SET_DISPLAY_MODE', display: mode})
+    dispatch({type: 'TOGGLE_RESPONSIVE_SIDEBAR_VISIBLE'})
   }
 
   return (

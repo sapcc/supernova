@@ -73,6 +73,10 @@ $navbar-height: 55px;
 
 // HTML elements ----------------------------------------
 
+body {
+    background: $bg-dark-active;
+}
+
 code {
     padding: 0.1rem 0.2rem;
     border-radius: 2px;
@@ -158,12 +162,18 @@ code {
 .page {
     display: flex;
     padding-left: 0;
-    padding-right: 0;
+    padding-right: 0; 
+    background: $bg-light;
+    
+    &.overview, &.map {
+        background: $bg-dark-active;
+    }
+
 }
 
 .main {
     flex: 0 1 100%;
-    background: $bg-light;
+    min-height: 100vh;
 }
 
 .content {
@@ -660,6 +670,12 @@ td.snug {
     .content {
         padding-left: 0.5rem;
         padding-right: 0.5rem;
+    }
+
+    .overview, .map {
+        .content {
+            padding: 0.5rem 0 0.5rem 0 ;
+        }
     }
     
     .sidebar {

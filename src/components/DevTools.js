@@ -14,13 +14,13 @@ export default () => {
   useEffect(() => {
     dispatchLogger((action) => updateLog(log => [...log, action]))
 
-    container.current.addEventListener("mouseenter", () => setOpacity(0.95))
-    container.current.addEventListener("mouseleave", () => setOpacity(0.5))
+    // container.current.addEventListener("mouseenter", () => setOpacity(0.95))
+    // container.current.addEventListener("mouseleave", () => setOpacity(0.5))
 
-    return () => {
-      container.current.removeEventListener("mouseenter")
-      container.current.removeEventListener("mouseleave")
-    }
+    // return () => {
+    //   container.current.removeEventListener("mouseenter")
+    //   container.current.removeEventListener("mouseleave")
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

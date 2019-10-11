@@ -54,16 +54,18 @@ const App = () => {
   const [modalContent, setModalContent] = useState([])
   // const [display,updateDisplay] = useState('dashboard')
 
+
   const initialURLFilters = useUrlFilters({"category": categories.active, "label": labelFilters.settings, "display": [display]})
 
   // decide which display mode should be used
-  const currentDisplayMode = useMemo(() => {
-    if(Array.isArray(initialURLFilters.display) && initialURLFilters.display.length>0) {
-      if(initialURLFilters.display[0] !== display) return initialURLFilters.display[0]
-    }
-    console.log("display changed: ", display);
-    return display
-  },[initialURLFilters.display,display])
+  // const currentDisplayMode = useMemo(() => {
+  //   if(Array.isArray(initialURLFilters.display) && initialURLFilters.display.length>0) {
+  //     if(initialURLFilters.display[0] !== display) return initialURLFilters.display[0]
+  //   }
+    
+  //   return display
+  // },[initialURLFilters.display,display])
+
 
   // get settings from URL and update the state
   useEffect(() => {
@@ -80,7 +82,6 @@ const App = () => {
   },[])
 
   const setDisplay = (mode) => {
-    console.log("set display app: ", mode);
     dispatch({type: 'SET_DISPLAY_MODE', display: mode})
   }
 
@@ -96,25 +97,25 @@ const App = () => {
 
   return (
     <React.Fragment>
-      { currentDisplayMode === 'map' 
-        ? <MapDisplay regionCounts={counts.region}/>
-        : currentDisplayMode === 'overview' 
-          ? <OverviewDisplay labelFilters={labelFilters} items={alerts.labelValues ? alerts.labelValues['region'] : null} counts={counts.region} />
+      {user.isLoading
+        ? <LoadingIndicator/>
+        : user.error 
+          ? <AuthError error={user.error}/>
           :
-          <React.Fragment>
-            {user.isLoading
-              ? <LoadingIndicator/>
-              : user.error 
-                ? <AuthError error={user.error}/>
-                :
-                <div className={`container-fluid page ${currentDisplayMode}`}>
-                  
-                  <Sidebar counts={counts} currentDisplayMode={currentDisplayMode} /> 
+          <div className={`container-fluid page ${display}`}>
+            
+            <Sidebar counts={counts} currentDisplayMode={display} /> 
 
-                  <div className="main">
-                    <SuperNavbar />
+            <div className="main">
+              <SuperNavbar />
 
-                    <div className="content" ref={contentRef}>
+              <div className="content" ref={contentRef}>
+                { display === 'map' 
+                  ? <MapDisplay regionCounts={counts.region}/>
+                  : display === 'overview' 
+                    ? <OverviewDisplay labelFilters={labelFilters} items={alerts.labelValues ? alerts.labelValues['region'] : null} counts={counts.region} />
+                    :
+                    <React.Fragment>
                       <Regions
                         labelFilters={labelFilters}
                         counts={counts.region}/>
@@ -127,23 +128,23 @@ const App = () => {
                         categories={categories}
                         showModal={(content) => { setModalContent(content); toggleModal() }}
                       />
-                    </div>
-                  </div> 
+                    </React.Fragment> 
+                }
+              </div>
+            </div> 
 
-                  <SuperModal 
-                    isShowing={modalIsShowing} 
-                    hide={toggleModal} 
-                    header={modalContent.header} 
-                    footer={modalContent.footer} 
-                    cancelButtonText={modalContent.cancelButtonText}>
-                      {modalContent.body}
-                  </SuperModal>
+            <SuperModal 
+              isShowing={modalIsShowing} 
+              hide={toggleModal} 
+              header={modalContent.header} 
+              footer={modalContent.footer} 
+              cancelButtonText={modalContent.cancelButtonText}>
+                {modalContent.body}
+            </SuperModal>
 
-                </div>
-            }
-            {process.env.NODE_ENV === 'development' && <DevTools/>}
-          </React.Fragment>
+          </div>
       }
+      {process.env.NODE_ENV === 'development' && <DevTools/>}
     </React.Fragment>
   )
 }
