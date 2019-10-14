@@ -17,8 +17,8 @@ const SuperNavbar = () => {
   }
 
   return (
-    <Navbar color="light" light expand="md">
-      <Button outline onClick={() => toggleResponsiveSidebar()}><FontAwesomeIcon icon="bars"/></Button>
+    <Navbar expand="md">
+      <Button outline className="hamburger" onClick={() => toggleResponsiveSidebar()}><FontAwesomeIcon icon="bars"/></Button>
       <Nav className="ml-auto" navbar>
         <UncontrolledDropdown nav inNavbar>
           <DropdownToggle nav caret>

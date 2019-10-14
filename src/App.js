@@ -66,6 +66,8 @@ const App = () => {
   //   return display
   // },[initialURLFilters.display,display])
 
+  // TODO: Fix browser back (currently display doesn't change on browser back if new mode didn't come via url)
+
 
   // get settings from URL and update the state
   useEffect(() => {

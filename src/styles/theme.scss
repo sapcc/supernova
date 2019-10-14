@@ -192,6 +192,17 @@ code {
     height: $navbar-height;
 }
 
+.overview, .map {
+    .navbar {
+        background: darken($bg-dark, 5);
+        border-bottom-color:$bg-dark;
+    }
+}
+
+.hamburger {
+    display: none;
+}
+
 // --------------------------------------------------------
 
 
@@ -213,6 +224,10 @@ code {
     ul {
         list-style: none;
         padding: 0;
+    }
+
+    .display-toggle {
+        display: none;
     }
 }
 
@@ -338,7 +353,8 @@ td.snug {
 }
 
 .alert-info-small-screen {
-    display: block;
+    display: none;
+
     .u-text-info {
         border-right: 1px solid rgba(0,0,0,0.5);
         padding-right: 1rem;
@@ -677,12 +693,16 @@ td.snug {
             padding: 0.5rem 0 0.5rem 0 ;
         }
     }
+
+    .hamburger {
+        display: inline-block;
+    }
     
     .sidebar {
         display: flex;
         flex-direction: column;
         transition: left 1s ease-out;
-        position: absolute;
+        position: fixed;
         top: 0;
         left: -15rem;
         width: 14rem;
@@ -690,11 +710,12 @@ td.snug {
         &.responsive-visible {
             left: 0;
         }
-    }
 
-    .display-toggle {
-        margin-top: auto;
-        padding: 0 0 0.6rem 0.6rem;
+        .display-toggle {
+            display: block;
+            margin-top: auto;
+            padding: 0 0 0.6rem 0.6rem;
+        }
     }
 
     .navbar {
