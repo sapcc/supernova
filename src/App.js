@@ -103,9 +103,6 @@ const App = () => {
   //useUserProfileLoader()
   useInitialLoader({urlFilters: initialURLFilters, userProfile: user.profile})
 
-  // if( currentDisplayMode === 'map') return <MapDisplay regionCounts={counts.region}/>
-  // if (currentDisplayMode === 'overview') return <OverviewDisplay labelFilters={labelFilters} items={alerts.labelValues ? alerts.labelValues['region'] : null} counts={counts.region} />
-
   return (
     <React.Fragment>
       {user.isLoading
