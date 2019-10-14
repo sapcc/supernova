@@ -49,13 +49,13 @@ const App = () => {
 
   const {alerts, silences, categories, labelFilters, user, layout} = state
   const display = layout.display
+  const layoutMode = layout.layoutMode
   const contentRef = useRef(null)
   const {modalIsShowing, toggleModal} = useModal()
   const [modalContent, setModalContent] = useState([])
-  // const [display,updateDisplay] = useState('dashboard')
 
 
-  const initialURLFilters = useUrlFilters({"category": categories.active, "label": labelFilters.settings, "display": [display]})
+  const initialURLFilters = useUrlFilters({"category": categories.active, "label": labelFilters.settings, "display": [display], "layout": [layoutMode]})
 
   // decide which display mode should be used
   // const currentDisplayMode = useMemo(() => {
@@ -74,17 +74,26 @@ const App = () => {
     if(Array.isArray(initialURLFilters.display) && initialURLFilters.display.length>0) {
       if(initialURLFilters.display[0] !== display) setDisplay(initialURLFilters.display[0])
     }
+    if(Array.isArray(initialURLFilters.layout) && initialURLFilters.layout.length>0) {
+      if(initialURLFilters.layout[0] !== layoutMode) setLayoutMode(initialURLFilters.layout[0])
+    }
     if(Array.isArray(initialURLFilters.category) && initialURLFilters.category.length > 0) {
       dispatch({type: 'INIT_ACTIVE_ITEMS', items: initialURLFilters.category})
     }
     if(initialURLFilters.label) {
       dispatch({type: 'INIT_LABEL_FILTERS', settings: initialURLFilters.label})
     }
+
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   const setDisplay = (mode) => {
     dispatch({type: 'SET_DISPLAY_MODE', display: mode})
+  }
+
+  const setLayoutMode = (mode) => {
+    dispatch({type: 'SET_LAYOUT_MODE', layoutMode: mode})
   }
 
   const counts = useActiveCategoryCounts({counts: alerts.counts, categories: categories.items})
@@ -106,10 +115,10 @@ const App = () => {
           :
           <div className={`container-fluid page ${display}`}>
             
-            <Sidebar counts={counts} currentDisplayMode={display} /> 
+            { layoutMode !== 'fullscreen' && <Sidebar counts={counts} currentDisplayMode={display} /> }
 
             <div className="main">
-              <SuperNavbar />
+              { layoutMode !== 'fullscreen' && <SuperNavbar /> }
 
               <div className="content" ref={contentRef}>
                 { display === 'map' 

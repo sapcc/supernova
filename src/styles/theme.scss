@@ -24,6 +24,10 @@ $theme-colors: (
     line-height: 1.2;
 }
 
+.custom-switch {
+    cursor: pointer;
+}
+
 // --------------------------------------------------------
 
 
@@ -190,6 +194,10 @@ code {
     border-bottom: 1px solid $border-light;
     box-shadow: 0 0 1px 1px rgba(100, 100, 100, 0.05);
     height: $navbar-height;
+
+    .utility-nav {
+        margin-left: 2rem;
+    }
 }
 
 .overview, .map {
