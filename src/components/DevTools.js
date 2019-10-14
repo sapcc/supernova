@@ -28,7 +28,7 @@ export default () => {
     <div
         style={{    
           position: 'fixed',
-          zIndex: 1000,
+          zIndex: 1100,
           top: 0,
           right: 0,
           height: '100%',
@@ -45,7 +45,7 @@ export default () => {
           border: '1px solid #666',
           width: collapsed ? 0 : 400,
           overflow: 'auto',
-          height: '100%',
+          height: '100%'
         }}>
         React DevTools
 

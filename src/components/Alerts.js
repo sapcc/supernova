@@ -159,6 +159,16 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
     </React.Fragment>
   }
 
+  const alertInfoForSmallScreens = (alert) => {
+    return (
+      <div className="alert-info-small-screen">
+        <span className="u-text-info">{alert.labels.region}</span>
+        <span className="u-text-info">{alert.labels.service}</span>
+        <span className="u-text-info">{moment(alert.startsAt).format('DD.MM. HH:mm')}</span> 
+      </div>
+    )   
+  }
+
   const descriptionParsed = (description) => {
     if(!description) return ''
     // urls in descriptions follow the schema: <URL|URL-NAME>
@@ -176,7 +186,7 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
 
 
   return (
-    <table className="table table-main">
+    <table className="alerts table table-main">
       <thead>
         <tr>
           <th>
@@ -205,7 +215,8 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
             <td>
               {alert.labels.service}
             </td>
-            <td>
+            <td className="alert-main u-break-all">
+              {alertInfoForSmallScreens(alert)}
               {alert.annotations.summary}
               <br/>
               <small className="u-text-info"><Markup content={descriptionParsed(alert.annotations.description)} tagName="span"/> - <Button className="btn-inline-link" color="link" onClick={() => toggleDetailsModal(alert)}>Show raw data</Button></small>
@@ -214,7 +225,7 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
             </td>
             <td>{moment(alert.startsAt).format('DD.MM.YYYY HH:mm:ss')}</td>
             <td>{alertStatus(alert.status)}</td>
-            <td className="snug">
+            <td className="alert-buttons snug">
               <AlertActionButtons alert={alert} />
             </td>
           </tr>
