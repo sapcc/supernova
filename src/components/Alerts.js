@@ -1,38 +1,25 @@
-import React, {useMemo,useState,useEffect,useRef} from 'react'
+import React, {useMemo,useState,useRef} from 'react'
 import ReactJson from 'react-json-view'
 import AlertItem from './AlertItem'
 
 const Alerts = React.memo(({alerts,silences,categories,labelFilters,showModal}) => {
   const tableElement = useRef(null)
-  const activeLabelFilters = {}
   const labelSettings = labelFilters.settings
   const activeCategories = useMemo(() => categories.items.filter(c => c.active), [categories.items])
   const silencesKeyPayload = useMemo(() => 
     silences.items.reduce((hash,silence) => {hash[silence.id] = silence; return hash}, {})
     , [silences.items]
   )
-
-  // scrollOffset is used to decide which alerts are visible to user
-  const [scrollOffset,setScrollOffset] = useState(0)
-
-  // update scrollOffset on scroll event
-  useEffect(() => {
-    const supportPageOffset = window.pageXOffset !== undefined
-    const isCSS1Compat = ((document.compatMode || "") === "CSS1Compat")
-    
-    const scrollEventHandler = () => {
-      const offset = supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop
-      setScrollOffset(offset)
+  const activeLabelFilters = useMemo(() => {
+    const result = {}
+    for(let name in labelSettings) { 
+      if(labelSettings[name] && labelSettings[name].length>0) result[name] = labelSettings[name] 
     }
+    return result
+  },[labelSettings])
 
-    window.addEventListener('scroll', scrollEventHandler)
-    // cleanup on unmount
-    return () => {window.removeEventListener('scroll',scrollEventHandler)}
-  },[])
-
-  for(let name in labelSettings) { 
-    if(labelSettings[name] && labelSettings[name].length>0) activeLabelFilters[name] = labelSettings[name] 
-  }
+  const pageSize = 100
+  const [page,setPage] = useState(1)
 
   // collect fingerprints of visible alerts
   // returns a hash
@@ -40,6 +27,7 @@ const Alerts = React.memo(({alerts,silences,categories,labelFilters,showModal}) 
     // don't filter at all if categories are empty
     if(categories.active.length === 0) return []
 
+    console.log('----',activeLabelFilters)
     return alerts.items.filter(alert => {
       let visible = activeCategories.reduce((matchesOtherCategories,category) => {
         return matchesOtherCategories && Object.keys(category.match_re).reduce((matchesOtherLabels,label) => {
@@ -47,6 +35,7 @@ const Alerts = React.memo(({alerts,silences,categories,labelFilters,showModal}) 
           return matchesOtherLabels && regex.test(alert.labels[label]) 
         },true)
       },true)
+
 
       if(visible && Object.keys(activeLabelFilters).length >= 0) {
         for(let name in activeLabelFilters) { 
@@ -93,56 +82,64 @@ const Alerts = React.memo(({alerts,silences,categories,labelFilters,showModal}) 
     })
   }
 
-  // These variables are necessary to calculate which alerts to render.
-  // We only render those alerts that are currently visible in the viewport of the window.
-  const tableOffset = (tableElement.current || {}).offsetTop
-  const viewportHeight = window.innerHeight
-  const tableHeight = Math.max((tableElement.current || {}).offsetHeight, viewportHeight*2)
-  const length = filteredAlerts.length
-  const itemHeight = Math.max(Math.ceil(tableHeight/length),50)
-  const start = Math.floor((scrollOffset-tableOffset)/itemHeight)-10
-  const end = Math.ceil((scrollOffset-tableOffset+viewportHeight)/itemHeight)+10
-
   return (
-    <table className="alerts table table-main" ref={tableElement}>
-      <thead>
-        <tr>
-          <th>
-            Region
-          </th>  
-          <th> 
-            Service
-          </th>  
-          <th>
-            Title       
-          </th>
-          <th className="text-nowrap">
-            Firing Since
-          </th>
-          <th>
-            Status
-          </th>
-          <th></th>
-        </tr>  
-      </thead>
-      <tbody>
-        {filteredAlerts.map((alert,index) => 
-          <AlertItem 
-            key={alert.fingerprint}
-            visible={index >= start && index <= end}
-            alert={alert}
-            labelSettings={labelSettings}
-            silencesKeyPayload={silencesKeyPayload}
-            showDetails={() => toggleDetailsModal(alert)}
-            showInhibitedBy={(fingerprint) => toggleInhibitedModal(fingerprint) }
-            showSilencedBy={(silenceId) => toggleSilenceModal(silenceId)}
-            showAckedBy={(payload) => toggleAckedModal(payload)}
-          />
-        )}
-      </tbody> 
-    </table> 
+    alerts.isLoading 
+    ? <span>Loading...</span> 
+    :  
+    <React.Fragment>
+      <table className="alerts table table-main" ref={tableElement}>
+        <thead>
+          <tr>
+            <th>
+              Region
+            </th>  
+            <th> 
+              Service
+            </th>  
+            <th>
+              Title       
+            </th>
+            <th className="text-nowrap">
+              Firing Since
+            </th>
+            <th>
+              Status
+            </th>
+            <th></th>
+          </tr>  
+        </thead>
+        <tbody>
+          {filteredAlerts.slice(0,page*pageSize).map((alert,index) => 
+            //index >= start && index <= end && 
+            <AlertItem 
+              key={alert.fingerprint}
+              alert={alert}
+              visible={true}
+              labelSettings={labelSettings}
+              silencesKeyPayload={silencesKeyPayload}
+              showDetails={() => toggleDetailsModal(alert)}
+              showInhibitedBy={(fingerprint) => toggleInhibitedModal(fingerprint) }
+              showSilencedBy={(silenceId) => toggleSilenceModal(silenceId)}
+              showAckedBy={(payload) => toggleAckedModal(payload)}
+            />
+          )}
+        </tbody> 
+      </table> 
+      {page*pageSize < filteredAlerts.length && 
+        <nav aria-label="Alerts navigation">
+          <ul className="pagination justify-content-end">
+            <li className="page-item">
+              <button className="page-link" tabIndex="-1" onClick={(e) => {e.preventDefault(); setPage(page+1)}}>
+                Load next
+              </button>
+            </li>
+          </ul>
+        </nav>
+      } 
+    </React.Fragment>  
   )
 },(oldProps,newProps) => {
+  console.log('::::',newProps)
   // speedup
   // do not re-render table if no changes
   const identical = oldProps.alerts.updatedAt === newProps.alerts.updatedAt && 

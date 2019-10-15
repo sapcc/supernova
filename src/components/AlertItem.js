@@ -102,11 +102,11 @@ const descriptionParsed = (text) => {
   return boldParsed.replace(regexCode, `<code>$1</code>`)
 }
 
-const AlertItem = ({
-  alert,visible,labelSettings,silencesKeyPayload,showDetails,
+const AlertItem = React.memo(({
+  alert,visible,emptyHeight,labelSettings,silencesKeyPayload,showDetails,
   showInhibitedBy,showSilencedBy,showAckedBy}) => {
   
-  if(!visible) return <tr><td colSpan={6}>Loading...</td></tr>  
+  if(!visible) return <tr><td colSpan={6} height={emptyHeight}>Loading...</td></tr>  
 
   return (
     <tr className={alert.labels.severity} >
@@ -141,6 +141,12 @@ const AlertItem = ({
       </td>
     </tr>
   )
-}
+},(oldProps,newProps) => {
+  const identical = oldProps.alert.fingerprint === newProps.alert.fingerprint && 
+                    oldProps.visible === newProps.visible && 
+                    oldProps.labelSettings === newProps.labelSettings && 
+                    oldProps.silencesKeyPayload === newProps.silencesKeyPayload
+  return identical                  
+})
 
 export default AlertItem
