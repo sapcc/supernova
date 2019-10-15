@@ -24,10 +24,10 @@ const Alerts = React.memo(({alerts,silences,categories,labelFilters,showModal}) 
   // collect fingerprints of visible alerts
   // returns a hash
   let filteredAlerts = useMemo(() => {
+    setPage(1)
     // don't filter at all if categories are empty
     if(categories.active.length === 0) return []
 
-    console.log('----',activeLabelFilters)
     return alerts.items.filter(alert => {
       let visible = activeCategories.reduce((matchesOtherCategories,category) => {
         return matchesOtherCategories && Object.keys(category.match_re).reduce((matchesOtherLabels,label) => {
@@ -45,7 +45,7 @@ const Alerts = React.memo(({alerts,silences,categories,labelFilters,showModal}) 
       
       return visible
     })
-  },[alerts,categories,activeCategories,activeLabelFilters])
+  },[alerts.updatedAt,categories,activeCategories,activeLabelFilters])
 
   const toggleDetailsModal = (alert) => 
     showModal({
@@ -133,6 +133,11 @@ const Alerts = React.memo(({alerts,silences,categories,labelFilters,showModal}) 
                 Load next
               </button>
             </li>
+            {/*<li>  
+              <button className="page-link" tabIndex="-1" onClick={(e) => {e.preventDefault(); setPage(Math.ceil(filteredAlerts.length/pageSize))}}>
+                All
+              </button>
+            </li>*/}
           </ul>
         </nav>
       } 

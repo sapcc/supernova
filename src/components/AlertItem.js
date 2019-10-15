@@ -103,10 +103,10 @@ const descriptionParsed = (text) => {
 }
 
 const AlertItem = React.memo(({
-  alert,visible,emptyHeight,labelSettings,silencesKeyPayload,showDetails,
+  alert,visible,labelSettings,silencesKeyPayload,showDetails,
   showInhibitedBy,showSilencedBy,showAckedBy}) => {
   
-  if(!visible) return <tr><td colSpan={6} height={emptyHeight}>Loading...</td></tr>  
+  if(!visible) return <tr><td colSpan={6}>Loading...</td></tr>  
 
   return (
     <tr className={alert.labels.severity} >
