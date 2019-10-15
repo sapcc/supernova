@@ -23,12 +23,15 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
   useEffect(() => {
     const supportPageOffset = window.pageXOffset !== undefined
     const isCSS1Compat = ((document.compatMode || "") === "CSS1Compat")
-
-    window.addEventListener('scroll', () => {
+    
+    const scrollEventHandler = () => {
       const y = supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop
       console.log('update scroll variable')
       setScrollOffset(y)
-    })
+    }
+
+    window.addEventListener('scroll', scrollEventHandler)
+    return () => {window.removeEventListener('scroll',scrollEventHandler)}
   },[])
 
   for(let name in labelSettings) { 
@@ -101,7 +104,7 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
   const end = Math.ceil((viewportHeight+scrollOffset)/itemHeight)
 
   return (
-    <table className="table table-main" ref={tableElement}>
+    <table className="alerts table table-main" ref={tableElement}>
       <thead>
         <tr>
           <th>
@@ -123,7 +126,6 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
         </tr>  
       </thead>
       <tbody>
-        {/* IF NO ALERTS -> YAY */}
         {alerts.items.map((alert,index) =>
           filteredAlertsIds[alert.fingerprint] && 
           <AlertItem 

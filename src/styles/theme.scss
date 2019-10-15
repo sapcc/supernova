@@ -24,6 +24,22 @@ $theme-colors: (
     line-height: 1.2;
 }
 
+.custom-switch {
+    cursor: pointer;
+}
+
+// --------------------------------------------------------
+
+
+
+// Layout sizes -------------------------------------------
+
+$navbar-height: 55px;
+
+// --------------------------------------------------------
+
+
+
 
 // Shared Utilities ----------------------------------------
 
@@ -51,11 +67,19 @@ $theme-colors: (
     display: flex !important;
 }
 
+.u-break-all {
+    word-break: break-all;
+}
+
 // --------------------------------------------------------
 
 
 
 // HTML elements ----------------------------------------
+
+body {
+    background: $bg-dark-active;
+}
 
 code {
     padding: 0.1rem 0.2rem;
@@ -138,28 +162,59 @@ code {
 
 // Layout components --------------------------------------
 
+
 .page {
     display: flex;
     padding-left: 0;
-    padding-right: 0;
+    padding-right: 0; 
+    background: $bg-light;
+    
+    &.overview, &.map {
+        background: $bg-dark-active;
+    }
+
 }
 
 .main {
     flex: 0 1 100%;
-    background: #F5F9FC;
+    min-height: 100vh;
 }
 
 .content {
-    padding: 30px 30px 30px 30px;
+    padding: 2rem;
 }
 
 .navbar {
+    @supports (position: sticky) {
+        position: sticky;
+        top: 0;
+        z-index: 1001;
+    }
+    background: $bg-light;
     border-bottom: 1px solid $border-light;
     box-shadow: 0 0 1px 1px rgba(100, 100, 100, 0.05);
-    height: 55px;
+    height: $navbar-height;
+
+    .brand {
+        display: none;
+    }
 }
 
+.navbar-toggler {
+    color: #ccc;
+}
+
+.overview, .map {
+    .navbar {
+        background: darken($bg-dark, 5);
+        border-bottom-color:$bg-dark;
+    }
+}
+
+
 // --------------------------------------------------------
+
+
 
 
 // SIDEBAR ------------------------------------------------
@@ -173,11 +228,15 @@ code {
     background: $bg-dark;
     border-right: 1px solid rgba(0, 0, 0, .1);    
     color: $light-grey;
-    flex: 0 1 320px;
+    flex: 0 1 23rem;
 
     ul {
         list-style: none;
         padding: 0;
+    }
+
+    .display-toggle {
+        display: none;
     }
 }
 
@@ -222,7 +281,7 @@ code {
     padding: 0.5rem 0.6rem;
 
     &.active {
-        background: darken($bg-dark, 12);
+        background: $bg-dark-active;
         font-weight: bold;
         color: #fff;
     }
@@ -298,6 +357,24 @@ td.snug {
     }
 }
 
+.alerts td.alert-main {
+    word-break: break-word;
+}
+
+.alert-info-small-screen {
+    display: none;
+
+    .u-text-info {
+        border-right: 1px solid rgba(0,0,0,0.5);
+        padding-right: 1rem;
+        margin-right: 1rem;
+
+        &:last-child {
+            border: none;
+        }
+    }
+}
+
 // --------------------------------------------------------
 
 
@@ -318,7 +395,6 @@ td.snug {
     border-radius: 12px;
     margin: 0.5rem 1rem 0 0;
     padding: 0.1rem 0.4rem;
-    white-space: nowrap;
 
     &:hover, &.active {
         background: rgba(0,0,0,0.05);
@@ -426,8 +502,12 @@ td.snug {
     }
 
     .form-group {
-        padding-right: 2rem;
-        flex-basis: 25%;
+        flex: 0 1 25%;
+    }
+
+    .filter {
+        min-width: 370px;
+        margin: 0 0.75rem 0.75rem 0;
     }
 
     .toggle-show {
@@ -471,7 +551,7 @@ td.snug {
 .region {
     display: flex;
     justify-content: space-between;
-    min-width: 380px;
+    min-width: 370px;
     background: $bg-dark-active;
     border: 1px solid $gray-900;
     border-radius: 3px;
@@ -581,5 +661,140 @@ td.snug {
 }
 
 
+
+// --------------------------------------------------------
+
+
+
+// Layout responsive --------------------------------------
+
+@include media-breakpoint-down(lg) {
+
+    .sidebar {
+        flex-basis: 18rem;
+    }
+    
+    .alerts {
+        th, td {
+            display: none;
+        }
+
+        td.alert-main, td.alert-buttons {
+            display: table-cell;
+        }
+    }
+
+    .alert-info-small-screen {
+        display: block;
+    }
+}
+
+
+@include media-breakpoint-down(md) {
+    
+    .content {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+
+    .overview, .map {
+        .content {
+            padding: 0.5rem 0 0.5rem 0 ;
+        }
+    }
+    
+    .sidebar {
+        display: flex;
+        flex-direction: column;
+        transition: left 1s ease-out;
+        position: fixed;
+        top: 0;
+        left: -15rem;
+        width: 14rem;
+
+        &.responsive-visible {
+            left: 0;
+        }
+
+        .display-toggle {
+            display: block;
+            margin-top: auto;
+            padding: 0 0 0.6rem 0.6rem;
+        }
+    }
+
+    .navbar {
+        background: $bg-dark-active !important;
+        border-bottom-color: #000;
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+
+        .layout-nav {
+            display: none;
+        }
+
+        .brand {
+            display: block;
+            color: #fff;
+            font-weight: bold;
+        }
+    }
+
+    // for some reason bootstrap changes this to static for these small screens and prevents the dropdown menu to be right aligned ¯\_(ツ)_/¯
+    .navbar-nav .dropdown-menu {
+        position: absolute;
+    }
+
+    .sidebar-toggler {
+        display: block;
+    }
+
+    .regions-panel {
+        display: none;
+
+        &.fullscreen {
+            display: flex;
+
+            .region {
+                min-width: 98vmin;
+                margin: 0 0.2rem 0.4rem 0;
+                line-height: 1.8;
+            }
+    
+            .region-name, .region-severity {
+                margin: 0 0.2rem;
+            }
+    
+            .region-name {
+                font-size: $font-size-base * 1.2;
+            }
+        
+            .region-severity-open {
+                font-size: $font-size-base * 1.4;
+            }
+        
+            .region-severity-silenced {
+                font-size: $font-size-base * 0.8;
+            }
+        }
+    }
+
+    .alerts {
+        th, td, td.alert-buttons {
+            display: none;
+        }
+
+        td.alert-main {
+            display: table-cell;
+        }
+    }
+
+    .alert-info-small-screen {
+        display: block;
+    }
+
+}
 
 // --------------------------------------------------------

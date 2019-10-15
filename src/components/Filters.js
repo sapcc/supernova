@@ -62,16 +62,18 @@ const Filters = ({labelFilters, labelValues}) => {
           <div className={`filter-section ${showAdvabcedFilters ? '' : 'u-hidden'}`}>
             { filterKeys.map((label) =>
               <FormGroup key={`filter-${label}`}>
-                <Label for={`filter-${label}` }>{label}</Label>
-                <Select 
-                  name={label} 
-                  id={`filter-${label}`} 
-                  value={transformValuesForSelect(settings[label])} 
-                  onChange={(value, change) => handleChange(value, change)}
-                  options={transformValuesForSelect(labelValues[label])}
-                  isLoading={!labelValues || !labelValues[label]}
-                  isMulti>
-                </Select>
+                <div className="filter">
+                  <Label for={`filter-${label}` }>{label}</Label>
+                  <Select 
+                    name={label} 
+                    id={`filter-${label}`} 
+                    value={transformValuesForSelect(settings[label])} 
+                    onChange={(value, change) => handleChange(value, change)}
+                    options={transformValuesForSelect(labelValues[label])}
+                    isLoading={!labelValues || !labelValues[label]}
+                    isMulti>
+                  </Select>
+                </div>
               </FormGroup>
             )}
           </div>

@@ -13,13 +13,13 @@ export default () => {
 
   useEffect(() => {
     dispatchLogger((action) => updateLog(log => [...log, action]))
-
-    container.current.addEventListener("mouseenter", () => setOpacity(0.95))
-    container.current.addEventListener("mouseleave", () => setOpacity(0.5))
+    const containerElement = container.current 
+    containerElement.addEventListener("mouseenter", () => setOpacity(0.95))
+    containerElement.addEventListener("mouseleave", () => setOpacity(0.5))
 
     return () => {
-      container.current.removeEventListener("mouseenter")
-      container.current.removeEventListener("mouseleave")
+      containerElement.removeEventListener("mouseenter")
+      containerElement.removeEventListener("mouseleave")
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -28,7 +28,7 @@ export default () => {
     <div
         style={{    
           position: 'fixed',
-          zIndex: 1000,
+          zIndex: 1100,
           top: 0,
           right: 0,
           height: '100%',
@@ -45,7 +45,7 @@ export default () => {
           border: '1px solid #666',
           width: collapsed ? 0 : 400,
           overflow: 'auto',
-          height: '100%',
+          height: '100%'
         }}>
         React DevTools
 

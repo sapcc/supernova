@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react'
+import React from 'react'
 import { Button } from 'reactstrap'
 import moment from 'moment'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -79,7 +79,15 @@ const AlertStatus = ({status,showAckedBy,showSilencedBy,showInhibitedBy,silences
   )
 }
 
-const descriptionParsed = ({text}) => {
+const AlertInfoForSmallScreens = ({alert}) => 
+  <div className="alert-info-small-screen">
+    <span className="u-text-info">{alert.labels.region}</span>
+    <span className="u-text-info">{alert.labels.service}</span>
+    <span className="u-text-info">{moment(alert.startsAt).format('DD.MM. HH:mm')}</span> 
+  </div>
+;
+
+const descriptionParsed = (text) => {
   if(!text) return ''
   // urls in descriptions follow the schema: <URL|URL-NAME>
   // Parse description and replace urls with a-tags
@@ -106,7 +114,8 @@ const AlertItem = ({
       <td>
         {alert.labels.service}
       </td>
-      <td>
+      <td className="alert-main u-break-all">
+        <AlertInfoForSmallScreens alert={alert}/>
         {alert.annotations.summary}
         <br/>
         <small className="u-text-info">
@@ -127,7 +136,7 @@ const AlertItem = ({
           showInhibitedBy={showInhibitedBy}
           silencesKeyPayload={silencesKeyPayload}/>
       </td>
-      <td className="snug">
+      <td className="alert-buttons snug">
         <AlertActionButtons alert={alert} />
       </td>
     </tr>
