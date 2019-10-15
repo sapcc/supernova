@@ -2,7 +2,7 @@ import React, {useMemo,useState,useEffect,useRef} from 'react'
 import ReactJson from 'react-json-view'
 import AlertItem from './AlertItem'
 
-const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
+const Alerts = React.memo(({alerts,silences,categories,labelFilters,showModal}) => {
   const tableElement = useRef(null)
   const activeLabelFilters = {}
   const labelSettings = labelFilters.settings
@@ -12,11 +12,7 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
     , [silences.items]
   )
 
-  // These variables are necessary to calculate which alerts to render.
-  // We only render those alerts that are currently visible in the viewport of the window.
-  const tableOffset = (tableElement.current || {}).offsetTop
-  const viewportHeight = window.innerHeight
-  const tableHeight = Math.max((tableElement.current || {}).offsetHeight, viewportHeight*2)
+  // scrollOffset is used to decide which alerts are visible to user
   const [scrollOffset,setScrollOffset] = useState(0)
 
   // update scrollOffset on scroll event
@@ -25,12 +21,12 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
     const isCSS1Compat = ((document.compatMode || "") === "CSS1Compat")
     
     const scrollEventHandler = () => {
-      const y = supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop
-      console.log('update scroll variable')
-      setScrollOffset(y)
+      const offset = supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop
+      setScrollOffset(offset)
     }
 
     window.addEventListener('scroll', scrollEventHandler)
+    // cleanup on unmount
     return () => {window.removeEventListener('scroll',scrollEventHandler)}
   },[])
 
@@ -40,11 +36,11 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
 
   // collect fingerprints of visible alerts
   // returns a hash
-  let filteredAlertsIds = useMemo(() => {
+  let filteredAlerts = useMemo(() => {
     // don't filter at all if categories are empty
-    if(categories.active.length === 0) return {}
+    if(categories.active.length === 0) return []
 
-    return alerts.items.reduce((hash,alert) => {
+    return alerts.items.filter(alert => {
       let visible = activeCategories.reduce((matchesOtherCategories,category) => {
         return matchesOtherCategories && Object.keys(category.match_re).reduce((matchesOtherLabels,label) => {
           const regex = new RegExp(category.match_re[label])
@@ -57,10 +53,9 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
           if(activeLabelFilters[name].indexOf(alert.labels[name]) < 0) visible = false
         }
       }
-
-      if(visible) hash[alert.fingerprint] = true
-      return hash
-    },{})
+      
+      return visible
+    })
   },[alerts,categories,activeCategories,activeLabelFilters])
 
   const toggleDetailsModal = (alert) => 
@@ -98,10 +93,15 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
     })
   }
 
-  const length = Object.keys(filteredAlertsIds).length
+  // These variables are necessary to calculate which alerts to render.
+  // We only render those alerts that are currently visible in the viewport of the window.
+  const tableOffset = (tableElement.current || {}).offsetTop
+  const viewportHeight = window.innerHeight
+  const tableHeight = Math.max((tableElement.current || {}).offsetHeight, viewportHeight*2)
+  const length = filteredAlerts.length
   const itemHeight = Math.max(Math.ceil(tableHeight/length),50)
-  const start = Math.min(-25,Math.floor((scrollOffset-tableOffset)/itemHeight))
-  const end = Math.ceil((viewportHeight+scrollOffset)/itemHeight)
+  const start = Math.floor((scrollOffset-tableOffset)/itemHeight)-10
+  const end = Math.ceil((scrollOffset-tableOffset+viewportHeight)/itemHeight)+10
 
   return (
     <table className="alerts table table-main" ref={tableElement}>
@@ -126,15 +126,14 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
         </tr>  
       </thead>
       <tbody>
-        {alerts.items.map((alert,index) =>
-          filteredAlertsIds[alert.fingerprint] && 
+        {filteredAlerts.map((alert,index) => 
           <AlertItem 
-            key={index}
+            key={alert.fingerprint}
             visible={index >= start && index <= end}
             alert={alert}
             labelSettings={labelSettings}
             silencesKeyPayload={silencesKeyPayload}
-            showDetails={() => toggleDetailsModal(alert.clone())}
+            showDetails={() => toggleDetailsModal(alert)}
             showInhibitedBy={(fingerprint) => toggleInhibitedModal(fingerprint) }
             showSilencedBy={(silenceId) => toggleSilenceModal(silenceId)}
             showAckedBy={(payload) => toggleAckedModal(payload)}
@@ -143,6 +142,14 @@ const Alerts = ({alerts,silences,categories,labelFilters,showModal}) => {
       </tbody> 
     </table> 
   )
-}
+},(oldProps,newProps) => {
+  // speedup
+  // do not re-render table if no changes
+  const identical = oldProps.alerts.updatedAt === newProps.alerts.updatedAt && 
+         oldProps.silences.updatedAt === newProps.silences.updatedAt && 
+         oldProps.categories === newProps.categories &&
+         oldProps.labelFilters === newProps.labelFilters
+  return identical     
+})
 
 export default Alerts
