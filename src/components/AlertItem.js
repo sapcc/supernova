@@ -110,7 +110,15 @@ const AlertItem = React.memo(({
 
   return (
     <tr className={alert.labels.severity} >
-      <td className="text-nowrap">{alert.labels.region}</td>
+      <td className="text-nowrap">
+        {alert.labels.region}
+        { alert.labels.region !== alert.labels.cluster &&
+          <React.Fragment>
+            <br />
+            <span className="u-text-info">{alert.labels.cluster}</span>
+          </React.Fragment>
+        }
+      </td> 
       <td>
         {alert.labels.service}
       </td>
