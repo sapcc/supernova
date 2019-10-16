@@ -26,16 +26,19 @@ const Alerts = React.memo(({alerts,silences,categories,labelFilters,showModal}) 
   let filteredAlerts = useMemo(() => {
     setPage(1)
     // don't filter at all if categories are empty
-    if(categories.active.length === 0) return []
+    //if(categories.active.length === 0) return []
 
     return alerts.items.filter(alert => {
-      let visible = activeCategories.reduce((matchesOtherCategories,category) => {
-        return matchesOtherCategories && Object.keys(category.match_re).reduce((matchesOtherLabels,label) => {
-          const regex = new RegExp(category.match_re[label])
-          return matchesOtherLabels && regex.test(alert.labels[label]) 
-        },true)
-      },true)
+      let visible = true
 
+      if(categories.active.length > 0) {
+        visible = activeCategories.reduce((matchesOtherCategories,category) => {
+          return matchesOtherCategories && Object.keys(category.match_re).reduce((matchesOtherLabels,label) => {
+            const regex = new RegExp(category.match_re[label])
+            return matchesOtherLabels && regex.test(alert.labels[label]) 
+          },true)
+        },true)
+      }
 
       if(visible && Object.keys(activeLabelFilters).length >= 0) {
         for(let name in activeLabelFilters) { 
