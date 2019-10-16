@@ -208,6 +208,7 @@ code {
     .navbar {
         background: darken($bg-dark, 5);
         border-bottom-color:$bg-dark;
+        color: #ccc;
     }
 }
 
@@ -333,12 +334,18 @@ code {
 .table-main {
     th {
         border-top: none;
-        border-color: #cdd4da !important;
+        border-color: lighten($bg-dark,7) !important;
+        padding: 0.5rem 0.75rem;
     }
 
     button {
         white-space: nowrap;
     }
+}
+
+thead {
+    background: lighten($bg-dark, 10);
+    color: #fff;
 }
 
 td.snug {
@@ -380,6 +387,12 @@ td.snug {
 
 
 // Components ----------------------------------------------
+
+.toolbar.toolbar-info {
+    background: $bg-dark;
+    color: #ccc;
+    padding: 0.25rem 0.75rem;
+}
 
 .react-json-view {
     word-break: break-all;

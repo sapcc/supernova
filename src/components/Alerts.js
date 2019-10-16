@@ -83,8 +83,21 @@ const Alerts = React.memo(({alerts,silences,categories,labelFilters,showModal}) 
     })
   }
 
+  const alertCounts = (alerts) => {
+    const criticals = alerts.filter(alert => alert.labels.severity === 'critical').length
+    const warnings  = alerts.filter(alert => alert.labels.severity === 'warning').length 
+    const infos     = alerts.filter(alert => alert.labels.severity === 'info').length
+    
+    return (
+      <React.Fragment>
+        {alerts.length} alerts <span className="u-text-info">({criticals} critical, {warnings} warning, {infos} info)</span>
+      </React.Fragment>
+    )
+  }
+
   return (
     <React.Fragment>
+      <div className="toolbar toolbar-info">{alertCounts(filteredAlerts)}</div>
       <table className="alerts table table-main" ref={tableElement}>
         <thead>
           <tr>
