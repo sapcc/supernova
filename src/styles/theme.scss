@@ -192,12 +192,25 @@ code {
     }
     background: $bg-light;
     border-bottom: 1px solid $border-light;
+    color: #666;
     box-shadow: 0 0 1px 1px rgba(100, 100, 100, 0.05);
     height: $navbar-height;
 
     .brand {
         display: none;
     }
+
+    .form-control {
+        color: #666;
+        line-height: 1;
+        height: calc(#{$input-height} - 0.5em);
+        margin-left: 0.5rem;
+    }
+
+    .form-group, .nav-item {
+        margin: 0 0.8rem;
+    }
+
 }
 
 .navbar-toggler {
@@ -209,6 +222,12 @@ code {
         background: darken($bg-dark, 5);
         border-bottom-color:$bg-dark;
         color: #ccc;
+
+        .form-control {
+            background-color: lighten($bg-dark, 5);
+            border-color: lighten($bg-dark, 15);
+            color: #ccc;
+        }
     }
 }
 
