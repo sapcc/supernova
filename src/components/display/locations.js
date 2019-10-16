@@ -27,8 +27,8 @@ export default {
     "regionname": "EU-DE-1",
     "lat":        48.66,
     "lon":        8.62,
-    "dx":         5,
-    "dy":         5  
+    "dx":         4,
+    "dy":         8  
   },
   "eu-de-2": {
     "country":    "Germany",
@@ -100,22 +100,22 @@ export default {
     "lat":        25.09,
     "lon":        55.17,
     "dx":         10,
-    "dy":         40  
+    "dy":         30  
   },
   "ap-sa-1":{
     "country":    "Saudi Arabia",
     "regionname": "AP-SA-1",
     "lat":        24.70,
     "lon":        46.68,
-    "dx":         -30,
-    "dy":         30  
+    "dx":         -40,
+    "dy":         12  
   },
   "ap-cn-1":{
     "country":    "China",
     "regionname": "AP-CN-1",
     "lat":        31.20,
     "lon":        121.47,
-    "dx":         -10,
+    "dx":         -8,
     "dy":         0  
   },
   "ap-jp-1":{
