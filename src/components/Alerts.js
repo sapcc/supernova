@@ -45,6 +45,7 @@ const Alerts = React.memo(({alerts,silences,categories,labelFilters,showModal}) 
       
       return visible
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[alerts.updatedAt,categories,activeCategories,activeLabelFilters])
 
   const toggleDetailsModal = (alert) => 
@@ -83,9 +84,6 @@ const Alerts = React.memo(({alerts,silences,categories,labelFilters,showModal}) 
   }
 
   return (
-    alerts.isLoading 
-    ? <span>Loading...</span> 
-    :  
     <React.Fragment>
       <table className="alerts table table-main" ref={tableElement}>
         <thead>
@@ -144,7 +142,6 @@ const Alerts = React.memo(({alerts,silences,categories,labelFilters,showModal}) 
     </React.Fragment>  
   )
 },(oldProps,newProps) => {
-  console.log('::::',newProps)
   // speedup
   // do not re-render table if no changes
   const identical = oldProps.alerts.updatedAt === newProps.alerts.updatedAt && 

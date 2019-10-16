@@ -54,9 +54,7 @@ const App = () => {
   const {modalIsShowing, toggleModal} = useModal()
   const [modalContent, setModalContent] = useState([])
 
-
   const initialURLFilters = useUrlFilters({"category": categories.active, "label": labelFilters.settings, "display": [display], "layout": [layoutMode]})
-
   // decide which display mode should be used
   // const currentDisplayMode = useMemo(() => {
   //   if(Array.isArray(initialURLFilters.display) && initialURLFilters.display.length>0) {
@@ -105,7 +103,7 @@ const App = () => {
 
   return (
     <React.Fragment>
-      {user.isLoading
+      {(user.isLoading || alerts.isLoading)
         ? <LoadingIndicator/>
         : user.error 
           ? <AuthError error={user.error}/>

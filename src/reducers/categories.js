@@ -2,7 +2,7 @@ import {categories} from '../config.json'
 
 const initialState = {
   items: categories,
-  active: []
+  active: categories.filter(c => c.active).map(c => c.name)
 }
 
 const initActiveItems = (state,{items}) => {
