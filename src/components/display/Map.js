@@ -68,7 +68,7 @@ const calculateRegionXY = (dx, dy, width, height) => {
 
 const AnnotationContent = ({region,dx,dy,counts}) => {
 
-  const severityWidth       = 30
+  const severityWidth       = 35
   const totalWidth          = severityWidth * 3
   const regionInfoHeight    = 20
   const extraInfoHeight     = 7
@@ -129,7 +129,7 @@ const AnnotationContent = ({region,dx,dy,counts}) => {
                 <tspan>{counts[`${severity}Handled`]}</tspan> 
                 </text>
 
-                <FontAwesomeIcon width="5" x={ 5 } y={ severityInfoHeight/2 - 3.5 } style={{color: 'white'}} size="xs" icon={["far", "bell-slash"]}/>
+                <FontAwesomeIcon width="5" x={ severityWidth/2 - 9 } y={ severityInfoHeight/2 - 3.5 } style={{color: 'white'}} size="xs" icon={["far", "bell-slash"]}/>
               </g>
             }
           </svg>
@@ -148,46 +148,46 @@ export default ({regionCounts}) => {
 
   return (
     <div style={wrapperStyles}>
-    <ComposableMap
-      className="map-wrapper"
-      projectionConfig={{
-        rotation: [-10,0,0]
-      }}
-    >
-      <ZoomableGroup center={[0,55]} zoom={1.1} disablePanning>
+      <ComposableMap
+        className="map-wrapper"
+        height="420"
+        projectionConfig={{
+          rotation: [-10,0,0]
+        }}
+      >
+      <ZoomableGroup center={[0,20]} disablePanning>
         <Geographies geography={require("./world-110m.json")}>
-            {(geographies, projection) => geographies.map((geography, i) => geography.id !== "ATA" && (
-              <Geography
-                key={i}
-                geography={geography}
-                projection={projection}
-                className="map-geography"
-              />
-            ))}
-            </Geographies>
-            <Markers>
-              {Object.keys(counts).map((region,index) => LOCATIONS[region] &&  
-                <Marker key={index} marker={{ coordinates: [ LOCATIONS[region].lon, LOCATIONS[region].lat ] }}>
-                  <circle className="map-marker" cx={ 0 } cy={ 0 } r={ 1.4 } />
-                </Marker>
-              )}
-            </Markers>
+          {(geographies, projection) => geographies.map((geography, i) => geography.properties["NAME"] !== "Antarctica" && (
+            <Geography
+              key={i}
+              geography={geography}
+              projection={projection}
+              className="map-geography"
+            />
+          ))}
+          </Geographies>
+          <Markers>
+            {Object.keys(counts).map((region,index) => LOCATIONS[region] &&  
+              <Marker key={index} marker={{ coordinates: [ LOCATIONS[region].lon, LOCATIONS[region].lat ] }}>
+                <circle className="map-marker" cx={ 0 } cy={ 0 } r={ 1.4 } />
+              </Marker>
+            )}
+          </Markers>
 
-
-            <Annotations>
-              {Object.keys(counts).map((region,index) => LOCATIONS[region] &&
-                <Annotation 
-                  key={index} 
-                  stroke='#000' 
-                  dx={ LOCATIONS[region].dx } dy={ LOCATIONS[region].dy } 
-                  subject={ [ LOCATIONS[region].lon, LOCATIONS[region].lat ] } 
-                  strokeWidth={ 1 }>
-                  <AnnotationContent region={region} counts={counts[region]} {...LOCATIONS[region]}/>
-                </Annotation>
-              )}  
-              </Annotations>
-          </ZoomableGroup>
-        </ComposableMap>
-      </div>
+          <Annotations>
+            {Object.keys(counts).map((region,index) => LOCATIONS[region] &&
+              <Annotation 
+                key={index} 
+                stroke='#000' 
+                dx={ LOCATIONS[region].dx } dy={ LOCATIONS[region].dy } 
+                subject={ [ LOCATIONS[region].lon, LOCATIONS[region].lat ] } 
+                strokeWidth={ 1 }>
+                <AnnotationContent region={region} counts={counts[region]} {...LOCATIONS[region]}/>
+              </Annotation>
+            )}  
+          </Annotations>
+        </ZoomableGroup>
+      </ComposableMap>
+    </div>
   )
 }
