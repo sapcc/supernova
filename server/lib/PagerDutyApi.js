@@ -15,14 +15,26 @@ const incidentAlerts = async (incidentId,params = {}) =>
     .then(response => response.data && response.data.alerts)
 ;
 
+const incidentNotes = async (incidentId) =>
+  axios
+    .get(url(`incidents/${incidentId}/notes`), {headers})
+    .then(response => response.data && response.data.notes)
+;
+
 const alertsWithIncidentStatus = async (incidentStatus) => {
   const tmpIncidents = await incidents({ "statuses[]": incidentStatus})
-  const alertPromises = tmpIncidents.map(i => 
-    incidentAlerts(i.id).then(alerts => alerts.map(a => {
-      a.incident = i
-      return a
-    }))
-  )
+  const alertPromises = tmpIncidents.map(async (i) => { 
+    const notes = await incidentNotes(i.id)
+
+    return incidentAlerts(i.id).then(alerts => 
+      alerts.map(a => {
+        // add incident and notes to alert
+        a.incident = i
+        a.notes = notes
+        return a
+      })
+    )
+  })
   return Promise
     .all(alertPromises)
     .then(array => array.flat())
@@ -31,6 +43,7 @@ const alertsWithIncidentStatus = async (incidentStatus) => {
 const PagerDutyApi = {
   incidents,
   incidentAlerts,
+  incidentNotes,
   acknowledgedAlerts: async () => alertsWithIncidentStatus('acknowledged'),
   resolvedAlerts: async () => alertsWithIncidentStatus('resolved')
 }

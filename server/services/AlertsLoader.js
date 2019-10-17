@@ -7,28 +7,54 @@ const PagerDutyApi = require('../lib/PagerDutyApi')
 let _cachedAlerts = { items: null, counts: {}, labelValues: {} }
 let _cachedAcknowledgements = {}
 
+// This function extracts acknowledgements from the notes and standardizes them.
+const buildAcknowledgements = ({acknowledgements,notes}) => {
+  const result = []
+  if(notes) {
+    const regex = /Incident was acknowledged on behalf of (.+@.+\.) \(?([^\)]+)?\)?\s*time: (.+)/
+    notes.forEach(note => {
+      const found = note.content.match(regex)
+      let name = found[2]
+      let email = found[1]
+      if(!name && email) { // extract name from email 
+        const nameMatch = email.match(/(.+)\.(.+)@/ )
+        if(nameMatch) name = `${utils.capitalize(nameMatch[1])} ${utils.capitalize(nameMatch[2])}`
+      }
+      if(found) result.push({at: new Date(found[3]), user: {email,name} })
+    })
+  }
+  if(acknowledgements) {
+    acknowledgements.forEach(ack => 
+      result.push({at: ack.at, user: {name: ack.acknowledger.summary} })
+    )
+  }
+  return result
+}
 
-// Convert acknowledgements array to a hash and 
-// cache them.
+// Convert acknowledged alerts array to a hash and cache them.
 const updateCachedAcknowledgements = (alerts) => {
   const items = alerts.reduce((hash,alert) => {
     const details = alert.body.details
     //TODO: add alert name
     //TODO: replace key with alert fingerprint after update of Alert Manager
     const key = `${alert.severity}-${details.Service}-${details.Tier}-${details.Region}-${details.Context}`.replace(/\n/g,'')
-    hash[key] = alert.incident.acknowledgements
+
+    hash[key] = buildAcknowledgements({ acknowledgements: alert.incident.acknowledgements, notes: alert.notes })
     return hash
   },{})
   _cachedAcknowledgements.items = items
 }
 
-// Returns acknowledgements for an alert or undefined
+// Returns acknowledgement infos for an alert or undefined
 const getAlertAcknowledgements = (alert) => {
   if(!_cachedAcknowledgements.items) return null
 
   const details = alert.labels
+  // TODO: remove next line
+  if(details.severity === 'test') details.severity = 'critical'
   const key = `${details.severity || ''}-${details.service || ''}-${details.tier || ''}-${details.region || ''}-${details.context || ''}`
-
+  //TODO: remove next line
+  if(alert.labels.region === 'area51') console.log('----------------------',details,key)
   return _cachedAcknowledgements.items[key]
 }
 
@@ -45,10 +71,10 @@ const getCachedAlerts = () => {
 
 // Extend alerts withth acknowledgements and counts and label values.
 const updateCachedAlerts = (alerts) => {
-  // acknowledgements
+  // extend alerts with acknowledgement infos from PagerDuty
   alerts = alerts.map(a => {
     const acknowledgements = getAlertAcknowledgements(a)
-    if(acknowledgements) a.status.acknowledgements = acknowledgements
+    if(a.status) a.status.acknowledgedBy = acknowledgements
     return a
   })
   // end acknowledgements

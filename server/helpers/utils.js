@@ -14,6 +14,9 @@ const doPeriodical = (options = {}, func) => {
   setTimeout(periodical, options.immediate ? 0 : interval)
 }
 
+const capitalize = (string) => string ? string[0].toUpperCase() + string.slice(1) : ''
+
 module.exports = {
-  doPeriodical
+  doPeriodical,
+  capitalize
 }

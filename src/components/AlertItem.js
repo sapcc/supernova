@@ -37,7 +37,7 @@ const AlertLabels = ({labelSettings,labels}) => {
   </React.Fragment>
 }
 
-const AlertStatus = ({status,showAckedBy,showSilencedBy,showInhibitedBy,silencesKeyPayload}) => {
+const AlertStatus = ({status, showAckedBy,showSilencedBy,showInhibitedBy,silencesKeyPayload}) => {
   return (
     <React.Fragment>
       {status.state &&
@@ -65,12 +65,12 @@ const AlertStatus = ({status,showAckedBy,showSilencedBy,showInhibitedBy,silences
         :
         ""
       }
-      {status.acknowledgements && status.acknowledgements.length>0 &&
-        status.acknowledgements.map((ack,i) => 
+      {status.acknowledgedBy && status.acknowledgedBy.length>0 &&
+        status.acknowledgedBy.map((ack,i) => 
           <div className="u-text-info u-text-small" key={i}>
             Acknowledged by: 
             <Button color="link" className="btn-inline-link" onClick={(e) => { e.preventDefault(); showAckedBy(ack)}}>
-              {ack.acknowledger.summary}
+              {ack.user.name || ack.user.email}
             </Button>
           </div>
         )          
