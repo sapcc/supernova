@@ -37,7 +37,7 @@ export default ({counts, labelFilters, isFullScreen}) => {
 
   return (
     <div className={`regions-panel ${regionSelectionActive()} ${isFullScreen ? "fullscreen" : ""}`}>
-      {sortedRegions.map(region =>
+      {sortedRegions.map(region => region !== 'area51' &&
         <div className={`region-wrapper ${wrapperActive(region)}`} key={region}>
           <div className="region" key={region} onClick={() => handleClick(region)} >
             <div className="region-name">{region}</div>
