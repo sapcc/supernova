@@ -7,10 +7,8 @@ module.exports = (req,res,next) => {
     req.user = userHelper.developer
     return next()
   }
-    
-  console.log(':::::::::',req.headers)
+
   // Check SSO
-  
   if(!req.header('ssl-client-verify') || req.header('ssl-client-verify').toUpperCase() !== 'SUCCESS') {
     res.sendStatus(401)
   } else {

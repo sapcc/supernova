@@ -34,10 +34,11 @@ const buildAcknowledgements = ({acknowledgements,notes}) => {
 // Convert acknowledged alerts array to a hash and cache them.
 const updateCachedAcknowledgements = (alerts) => {
   const items = alerts.reduce((hash,alert) => {
-    const details = alert.body.details
-    //TODO: add alert name
-    //TODO: replace key with alert fingerprint after update of Alert Manager
-    const key = `${alert.severity}-${details.Service}-${details.Tier}-${details.Region}-${details.Context}`.replace(/\n/g,'')
+    // const details = alert.body.details
+    // //TODO: add alert name
+    // //TODO: replace key with alert fingerprint after update of Alert Manager
+    // const key = `${alert.severity}-${details.Service}-${details.Tier}-${details.Region}-${details.Context}`.replace(/\n/g,'')
+    const key = alertsHelper.pagerDutyAlertKey(alert)
 
     hash[key] = buildAcknowledgements({ acknowledgements: alert.incident.acknowledgements, notes: alert.notes })
     return hash
@@ -49,12 +50,11 @@ const updateCachedAcknowledgements = (alerts) => {
 const getAlertAcknowledgements = (alert) => {
   if(!_cachedAcknowledgements.items) return null
 
-  const details = alert.labels
-  // TODO: remove next line
-  if(details.severity === 'test') details.severity = 'critical'
-  const key = `${details.severity || ''}-${details.service || ''}-${details.tier || ''}-${details.region || ''}-${details.context || ''}`
-  //TODO: remove next line
-  if(alert.labels.region === 'area51') console.log('----------------------',details,key)
+  // const details = alert.labels
+  // // TODO: remove next line
+  // if(details.severity === 'test') details.severity = 'critical'
+  // const key = `${details.severity || ''}-${details.service || ''}-${details.tier || ''}-${details.region || ''}-${details.context || ''}`
+  const key = alertsHelper.alertKey(alert)
   return _cachedAcknowledgements.items[key]
 }
 

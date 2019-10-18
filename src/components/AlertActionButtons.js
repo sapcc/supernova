@@ -1,9 +1,48 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
+import axios from 'axios'
 
-const AlertActionButtons = ({alert}) => {
+const AckButton = ({statusAcked,fingerprint}) => {
+  const [confirm,setConfirm] = useState(false)
+  const [isSending,setIsSending] = useState(false)
+  const [acked,setAcked] = useState(statusAcked)
+
+  useEffect(() => {
+    let timer
+    if(confirm) {
+      timer = setTimeout(() => setConfirm(false), 5000)
+    }
+    return () => clearTimeout(timer)
+  },[confirm])
+
+  const handleClick = (e) => {
+    e.preventDefault()
+    if(!confirm) {
+      setConfirm(true)
+      return
+    }
+    
+    setIsSending(true)
+    axios.put(`/api/alerts/${fingerprint}/ack`)
+      .then(response => {setAcked(true); alert('Acked')} )
+      .catch(error => alert(`${error.response.status} ${error.response.data}`))
+      .finally(() => setIsSending(false))
+    setConfirm(false)
+  }
 
   return (
+    <button className="btn btn-xs" onClick={handleClick} disabled={acked || isSending}>
+      {confirm ? 'Confirm' : acked ? 'Acked' : 'Ack'}
+    </button>
+  )
+}
+
+const AlertActionButtons = ({alert}) => {
+  
+  return (
     <div className="action-buttons-vertical">
+      {alert.labels.severity === 'critical' && !alert.status.acknowledgedBy &&
+        <AckButton statusAcked={!!alert.status.acknowledgedBy} fingerprint={alert.fingerprint}/>
+      }
       {alert.labels.playbook && 
         <a href={`https://operations.global.cloud.sap/${alert.labels.playbook}`} target="_blank" rel="noopener noreferrer" className="btn btn-xs">Playbook</a>
       }

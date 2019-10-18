@@ -66,14 +66,17 @@ const AlertStatus = ({status, showAckedBy,showSilencedBy,showInhibitedBy,silence
         ""
       }
       {status.acknowledgedBy && status.acknowledgedBy.length>0 &&
-        status.acknowledgedBy.map((ack,i) => 
-          <div className="u-text-info u-text-small" key={i}>
-            Acknowledged by: 
-            <Button color="link" className="btn-inline-link" onClick={(e) => { e.preventDefault(); showAckedBy(ack)}}>
-              {ack.user.name || ack.user.email}
-            </Button>
-          </div>
-        )          
+        <React.Fragment>
+          <div className="u-text-info u-text-small">Acked By:</div>
+          {status.acknowledgedBy.map((ack,i) => 
+            <div className="u-text-info u-text-small" key={i}>
+              <Button color="link" className="btn-inline-link" onClick={(e) => { e.preventDefault(); showAckedBy(ack)}}>
+                {ack.user.name || ack.user.email}
+              </Button>
+              {' '}{moment(ack.at).fromNow()}
+            </div>
+          )}          
+          </React.Fragment>
       }      
     </React.Fragment>
   )
