@@ -96,6 +96,10 @@ code {
     background: $bg-danger;
     border-color: $border-danger;
 
+    a, .btn-inline-link {
+        color: $danger;
+    }
+
     .btn:not(.btn-link) {
         background-color: lighten($danger, 25);
         border-color: lighten($danger, 10);
@@ -112,6 +116,10 @@ code {
     background: $bg-warning;
     border-color: $border-warning;
 
+    a, .btn-inline-link {
+        color: darken($warning, 20);
+    }
+
     .btn:not(.btn-link) {
         background-color: darken($warning, 4);
         border-color: darken($warning, 6);
@@ -127,6 +135,10 @@ code {
 .info td {
     background: $bg-info;
     border-color: $border-info;
+
+    a, .btn-inline-link {
+        color: darken($info, 30);
+    }
 
     .btn:not(.btn-link) {
         background-color: darken($info, 10);
@@ -348,7 +360,7 @@ code {
 // --------------------------------------------------------
 
 
-// Tables -------------------------------------------------
+// Tables / Alerts -------------------------------------------------
 
 .table-main {
     th {
@@ -385,6 +397,30 @@ td.snug {
 
 .alerts td.alert-main {
     word-break: break-word;
+
+    a, .btn-inline-link {
+        text-decoration: underline;
+    }
+}
+
+.alert-links {
+    a {
+        border-left: 1px solid #bbb;
+        margin-left: 0.5rem;
+        padding-left: 0.5rem;
+    }
+}
+
+.critical .alert-links a {
+    border-color: lighten($danger, 5);
+}
+
+.warning .alert-links a {
+    border-color: darken($warning, 15);
+}
+
+.info .alert-links a {
+    border-color: darken($info, 20);
 }
 
 .alert-info-small-screen {
