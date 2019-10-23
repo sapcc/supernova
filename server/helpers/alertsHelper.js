@@ -89,7 +89,7 @@ const updateCounts = (container,alert) => {
 
 // Calculate and ectend alerts with severity counts and available label values
 const extend = (alerts) => {
-  const result = {items: alerts, counts: {}, labelValues: {}}
+  const result = {alerts, counts: {}, labelValues: {}}
   result.counts.region = result.counts.region || {}
 
   // load default regions and prefil counts with zero
@@ -161,23 +161,7 @@ const extend = (alerts) => {
   return result
 }
 
-const alertKey = (alert) => {
-  const details = alert.labels
-  // TODO: remove next line
-  if(details.severity === 'test') details.severity = 'critical'
-  return `${details.severity || ''}-${details.service || ''}-${details.tier || ''}-${details.region || ''}-${details.context || ''}`
-}
-
-const pagerDutyAlertKey = (alert) => {
-  const details = alert.body.details
-  //TODO: add alert name
-  //TODO: replace key with alert fingerprint after update of Alert Manager
-  return `${alert.severity}-${details.Service}-${details.Tier}-${details.Region}-${details.Context}`.replace(/\n/g,'')
-}
-
 module.exports = {
   sort,
-  extend,
-  alertKey,
-  pagerDutyAlertKey
+  extend
 }

@@ -4,9 +4,8 @@ const headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/vnd.pagerduty+json;version=2',
   'Authorization': `Token token=${process.env.REACT_APP_PAGERDUTY_API_TOKEN}`, 
-  'From': `${process.env.REACT_APP_PAGERDUTY_SERVICE_USER_EMAIL}`
+  'From': process.env.REACT_APP_PAGERDUTY_SERVICE_USER_EMAIL
 }
-
 const url = (path) => `${process.env.REACT_APP_PAGERDUTY_API_ENDPOINT}/${path}`
 
 const incidents = async (params = {}) => 
@@ -26,6 +25,30 @@ const incidentNotes = async (incidentId) =>
     .get(url(`incidents/${incidentId}/notes`), {headers})
     .then(response => response.data && response.data.notes)
 ;
+
+const alertsWithIncidentStatus = async (incidentStatus) => {
+  const tmpIncidents = await incidents({ "statuses[]": incidentStatus})
+  const alertPromises = tmpIncidents.map(async (i) => { 
+    return incidentAlerts(i.id).then(alerts => alerts.map(a => {a.incident = i; return a}))
+  })
+  return Promise
+    .all(alertPromises)
+    .then(array => array.flat())
+}
+
+const acknowledgedAlerts = async () => {
+  const tmpIncidents = await incidents({ "statuses[]": "acknowledged"})
+  const alertPromises = tmpIncidents.map(async (i) => { 
+    const notes = await incidentNotes(i.id)
+
+    return incidentAlerts(i.id).then(alerts => 
+      alerts.map(a => {a.incident = i; a.notes = notes; return a})
+    )
+  })
+  return Promise
+    .all(alertPromises)
+    .then(array => array.flat())
+}
 
 const ackIncident = (incidentId) => 
   axios.put(url(`incidents/${incidentId}`), {
@@ -49,6 +72,9 @@ const PagerDutyApi = {
   incidents,
   incidentAlerts,
   incidentNotes,
+  acknowledgedAlerts: async () => acknowledgedAlerts(),
+  resolvedAlerts: async () => alertsWithIncidentStatus('resolved'),
+  triggeredAlerts: async () => alertsWithIncidentStatus('triggered'),
   ackIncident,
   createNote
 }

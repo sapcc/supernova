@@ -40,8 +40,8 @@ const AlertActionButtons = ({alert}) => {
   
   return (
     <div className="action-buttons-vertical">
-      {alert.labels.severity === 'critical' && !alert.status.acknowledgedBy &&
-        <AckButton statusAcked={!!alert.status.acknowledgedBy} fingerprint={alert.fingerprint}/>
+      {alert.status && alert.status.pagerDutyInfos && alert.status.pagerDutyInfos.incidentId &&
+        <AckButton statusAcked={!!alert.status.pagerDutyInfos.acknowledgements} fingerprint={alert.fingerprint}/>
       }
       {alert.labels.playbook && 
         <a href={`https://operations.global.cloud.sap/${alert.labels.playbook}`} target="_blank" rel="noopener noreferrer" className="btn btn-xs">Playbook</a>

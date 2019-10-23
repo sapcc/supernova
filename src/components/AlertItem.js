@@ -65,10 +65,10 @@ const AlertStatus = ({status, showAckedBy,showSilencedBy,showInhibitedBy,silence
         :
         ""
       }
-      {status.acknowledgedBy && status.acknowledgedBy.length>0 &&
+      {status.pagerDutyInfos && status.pagerDutyInfos.acknowledgements &&  status.pagerDutyInfos.acknowledgements.length>0 &&
         <React.Fragment>
           <div className="u-text-info u-text-small">Acked By:</div>
-          {status.acknowledgedBy.map((ack,i) => 
+          {status.pagerDutyInfos.acknowledgements.map((ack,i) => 
             <div className="u-text-info u-text-small" key={i}>
               <Button color="link" className="btn-inline-link" onClick={(e) => { e.preventDefault(); showAckedBy(ack)}}>
                 {ack.user.name || ack.user.email}

@@ -2122,6 +2122,11 @@ babel-plugin-named-asset-import@^0.3.2:
   resolved "https://registry.yarnpkg.com/babel-plugin-named-asset-import/-/babel-plugin-named-asset-import-0.3.4.tgz#4a8fc30e9a3e2b1f5ed36883386ab2d84e1089bd"
   integrity sha512-S6d+tEzc5Af1tKIMbsf2QirCcPdQ+mKUCY2H1nJj1DyA1ShwpsoxEOAwbWsG5gcXNV/olpvQd9vrUWRx4bnhpw==
 
+babel-plugin-rewire@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/babel-plugin-rewire/-/babel-plugin-rewire-1.2.0.tgz#822562d72ed2c84e47c0f95ee232c920853e9d89"
+  integrity sha512-JBZxczHw3tScS+djy6JPLMjblchGhLI89ep15H3SyjujIzlxo5nr6Yjo7AXotdeVczeBmWs0tF8PgJWDdgzAkQ==
+
 babel-plugin-syntax-jsx@^6.18.0:
   version "6.18.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-syntax-jsx/-/babel-plugin-syntax-jsx-6.18.0.tgz#0af32a9a6e13ca7a3fd5069e62d7b0f58d0d8946"
