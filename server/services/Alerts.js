@@ -173,7 +173,13 @@ const buildAcknowledgements = (incident) => {
       let email = found[1]
       if(!name && email) { // extract name from email 
         const nameMatch = email.match(/(.+)\.(.+)@/ )
-        if(nameMatch) name = `${utils.capitalize(nameMatch[1])} ${utils.capitalize(nameMatch[2])}`
+        try {
+          if(nameMatch) {
+            const firstName = nameMatch[1].split('.').map(n => utils.capitalize(n)).join(' ')
+            const lastName = nameMatch[2].split('.').map(n => utils.capitalize(n)).join(' ')
+            name = `${firstName} ${lastName}`
+          }
+        } catch(e) {}
       }
       if(found) result.push({at: new Date(found[3]), user: {email,name} })
     })
