@@ -1,10 +1,14 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-const AckButton = ({statusAcked,fingerprint}) => {
+const AckButton = ({pagerDutyInfos,fingerprint}) => {
   const [confirm,setConfirm] = useState(false)
   const [isSending,setIsSending] = useState(false)
-  const [acked,setAcked] = useState(statusAcked)
+  const [acked,setAcked] = useState(pagerDutyInfos && 
+    pagerDutyInfos.acknowledgements && 
+    pagerDutyInfos.acknowledgements.length>0
+  )
 
   useEffect(() => {
     let timer
@@ -23,16 +27,20 @@ const AckButton = ({statusAcked,fingerprint}) => {
     
     setIsSending(true)
     axios.put(`/api/alerts/${fingerprint}/ack`)
-      .then(response => {setAcked(true); alert('Acked')} )
+      .then(response => setAcked(true) )
       .catch(error => alert(`${error.response.status} ${error.response.data}`))
       .finally(() => setIsSending(false))
     setConfirm(false)
   }
 
   return (
-    <button className="btn btn-xs" onClick={handleClick} disabled={acked || isSending}>
-      {confirm ? 'Confirm' : acked ? 'Acked' : 'Ack'}
-    </button>
+    pagerDutyInfos.incidentId &&
+      <button className="btn btn-xs" onClick={handleClick} disabled={acked || isSending}>
+        {isSending 
+          ? <React.Fragment><FontAwesomeIcon icon="sun" className="fa-spin"/> Ack...</React.Fragment>
+          : confirm ? 'Confirm' : acked ? 'Acked' : 'Ack'
+        }
+      </button>
   )
 }
 
@@ -40,8 +48,8 @@ const AlertActionButtons = ({alert}) => {
   
   return (
     <div className="action-buttons-vertical">
-      {alert.status && alert.status.pagerDutyInfos && alert.status.pagerDutyInfos.incidentId &&
-        <AckButton statusAcked={!!alert.status.pagerDutyInfos.acknowledgements} fingerprint={alert.fingerprint}/>
+      {alert.status && alert.status.pagerDutyInfos &&
+        <AckButton pagerDutyInfos={alert.status.pagerDutyInfos} fingerprint={alert.fingerprint}/>
       }
       {alert.labels.playbook && 
         <a href={`https://operations.global.cloud.sap/${alert.labels.playbook}`} target="_blank" rel="noopener noreferrer" className="btn btn-xs">Playbook</a>

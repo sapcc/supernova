@@ -33,19 +33,30 @@ const acknowledgeAlert = async (fingerprint,user) => {
   const index = alerts.findIndex(a => a.fingerprint === fingerprint)
   if(index<0) throw('Could not find alert')
   const alert = alerts[index]
-  if(!alert) throw('Could not find alert')
-  if(!alert.pagerDutyInfos || !alert.pagerDutyInfos.incidentId) throw('Alert is not acknowledgeable!')
 
-  PagerDutyApi.ackIncident(incidentId)
+  if(!alert) throw('Could not find alert')
+  if(!alert.status.pagerDutyInfos || !alert.status.pagerDutyInfos.incidentId) throw('Alert is not acknowledgeable!')
+  const key = alertKey(alert)
+  const incidentId = alert.status.pagerDutyInfos.incidentId
+
+  return PagerDutyApi.ackIncident(incidentId)
     .then(incident => 
       PagerDutyApi.createNote(
         incidentId, 
         `Incident was acknowledged on behalf of ${user.email}. (${user.fullName}) time: ${moment().utc().format('YYYY-MM-DD HH:mm:ss ZZ UTC')}`
-      ).then(note => {
-        incident.notes = incident.notes || []
-        incident.notes.push(note)
-        alert.pagerDutyInfos = buildAcknowledgements(incident)
-        updateAlerts(alerts)
+      )
+      .then(note => PagerDutyApi.incidentNotes(incidentId))
+      .then(notes => {
+        incident.notes = notes
+        
+        // add new acknowledgements to cached Acknowledgements
+        const hashMap = _acknowledgementsCache.get() 
+        const acknowledgements = buildAcknowledgements(incident)
+        hashMap[key] = {incidentId, acknowledgements}
+
+        // update alerts if any changes
+        const hasChanged = _acknowledgementsCache.update(hashMap)
+        if(hasChanged) updateAlerts(alerts)
       })
     )
 }
@@ -72,7 +83,6 @@ const informUpdateListeners = () => _updateListeners.forEach(listener => {
 const updateAlerts = (alerts) => {
   // if alerts provided then extend them otherwise load them from the cache
   if(!alerts) ({alerts} = _alertsCache.get())
-  alerts = alertsHelper.sort(alerts)
   
   const acknowledgements = _acknowledgementsCache.get()
   // extend alerts with acknowledgements
@@ -82,12 +92,14 @@ const updateAlerts = (alerts) => {
       if(acknowledgements[alertKey(alert)]) {
         alert.status = alert.status || {}  
         alert.status.pagerDutyInfos = acknowledgements[alertKey(alert)]
+        //console.log(':::::',alertKey(alert),alert.status.pagerDutyInfos)
       }
       return alert
     })
   }
   let counts,labelValues
   ({alerts,counts,labelValues} = alertsHelper.extend(alerts))
+  alerts = alertsHelper.sort(alerts)
   const hasChanged = _alertsCache.update({alerts,counts,labelValues})
   if(hasChanged) informUpdateListeners(_alertsCache.get())
   return _alertsCache.get()
