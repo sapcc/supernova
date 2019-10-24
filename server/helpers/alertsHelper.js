@@ -51,7 +51,9 @@ const updateCounts = (container,alert) => {
       handled = true
     }
     
-    if(alert.status && alert.status.acknowledgements && alert.status.acknowledgements.length>0) {
+    if(alert.status && alert.status.pagerDutyInfos && 
+      alert.status.pagerDutyInfos.acknowledgements && 
+      alert.status.pagerDutyInfos.acknowledgements.length>0) {
       container.summary[`${severity}Acked`] += 1
       handled = true
     }
@@ -74,7 +76,9 @@ const updateCounts = (container,alert) => {
         regionHandled = true
       }
       
-      if(alert.status && alert.status.acknowledgements && alert.status.acknowledgements.length>0) {
+      if(alert.status && alert.status.pagerDutyInfos &&
+        alert.status.pagerDutyInfos.acknowledgements && 
+        alert.status.pagerDutyInfos.acknowledgements.length>0) {
         container.region[region][`${severity}Acked`] = container.region[region][`${severity}Acked`] || 0
         container.region[region][`${severity}Acked`] += 1
         regionHandled = true

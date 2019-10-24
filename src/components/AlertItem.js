@@ -153,7 +153,7 @@ const AlertItem = React.memo(({
     </tr>
   )
 },(oldProps,newProps) => {
-  const identical = oldProps.alert.fingerprint === newProps.alert.fingerprint && 
+  const identical = oldProps.alert === newProps.alert && 
                     oldProps.visible === newProps.visible && 
                     oldProps.labelSettings === newProps.labelSettings && 
                     oldProps.silencesKeyPayload === newProps.silencesKeyPayload

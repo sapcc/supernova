@@ -70,14 +70,14 @@ const informUpdateListeners = () => _updateListeners.forEach(listener => {
  * @private
  */
 const updateAlerts = (alerts) => {
-  let counts, labelValues
   // if alerts provided then extend them otherwise load them from the cache
-  ({alerts,counts,labelValues} = alerts ? alertsHelper.extend(alerts) : _alertsCache.get())
+  if(!alerts) ({alerts} = _alertsCache.get())
   alerts = alertsHelper.sort(alerts)
-
+  
   const acknowledgements = _acknowledgementsCache.get()
   // extend alerts with acknowledgements
   if(acknowledgements) {
+    //console.log(Object.keys(acknowledgements))
     alerts = alerts.map(alert => {
       if(acknowledgements[alertKey(alert)]) {
         alert.status = alert.status || {}  
@@ -86,6 +86,8 @@ const updateAlerts = (alerts) => {
       return alert
     })
   }
+  let counts,labelValues
+  ({alerts,counts,labelValues} = alertsHelper.extend(alerts))
   const hasChanged = _alertsCache.update({alerts,counts,labelValues})
   if(hasChanged) informUpdateListeners(_alertsCache.get())
   return _alertsCache.get()
@@ -115,7 +117,7 @@ const load = () => AlertManagerApi.alerts()
  * @return {ALERT_PROPS, incident: {INCIDENT_PROPS, notes: []}}
  */
 // const loadPagerDutyAlerts = () => PagerDutyApi.incidents({"statuses[]": "acknowledged", "statuses[]": "triggered"})
-const loadPagerDutyAlerts = () => PagerDutyApi.incidents({"statuses": ["acknowledged", "triggered"]})
+const loadPagerDutyAlerts = () => PagerDutyApi.incidents({"statuses": ["acknowledged", "triggered"],limit: 200})
   .then(incidents => {
     console.log(`[${moment().format('DD.MM.YYYY HH:mm')}] PAGERDUTY LOADER: receive incidents from pagerduty`, incidents.length)
     // load notes for each incident and add them to incident 
@@ -130,6 +132,7 @@ const loadPagerDutyAlerts = () => PagerDutyApi.incidents({"statuses": ["acknowle
   ).then(incidentAlerts => incidentAlerts.flat()) // incidentAlerts is an array of alert array. So we have to flat it!
   .then(alerts => {
     console.info(`[${moment().format('DD.MM.YYYY HH:mm')}] PAGERDUTY LOADER: receive alerts from pagerduty`, alerts.length)
+    
     return alerts.reduce((hashMap,alert) => {
       const acknowledgements = buildAcknowledgements(alert.incident)
       hashMap[pagerDutyAlertKey(alert)] = {incidentId: alert.incident.id, acknowledgements}
