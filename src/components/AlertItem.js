@@ -6,6 +6,7 @@ import { Markup } from 'interweave'
 
 import { useDispatch } from '../lib/globalState'
 import AlertActionButtons from './AlertActionButtons'
+import AlertLinks from './AlertLinks'
 
 const AlertLabels = ({labelSettings,labels}) => {
   const dispatch = useDispatch()  
@@ -134,6 +135,7 @@ const AlertItem = React.memo(({
           <Button className="btn-inline-link" color="link" onClick={(e) => { e.preventDefault(); showDetails()}}>
             Show raw data
           </Button>
+          <AlertLinks alert={alert} />
         </small>
         <br />
         <AlertLabels labels={alert.labels} labelSettings={labelSettings}/>
