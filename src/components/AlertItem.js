@@ -8,6 +8,25 @@ import { useDispatch } from '../lib/globalState'
 import AlertActionButtons from './AlertActionButtons'
 import AlertLinks from './AlertLinks'
 
+moment.updateLocale('en', {
+  relativeTime : {
+      future: "in %s",
+      past:   "%s ago",
+      s  : 'a few sec',
+      ss : '%d sec',
+      m:  "a min",
+      mm: "%d min",
+      h:  "an hour",
+      hh: "%d hours",
+      d:  "a day",
+      dd: "%d days",
+      M:  "a month",
+      MM: "%d months",
+      y:  "a year",
+      yy: "%d years"
+  }
+});
+
 const AlertLabels = ({labelSettings,labels}) => {
   const dispatch = useDispatch()  
 
@@ -69,12 +88,12 @@ const AlertStatus = ({status, showAckedBy,showSilencedBy,showInhibitedBy,silence
       {status.pagerDutyInfos && status.pagerDutyInfos.acknowledgements &&  status.pagerDutyInfos.acknowledgements.length>0 &&
         <React.Fragment>
           <div className="u-text-info u-text-small">Acked By:</div>
-          {status.pagerDutyInfos.acknowledgements.map((ack,i) => 
+          {status.pagerDutyInfos.acknowledgements.map((ack,i) => ack.user.name !== 'CC Supernova' && 
             <div className="u-text-info u-text-small" key={i}>
               <Button color="link" className="btn-inline-link" onClick={(e) => { e.preventDefault(); showAckedBy(ack)}}>
                 {ack.user.name || ack.user.email}
               </Button>
-              {' '}{moment(ack.at).fromNow()}
+              <span className="u-nowrap">{' '}{moment(ack.at).fromNow(true)}</span>
             </div>
           )}          
           </React.Fragment>
