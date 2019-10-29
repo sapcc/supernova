@@ -268,20 +268,20 @@ describe('get', () => {
       })
       
       it('contains pagerDutyInfos', () => {
-        expect(alert.pagerDutyInfos).toBeDefined()
+        expect(alert.status.pagerDutyInfos).toBeDefined()
       })
 
       it('pagerDutyInfos contains incidentId', () => {
         //console.log(alerts)
-        expect(alert.pagerDutyInfos.incidentId).toEqual('PT4KHLK')
+        expect(alert.status.pagerDutyInfos.incidentId).toEqual('PT4KHLK')
       })
 
       it('pagerDutyInfos contains acknowledgements', () => {
-        expect(alert.pagerDutyInfos.acknowledgements).toBeDefined()
+        expect(alert.status.pagerDutyInfos.acknowledgements).toBeDefined()
       })
 
       it('acknowledgements contains user infos', () => {
-        expect(alert.pagerDutyInfos.acknowledgements).toEqual([
+        expect(alert.status.pagerDutyInfos.acknowledgements).toEqual([
           {
             "at": new Date("2019-10-22T08:31:08.929Z"),
             "user": {
