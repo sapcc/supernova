@@ -35,10 +35,10 @@ const AckButton = ({pagerDutyInfos,fingerprint}) => {
 
   return (
     pagerDutyInfos.incidentId &&
-      <button className="btn btn-xs" onClick={handleClick} disabled={acked || isSending}>
+      <button className="btn btn-xs" onClick={handleClick} disabled={isSending}>
         {isSending 
           ? <React.Fragment><FontAwesomeIcon icon="sun" className="fa-spin"/> Ack...</React.Fragment>
-          : confirm ? 'Confirm' : acked ? 'Acked' : 'Ack'
+          : confirm ? 'Confirm' : 'Ack'
         }
       </button>
   )
