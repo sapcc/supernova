@@ -49,6 +49,8 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "babel-jest": "^24.9.0",
+    "babel-plugin-rewire": "^1.2.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "supertest": "^4.0.2"

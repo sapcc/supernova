@@ -51,7 +51,9 @@ const updateCounts = (container,alert) => {
       handled = true
     }
     
-    if(alert.status && alert.status.acknowledgements && alert.status.acknowledgements.length>0) {
+    if(alert.status && alert.status.pagerDutyInfos && 
+      alert.status.pagerDutyInfos.acknowledgements && 
+      alert.status.pagerDutyInfos.acknowledgements.length>0) {
       container.summary[`${severity}Acked`] += 1
       handled = true
     }
@@ -74,7 +76,9 @@ const updateCounts = (container,alert) => {
         regionHandled = true
       }
       
-      if(alert.status && alert.status.acknowledgements && alert.status.acknowledgements.length>0) {
+      if(alert.status && alert.status.pagerDutyInfos &&
+        alert.status.pagerDutyInfos.acknowledgements && 
+        alert.status.pagerDutyInfos.acknowledgements.length>0) {
         container.region[region][`${severity}Acked`] = container.region[region][`${severity}Acked`] || 0
         container.region[region][`${severity}Acked`] += 1
         regionHandled = true
@@ -89,7 +93,7 @@ const updateCounts = (container,alert) => {
 
 // Calculate and ectend alerts with severity counts and available label values
 const extend = (alerts) => {
-  const result = {items: alerts, counts: {}, labelValues: {}}
+  const result = {alerts, counts: {}, labelValues: {}}
   result.counts.region = result.counts.region || {}
 
   // load default regions and prefil counts with zero

@@ -66,15 +66,18 @@ const AlertStatus = ({status, showAckedBy,showSilencedBy,showInhibitedBy,silence
         :
         ""
       }
-      {status.acknowledgedBy && status.acknowledgedBy.length>0 &&
-        status.acknowledgedBy.map((ack,i) => 
-          <div className="u-text-info u-text-small" key={i}>
-            Acknowledged by: 
-            <Button color="link" className="btn-inline-link" onClick={(e) => { e.preventDefault(); showAckedBy(ack)}}>
-              {ack.user.name || ack.user.email}
-            </Button>
-          </div>
-        )          
+      {status.pagerDutyInfos && status.pagerDutyInfos.acknowledgements &&  status.pagerDutyInfos.acknowledgements.length>0 &&
+        <React.Fragment>
+          <div className="u-text-info u-text-small">Acked By:</div>
+          {status.pagerDutyInfos.acknowledgements.map((ack,i) => 
+            <div className="u-text-info u-text-small" key={i}>
+              <Button color="link" className="btn-inline-link" onClick={(e) => { e.preventDefault(); showAckedBy(ack)}}>
+                {ack.user.name || ack.user.email}
+              </Button>
+              {' '}{moment(ack.at).fromNow()}
+            </div>
+          )}          
+          </React.Fragment>
       }      
     </React.Fragment>
   )
@@ -152,7 +155,7 @@ const AlertItem = React.memo(({
     </tr>
   )
 },(oldProps,newProps) => {
-  const identical = oldProps.alert.fingerprint === newProps.alert.fingerprint && 
+  const identical = oldProps.alert === newProps.alert && 
                     oldProps.visible === newProps.visible && 
                     oldProps.labelSettings === newProps.labelSettings && 
                     oldProps.silencesKeyPayload === newProps.silencesKeyPayload
