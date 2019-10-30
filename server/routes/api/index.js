@@ -4,5 +4,6 @@ const router = express.Router()
 // middleware that is specific to this router
 router.use('/auth', require('./auth'))
 router.use('/alerts', require('./alerts'))
+router.use('/silences', require('./silences'))
 
 module.exports = router

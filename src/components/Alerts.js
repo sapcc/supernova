@@ -24,11 +24,10 @@ const Alerts = React.memo(({alerts,silences,categories,labelFilters,showModal}) 
   // collect fingerprints of visible alerts
   // returns a hash
   let filteredAlerts = useMemo(() => {
-    setPage(1)
     // don't filter at all if categories are empty
     //if(categories.active.length === 0) return []
 
-    return alerts.items.filter(alert => {
+    const items = alerts.items.filter(alert => {
       let visible = true
 
       if(categories.active.length > 0) {
@@ -48,6 +47,8 @@ const Alerts = React.memo(({alerts,silences,categories,labelFilters,showModal}) 
       
       return visible
     })
+    if(items.length/pageSize < page) setPage(1)
+    return items
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[alerts.updatedAt,categories,activeCategories,activeLabelFilters])
 

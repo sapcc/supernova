@@ -41,12 +41,37 @@ const flattenJson = (data) => {
  *  } 
  **/  
 
+// const unflattenJson = (flatJson) => {
+//   const result = {}
+//   for(let key in flatJson) {
+//     const value = flatJson[key]
+
+//     const keys = key.split('_')
+//     let subJson = result, prop
+
+//     while((prop = keys.shift())){
+//       subJson[prop] = subJson[prop] || {}
+//       if(keys.length === 0) subJson[prop] = value
+//       subJson = subJson[prop]
+//     }
+
+//   }
+    
+//   return result
+// }
+
 const unflattenJson = (flatJson) => {
   const result = {}
+
   for(let key in flatJson) {
     const value = flatJson[key]
 
-    const keys = key.split('_')
+    //const keys = key.split('_')
+    // consider only the first underline
+    const index = key.indexOf('_')
+    const keys = index >= 0 ? [key.substr(0,index), key.substr(index+1)] : []
+    // end
+
     let subJson = result, prop
 
     while((prop = keys.shift())){
@@ -56,6 +81,8 @@ const unflattenJson = (flatJson) => {
     }
 
   }
+    
+  console.log(':::::::::::::::::::::::::result',result, flatJson)
   return result
 }
 
