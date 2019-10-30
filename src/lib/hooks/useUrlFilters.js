@@ -66,10 +66,10 @@ const unflattenJson = (flatJson) => {
   for(let key in flatJson) {
     const value = flatJson[key]
 
-    //const keys = key.split('_')
+    // const keys = key.split('_')
     // consider only the first underline
     const index = key.indexOf('_')
-    const keys = index >= 0 ? [key.substr(0,index), key.substr(index+1)] : []
+    const keys = index < 0 ? [key] : [key.substr(0,index), key.substr(index+1)]
     // end
 
     let subJson = result, prop
@@ -81,8 +81,7 @@ const unflattenJson = (flatJson) => {
     }
 
   }
-    
-  console.log(':::::::::::::::::::::::::result',result, flatJson)
+
   return result
 }
 

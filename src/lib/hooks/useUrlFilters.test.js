@@ -1,6 +1,3 @@
-import React from 'react'
-
-import { mount } from 'enzyme'
 import useUrlFilters from './useUrlFilters'
 import { testHook } from './testHook'
 
