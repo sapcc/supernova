@@ -14,9 +14,17 @@ const silences = async (params = {}) =>
     .then(response => response.data)
 ;
 
+const createSilence = ({matchers,startsAt,endsAt,createdBy,comment}) => {
+  startsAt = startsAt || (new Date()).toString()
+  return axios.post(url(`silences`),{
+    matchers,startsAt,endsAt,createdBy,comment
+  }).then(response => response.data)
+}
+
 const AlertManagerApi = {
   alerts,
-  silences
+  silences,
+  createSilence
 }
 Object.freeze(AlertManagerApi)
 module.exports = AlertManagerApi

@@ -1,18 +1,20 @@
 const auth = require("../../middlewares/auth")
 const express = require("express")
-const Alerts= require('../../services/Silences')
-const AlertManagerApi = require('../../lib/AlertManagerApi')
+const Alerts= require('../../services/Alerts')
+const Silences= require('../../services/Silences')
 const router = express.Router()
 
 router.post("/:fingerprint", auth, async (req, res) => {
-  /*Alerts.acknowledgeAlert(req.params.fingerprint,req.user)
-    .then(() => res.status(200).send('OK'))
-    .catch(error => {
-      console.error(error)
-      res.status(500).send(`Acknowledgement failed! ${error}`)
-    })
-  */
-  res.send(200)  
+  // check user credentials
+  if(!req.user.editor) return res.status(401).send('Not authorized!') 
+  const {duration,comment} = req.body
+  if(!comment) throw('Please give a description')
+
+  Alerts.get()
+    .then( result => result.alerts.find(a => a.fingerprint === req.params.fingerprint))
+    .then(alert => Silences.createSilence({user:req.user,alert,duration,comment}))
+    .then(() => res.status(201).send('OK'))
+    .catch(error => res.status(500).send(`Silence creation failed! ${error}`))
 })
 
 

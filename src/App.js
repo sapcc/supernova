@@ -95,8 +95,7 @@ const App = () => {
   }
 
   const counts = useActiveCategoryCounts({counts: alerts.counts, categories: categories.items})
-
-
+  
   //useAlertsLoader(initialURLFilters)
   //useUserProfileLoader()
   useInitialLoader({urlFilters: initialURLFilters, userProfile: user.profile})
@@ -144,8 +143,9 @@ const App = () => {
               hide={toggleModal} 
               header={modalContent.header} 
               footer={modalContent.footer} 
+              body={modalContent.body}
               cancelButtonText={modalContent.cancelButtonText}>
-                {modalContent.body}
+                {modalContent.content}
             </SuperModal>
 
           </div>

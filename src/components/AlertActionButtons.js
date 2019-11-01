@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useGlobalState } from '../lib/globalState'
 
 const AckButton = ({pagerDutyInfos,fingerprint}) => {
   const [confirm,setConfirm] = useState(false)
@@ -44,22 +45,27 @@ const AckButton = ({pagerDutyInfos,fingerprint}) => {
   )
 }
 
-const AlertActionButtons = ({alert}) => {
-  
+const SilenceButton = ({alert,createSilence}) => {
+  const handleClick = (e) => {
+    e.preventDefault()
+    createSilence(alert)
+      //.then(() => alert('OK'))
+      //.catch( error => alert('KO',error))
+  }
+  return <button className="btn btn-xs" onClick={handleClick}>Silence</button>
+}
+
+const AlertActionButtons = ({alert,createSilence}) => {
+  const {user} = useGlobalState()
+
   return (
     <div className="action-buttons-vertical">
-      {alert.status && alert.status.pagerDutyInfos &&
+      {user.profile.editor && alert.status && alert.status.pagerDutyInfos &&
         <AckButton pagerDutyInfos={alert.status.pagerDutyInfos} fingerprint={alert.fingerprint}/>
       }
-      {/* {alert.labels.playbook && 
-        <a href={`https://operations.global.cloud.sap/${alert.labels.playbook}`} target="_blank" rel="noopener noreferrer" className="btn btn-xs">Playbook</a>
+      {user.profile.editor && 
+        <SilenceButton alert={alert} createSilence={createSilence}/>
       }
-      {alert.labels.kibana && 
-        <a href={`https://logs.${alert.labels.region}.cloud.sap/${alert.labels.kibana}`} target="_blank" rel="noopener noreferrer" className="btn btn-xs">Logs</a>
-      }
-      {alert.labels.dashboard && 
-        <a href={`https://grafana.${alert.labels.region}.cloud.sap/d/${alert.labels.dashboard}`} target="_blank" rel="noopener noreferrer" className="btn btn-xs">Grafana</a>
-      } */}
     </div>
   )
 }

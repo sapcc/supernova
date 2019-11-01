@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Button } from 'reactstrap'
 import moment from 'moment'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -57,7 +57,7 @@ const AlertLabels = ({labelSettings,labels}) => {
   </React.Fragment>
 }
 
-const AlertStatus = ({status, showAckedBy,showSilencedBy,showInhibitedBy,silencesKeyPayload}) => {
+const AlertStatus = ({status, showAckedBy,showSilencedBy,showInhibitedBy,silences}) => {
   return (
     <React.Fragment>
       {status.state &&
@@ -73,21 +73,26 @@ const AlertStatus = ({status, showAckedBy,showSilencedBy,showInhibitedBy,silence
         :
         ""
       }
-      {status.silencedBy && status.silencedBy.length ?
-          <div className="u-text-info u-text-small">
-            Silenced by: {silencesKeyPayload[status.silencedBy] 
-            ? <Button color="link" className="btn-inline-link" onClick={(e) => {e.preventDefault(); showSilencedBy(status.silencedBy)}}>
-                  {silencesKeyPayload[status.silencedBy].createdBy}
-                </Button>
-            : status.silencedBy
-            }
-          </div>
-        :
-        ""
+      {silences && silences.length>0 &&
+        <React.Fragment> 
+          <div className="u-text-info u-text-small">Silenced by:</div>
+          {
+            silences.map(data => 
+              <div key={data.id} className="u-text-info u-text-small">
+                { data.silence 
+                  ? <Button color="link" className="btn-inline-link" onClick={(e) => {e.preventDefault(); showSilencedBy(data.id)}}>
+                      {data.silence.createdBy}
+                    </Button>
+                  : data['id']  
+                }
+              </div>  
+            )
+          } 
+        </React.Fragment>  
       }
       {status.pagerDutyInfos && status.pagerDutyInfos.acknowledgements &&  status.pagerDutyInfos.acknowledgements.length>0 &&
         <React.Fragment>
-          <div className="u-text-info u-text-small">Acked By:</div>
+          <div className="u-text-info u-text-small">Acked by:</div>
           {status.pagerDutyInfos.acknowledgements.map((ack,i) => ack.user.name !== 'CC Supernova' && 
             <div className="u-text-info u-text-small" key={i}>
               <Button color="link" className="btn-inline-link" onClick={(e) => { e.preventDefault(); showAckedBy(ack)}}>
@@ -127,9 +132,16 @@ const descriptionParsed = (text) => {
 
 const AlertItem = React.memo(({
   alert,visible,labelSettings,silencesKeyPayload,showDetails,
-  showInhibitedBy,showSilencedBy,showAckedBy}) => {
+  showInhibitedBy,showSilencedBy,showAckedBy,createSilence}) => {
   
   if(!visible) return <tr><td colSpan={6}>Loading...</td></tr>  
+
+  const silences = useMemo(() => {
+    if(!alert.status || !alert.status.silencedBy) return []
+    let silenceIds = alert.status.silencedBy
+    if(!Array.isArray(silenceIds)) silenceIds = [silenceIds]
+    return silenceIds.map(id => ( {id, silence: silencesKeyPayload[id]} ))
+  },[alert.status,silencesKeyPayload])
 
   return (
     <tr className={alert.labels.severity} >
@@ -166,10 +178,10 @@ const AlertItem = React.memo(({
           showAckedBy={showAckedBy}
           showSilencedBy={showSilencedBy}
           showInhibitedBy={showInhibitedBy}
-          silencesKeyPayload={silencesKeyPayload}/>
+          silences={silences}/>
       </td>
       <td className="alert-buttons snug">
-        <AlertActionButtons alert={alert} />
+        <AlertActionButtons alert={alert} createSilence={createSilence}/>
       </td>
     </tr>
   )
