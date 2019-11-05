@@ -9,7 +9,9 @@ const useModal = () => {
 
   return {
     modalIsShowing,
-    toggleModal
+    toggleModal,
+    openModal: () => setModalIsShowing(true),
+    closeModal: () => setModalIsShowing(false)
   }
 }
 

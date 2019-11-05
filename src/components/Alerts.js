@@ -93,6 +93,7 @@ const Alerts = React.memo(({alerts,silences,categories,labelFilters,showModal}) 
   const createSilence = (alert) => {
     return new Promise((resolve,reject) => 
       showModal({
+        size: 'default',
         header: `New Silence ${alert.labels.alertname && `for alert ${alert.labels.alertname}`}`,
         // props are Body, Buttons and hide
         content: (props) => <CreateSilenceForm alert={alert} onSuccess={resolve} onFailure={reject} {...props} />

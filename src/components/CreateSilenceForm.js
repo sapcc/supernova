@@ -8,12 +8,14 @@ export default ({alert,onSuccess,onFailure,Body,Buttons,hide}) => {
   const [comment,setComment] = useState('')
   const [submitting,setSubmitting] = useState(false)
   const [error,setError] = useState(null)
+  const [success,setSuccess] = useState(false)
   
   const handleSubmit = (e) => {
     e.preventDefault()
     setSubmitting(true)
+    setSuccess(false)
     axios.post(`/api/silences/${alert.fingerprint}`,{duration,comment})
-    .then(() => {hide(); onSuccess()})
+    .then(() => { setSuccess(true); onSuccess()})
     .catch(error => setError(error.response.data))
     .finally(() => setSubmitting(false))
   }
@@ -24,31 +26,39 @@ export default ({alert,onSuccess,onFailure,Body,Buttons,hide}) => {
         {error && <div className="alert alert-danger" role="alert">
           {''+error}
         </div>}
-        <FormGroup>
-          <Label>Description *</Label>
-          <Input type="textarea" name="comment" value={comment} onChange={(e) => setComment(e.target.value)}/>
-        </FormGroup>
-        <FormGroup>
-          <Label>Duration</Label>
-          <Input type="select" name="duration" value={duration} onChange={(e) => setDuration(e.target.value)}>
-            <option value={2}>2 hours</option>
-            <option value={3}>3 hours</option>
-            <option value={4}>4 hours</option>
-            <option value={5}>5 hours</option>
-            <option value={6}>6 hours</option>
-            <option value={7}>7 hours</option>
-            <option value={8}>8 hours</option>
-            <option value={9}>9 hours</option>
-            <option value={10}>10 hours</option>
-            <option value={12}>12 hours</option>
-            <option value={24}>1 day</option>
-          </Input>
-        </FormGroup>
+        { success 
+          ? <div className="alert alert-info" role="alert">
+              A Silcene object was created successfully. Please note, it may take up to 5 minutes for the alert to be silenced.
+            </div>
+          :
+          <React.Fragment>
+            <FormGroup>
+              <Label>Description *</Label>
+              <Input type="textarea" name="comment" value={comment} onChange={(e) => setComment(e.target.value)}/>
+            </FormGroup>
+            <FormGroup>
+              <Label>Duration</Label>
+              <Input type="select" name="duration" value={duration} onChange={(e) => setDuration(e.target.value)}>
+                <option value={2}>2 hours</option>
+                <option value={3}>3 hours</option>
+                <option value={4}>4 hours</option>
+                <option value={5}>5 hours</option>
+                <option value={6}>6 hours</option>
+                <option value={7}>7 hours</option>
+                <option value={8}>8 hours</option>
+                <option value={9}>9 hours</option>
+                <option value={10}>10 hours</option>
+                <option value={12}>12 hours</option>
+                <option value={24}>1 day</option>
+              </Input>
+            </FormGroup>
+          </React.Fragment>
+        }
       </Body>
 
       <Buttons>
         <Button color='secondary' type='button' onClick={(e) => {e.preventDefault(); hide()}}>Close</Button>
-        <Button color="primary" disabled={submitting || !comment} type="submit">{submitting ? 'Processing...' : 'Save'}</Button>
+        {!success && <Button color="primary" disabled={submitting || !comment} type="submit">{submitting ? 'Processing...' : 'Save'}</Button>}
       </Buttons>
     </Form>
   )
