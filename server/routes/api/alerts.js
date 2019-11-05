@@ -4,6 +4,9 @@ const Alerts= require('../../services/Alerts')
 const router = express.Router()
 
 router.put("/:fingerprint/ack", auth, async (req, res) => {
+  // check user credentials
+  if(!req.user.editor) return res.status(401).send('Not authorized!') 
+  
   Alerts.acknowledgeAlert(req.params.fingerprint,req.user)
     .then(() => res.status(200).send('OK'))
     .catch(error => {

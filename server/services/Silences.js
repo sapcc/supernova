@@ -8,6 +8,32 @@ const _updateListeners = []
 const addUpdateListener = (func) => _updateListeners.push(func)
 
 /**
+ *  This function creates a silence in AlertManager. 
+ * @param {object} alert 
+ * @param {Number} duration 
+ * @param {String} comment, a description
+ */
+const createSilence = async ({alert,duration,comment,user}) => {
+  const startsAt = new Date()
+  const endsAt = new Date()
+  endsAt.setHours(endsAt.getHours()+ Number.parseInt(duration || 4))
+  const matchers = []
+  for(let name in alert.labels) {
+    if(['status'].indexOf(name) >= 0) continue
+    let value = alert.labels[name]
+    if(alert.labels.region === 'area51' && name === 'severity') value = 'test'
+    matchers.push({name, value})
+  }
+  return AlertManagerApi.createSilence({
+    matchers,
+    startsAt,
+    endsAt,
+    createdBy: user.fullName,
+    comment: comment
+  }).then(() => load())
+}
+
+/**
  * This function informs all listeners for silence changes.
  * @private
  */
@@ -54,5 +80,6 @@ utils.doPeriodical({intervalInSeconds: 300, immediate: true}, load)
 
 module.exports = Silences = {
   addUpdateListener,
-  get
+  get,
+  createSilence
 }

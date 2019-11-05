@@ -20,7 +20,7 @@ module.exports = (server) => {
 
   Silences.addUpdateListener(silences => {
     console.log(`[${moment().format('DD.MM.YYYY HH:mm')}] WEBSOCKET: silences update.`)
-    if(silences) wsServer.sockets.emit(SILENCES_UPDATE, silences)
+    if(silences) wsServer.sockets.emit(SILENCES_UPDATE, {items: silences})
   })
 
   // INITIAL LOAD. 

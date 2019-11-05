@@ -1,6 +1,8 @@
 import React, {useMemo,useState,useRef} from 'react'
 import ReactJson from 'react-json-view'
 import AlertItem from './AlertItem'
+import CreateSilenceForm from './CreateSilenceForm'
+import { Button } from 'reactstrap'
 
 const Alerts = React.memo(({alerts,silences,categories,labelFilters,showModal}) => {
   const tableElement = useRef(null)
@@ -87,6 +89,17 @@ const Alerts = React.memo(({alerts,silences,categories,labelFilters,showModal}) 
     })
   }
 
+  // opens a modal window with silence form
+  const createSilence = (alert) => {
+    return new Promise((resolve,reject) => 
+      showModal({
+        header: `New Silence ${alert.labels.alertname && `for alert ${alert.labels.alertname}`}`,
+        // props are Body, Buttons and hide
+        content: (props) => <CreateSilenceForm alert={alert} onSuccess={resolve} onFailure={reject} {...props} />
+      })
+    )
+  }
+
   const alertCounts = (alerts) => {
     const criticals = alerts.filter(alert => alert.labels.severity === 'critical').length
     const warnings  = alerts.filter(alert => alert.labels.severity === 'warning').length 
@@ -136,6 +149,7 @@ const Alerts = React.memo(({alerts,silences,categories,labelFilters,showModal}) 
               showInhibitedBy={(fingerprint) => toggleInhibitedModal(fingerprint) }
               showSilencedBy={(silenceId) => toggleSilenceModal(silenceId)}
               showAckedBy={(payload) => toggleAckedModal(payload)}
+              createSilence={createSilence}
             />
           )}
         </tbody> 
