@@ -9,9 +9,9 @@ const isFunction = (functionToCheck) =>
 const SuperModal = ({ isShowing, hide, size, header, footer, cancelButtonText, body, children }) => ReactDOM.createPortal(
     <React.Fragment>
         {/* <div className="modal-overlay"/> */}
-        <Modal isOpen={isShowing} toggle={hide} className="main-modal" size={size ? size : "xl"} scrollable={true}>
+        <Modal isOpen={isShowing} toggle={hide} className="main-modal" size={size === 'default' ? null : size || "xl"} scrollable={true}>
           <ModalHeader toggle={hide}>{header}</ModalHeader>
-          {/*if children defined then render children as content.
+          {/*if children is defined then render children as content.
              Pass Body and Footer to the children if children is a function.
           */}
           {children 

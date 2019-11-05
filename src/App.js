@@ -51,7 +51,7 @@ const App = () => {
   const display = layout.display
   const layoutMode = layout.layoutMode
   const contentRef = useRef(null)
-  const {modalIsShowing, toggleModal} = useModal()
+  const {modalIsShowing, closeModal,openModal} = useModal()
   const [modalContent, setModalContent] = useState([])
 
   const initialURLFilters = useUrlFilters({"category": categories.active, "label": labelFilters.settings, "display": [display], "layout": [layoutMode]})
@@ -131,22 +131,25 @@ const App = () => {
                         silences={silences}
                         labelFilters={labelFilters} 
                         categories={categories}
-                        showModal={(content) => { setModalContent(content); toggleModal() }}
+                        showModal={(content) => { setModalContent(content); openModal() }}
                       />
                     </React.Fragment> 
                 }
               </div>
             </div> 
 
-            <SuperModal 
-              isShowing={modalIsShowing} 
-              hide={toggleModal} 
-              header={modalContent.header} 
-              footer={modalContent.footer} 
-              body={modalContent.body}
-              cancelButtonText={modalContent.cancelButtonText}>
-                {modalContent.content}
-            </SuperModal>
+            {(modalContent.header || modalContent.body || modalContent.footer || modalContent.content) && 
+              <SuperModal 
+                size={modalContent.size}
+                isShowing={modalIsShowing} 
+                hide={closeModal} 
+                header={modalContent.header} 
+                footer={modalContent.footer} 
+                body={modalContent.body}
+                cancelButtonText={modalContent.cancelButtonText}>
+                  {modalContent.content}
+              </SuperModal>
+            }
 
           </div>
       }
