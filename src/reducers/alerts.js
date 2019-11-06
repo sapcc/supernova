@@ -2,6 +2,7 @@ const initialState = {
   items: [],
   counts: {},
   labelValues: {},
+  showTarget: null,
   isLoading: false,
   updatedAt: null,
   error: null
@@ -18,6 +19,8 @@ const receive = (state,{items,counts,labelValues}) => {
 
 const requestFailure = (state, {error}) => ({...state, isLoading: false, error})
 
+const setShowTarget = (state, {showTarget}) => ({...state, showTarget: showTarget})
+
 export default (state = initialState, action) => {
   switch (action.type) {
     case 'REQUEST_ALERTS':
@@ -26,6 +29,8 @@ export default (state = initialState, action) => {
       return receive(state,action)
     case 'REQUEST_ALERTS_FAILURE':
       return requestFailure(state,action)
+    case 'SET_SHOW_TARGET':
+      return setShowTarget(state,action)
     default:
       return state
   }

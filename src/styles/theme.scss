@@ -247,6 +247,18 @@ code {
     }
 }
 
+.nav-tabs {
+    margin-bottom: 1rem;
+
+    .nav-link {
+        cursor: pointer;
+
+        &.active {
+            cursor: default;
+        }
+    }
+}
+
 
 // --------------------------------------------------------
 
@@ -399,6 +411,12 @@ td.snug {
     }
 }
 
+.alert-details {
+    .action-buttons-vertical {
+        flex-direction: row;
+    }
+}
+
 .alerts td.alert-main {
     word-break: break-word;
 
@@ -412,6 +430,14 @@ td.snug {
         border-left: 1px solid #bbb;
         margin-left: 0.5rem;
         padding-left: 0.5rem;
+    }
+}
+
+.alert-details {
+    .alert-links:first-child a {
+        border: none;
+        padding: 0;
+        margin: 0;
     }
 }
 
