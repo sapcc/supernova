@@ -91,13 +91,13 @@ const App = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])  
 
-  const toggleDetailsModal = (alert) => {
+  const openDetailsModal = (alert) => {
     setModalContent({
       header: <React.Fragment>Raw Data for <span className="u-text-info">&quot;{alert.annotations.summary}&quot;</span></React.Fragment>,
       body: <React.Fragment>{alert.annotations.description}</React.Fragment>,
       cancelButtonText: "Close" 
     })
-    toggleModal()
+    openModal()
   }
 
   const setDisplay = (mode) => {

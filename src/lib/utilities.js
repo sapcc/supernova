@@ -15,16 +15,6 @@ const descriptionParsed = (text) => {
   return boldParsed.replace(regexCode, `<code>$1</code>`)
 }
 
-const silences = (alert, silencesKeyPayload) => {
-  return useMemo(() => {
-    if(!alert.status || !alert.status.silencedBy) return []
-    let silenceIds = alert.status.silencedBy
-    if(!Array.isArray(silenceIds)) silenceIds = [silenceIds]
-    return silenceIds.map(id => ( {id, silence: silencesKeyPayload[id]} ))
-  },[alert.status,silencesKeyPayload])
-}
-
 export {
-  descriptionParsed,
-  silences
+  descriptionParsed
 }

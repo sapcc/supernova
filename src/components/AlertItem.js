@@ -7,7 +7,7 @@ import AlertActionButtons from './AlertActionButtons'
 import AlertLinks from './AlertLinks'
 import AlertLabels from './shared/AlertLabels'
 import AlertStatus from './shared/AlertStatus'
-import { descriptionParsed, silences } from '../lib/utilities'
+import { descriptionParsed } from '../lib/utilities'
 
 moment.updateLocale('en', {
   relativeTime : {
@@ -41,6 +41,13 @@ const AlertItem = React.memo(({
   showInhibitedBy,showSilencedBy,showAckedBy,createSilence}) => {
   
   if(!visible) return <tr><td colSpan={6}>Loading...</td></tr>  
+
+  const silences = useMemo(() => {
+    if(!alert.status || !alert.status.silencedBy) return []
+    let silenceIds = alert.status.silencedBy
+    if(!Array.isArray(silenceIds)) silenceIds = [silenceIds]
+    return silenceIds.map(id => ( {id, silence: silencesKeyPayload[id]} ))
+  },[alert.status,silencesKeyPayload])
 
   return (
     <tr className={alert.labels.severity} >

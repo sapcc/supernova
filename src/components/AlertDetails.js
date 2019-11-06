@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useMemo} from 'react'
 import ReactJson from 'react-json-view'
 import { Markup } from 'interweave'
 import classnames from 'classnames'
@@ -23,8 +23,15 @@ const AlertDetails = ({alert, labelSettings, silencesKeyPayload, showInhibitedBy
     if(activeTab !== tab) setActiveTab(tab);
   }
 
+  const silences = useMemo(() => {
+    if(!alert.status || !alert.status.silencedBy) return []
+    let silenceIds = alert.status.silencedBy
+    if(!Array.isArray(silenceIds)) silenceIds = [silenceIds]
+    return silenceIds.map(id => ( {id, silence: silencesKeyPayload[id]} ))
+  },[alert.status,silencesKeyPayload])
+
   return (
-    <div className="alert-details">
+    <div className={`alert-details ${alert.labels.severity}`}>
       <Nav tabs>
         <NavItem>
           <NavLink
@@ -117,11 +124,15 @@ const AlertDetails = ({alert, labelSettings, silencesKeyPayload, showInhibitedBy
                   <AlertLinks alert={alert} />
                 </td>
               </tr>
+
+              <tr>
+                <td colSpan="2">
+                  <AlertActionButtons alert={alert} createSilence={createSilence} />
+                </td>
+              </tr>
             </tbody>
           </Table>
 
-          <AlertActionButtons alert={alert} createSilence={createSilence} />
-          
         </TabPane>
       </TabContent>
 
