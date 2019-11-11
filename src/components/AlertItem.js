@@ -70,7 +70,7 @@ const AlertItem = React.memo(({
         <small className="u-text-info">
           <Markup content={descriptionParsed(alert.annotations.description)} tagName="span"/> - {' '}
           <Button className="btn-inline-link" color="link" onClick={(e) => { e.preventDefault(); showDetails()}}>
-            Show raw data
+            Show details
           </Button>
           <AlertLinks alert={alert} />
         </small>

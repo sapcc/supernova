@@ -56,29 +56,31 @@ const Alerts = React.memo(({alerts,silences,categories,labelFilters,showModal, s
   },[alerts.updatedAt,categories,activeCategories,activeLabelFilters])
 
 
-  // on load check if an alert id has been set in the URL. If so, toggle the alert details modal window for this alert
+  // on load check if an alert id has been set in the URL. If so, show the alert details modal window for this alert
   useEffect(() => {
     if (showTarget && showTarget.length > 0) {
       const showAlert = filteredAlerts.find(alert => alert.fingerprint === showTarget)
       if (showAlert) {
-        toggleDetailsModal(showAlert)
+        showDetailsModal(showAlert)
       }
       // if alert can't be found show a message
     }
   }, []) 
 
-  const toggleDetailsModal = (alert) => 
+  const showDetailsModal = (alert) => 
     showModal({
       header: <React.Fragment>Details for <span className="u-text-info">&quot;{alert.annotations.summary}&quot;</span></React.Fragment>,
-      body: <AlertDetails 
+      content: (props) => <AlertDetails 
               alert={alert} 
               labelSettings={labelSettings}
               silencesKeyPayload={silencesKeyPayload}
-              showDetails={() => toggleDetailsModal(alert)}
+              showDetails={() => showDetailsModal(alert)}
               showInhibitedBy={(fingerprint) => toggleInhibitedModal(fingerprint) }
               showSilencedBy={(silenceId) => toggleSilenceModal(silenceId)}
-              showAckedBy={(payload) => toggleAckedModal(payload)} />,
-      cancelButtonText: "Close" 
+              showAckedBy={(payload) => toggleAckedModal(payload)}
+              createSilence={createSilence}
+              {...props}
+              />
     })
   
   const toggleSilenceModal = (silenceId) => {
@@ -166,7 +168,7 @@ const Alerts = React.memo(({alerts,silences,categories,labelFilters,showModal, s
               visible={true}
               labelSettings={labelSettings}
               silencesKeyPayload={silencesKeyPayload}
-              showDetails={() => toggleDetailsModal(alert)}
+              showDetails={() => showDetailsModal(alert)}
               showInhibitedBy={(fingerprint) => toggleInhibitedModal(fingerprint) }
               showSilencedBy={(silenceId) => toggleSilenceModal(silenceId)}
               showAckedBy={(payload) => toggleAckedModal(payload)}
