@@ -28,13 +28,13 @@ module.exports = (server) => {
   wsServer.on('connection', socket => { 
     Alerts.get().then(result => {
       if(result) {
-        console.log(`[${moment().format('DD.MM.YYYY HH:mm')}] WEBSOCKET: new connection -> get current alerts.`)
+        //console.log(`[${moment().format('DD.MM.YYYY HH:mm')}] WEBSOCKET: new connection -> get current alerts.`)
         const {alerts, counts, labelValues} = result
         socket.emit(ALERTS_UPDATE, {items:alerts,counts,labelValues}) 
       }
     })
     Silences.get().then(silences => {
-      console.log(`[${moment().format('DD.MM.YYYY HH:mm')}] WEBSOCKET: new connection -> get current silences.`)
+      //console.log(`[${moment().format('DD.MM.YYYY HH:mm')}] WEBSOCKET: new connection -> get current silences.`)
       if(silences) socket.emit(SILENCES_UPDATE, {items: silences})
     })
   })
