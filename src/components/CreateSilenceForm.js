@@ -40,16 +40,10 @@ export default ({alert,onSuccess,onFailure,Body,Buttons,hide}) => {
               <Label>Duration</Label>
               <Input type="select" name="duration" value={duration} onChange={(e) => setDuration(e.target.value)}>
                 <option value={2}>2 hours</option>
-                <option value={3}>3 hours</option>
-                <option value={4}>4 hours</option>
-                <option value={5}>5 hours</option>
-                <option value={6}>6 hours</option>
-                <option value={7}>7 hours</option>
-                <option value={8}>8 hours</option>
-                <option value={9}>9 hours</option>
-                <option value={10}>10 hours</option>
                 <option value={12}>12 hours</option>
                 <option value={24}>1 day</option>
+                <option value={72}>3 days</option>
+                <option value={168}>7 days</option>
               </Input>
             </FormGroup>
           </React.Fragment>
