@@ -15,7 +15,7 @@ $theme-colors: (
 
 .btn-inline-link {
     font-size: inherit;
-    padding: 0;
+    padding: 0 !important;
     margin-top: -2px;
 }
 
@@ -415,7 +415,6 @@ td.snug {
     flex-direction: column;
     // wrap is problematic in column direction because the parent width doesn't increase. will have to think of something else to deal with too many buttons. maybe button dropdown.
 
-
     .btn {
         margin: 0 0 0.25rem 0.25rem;
         white-space: nowrap;
@@ -428,7 +427,7 @@ td.snug {
         margin-right: auto;
 
         .btn {
-            margin-bottom: 0;
+            margin: 0 0.8rem 0 0;
         }
     }
 }
@@ -450,7 +449,7 @@ td.snug {
 }
 
 .alert-details {
-    .alert-links:first-child a {
+    .alert-links a:first-child {
         border: none;
         padding: 0;
         margin: 0;

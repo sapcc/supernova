@@ -5,6 +5,7 @@ import classnames from 'classnames'
 import { Button, Nav, NavItem, NavLink, TabContent, TabPane, Table } from 'reactstrap'
 
 import { useDispatch } from '../lib/globalState'
+import useSilences from '../lib/hooks/useSilences'
 import AlertActionButtons from './AlertActionButtons'
 import AlertLinks from './AlertLinks'
 import AlertLabels from './shared/AlertLabels'
@@ -33,12 +34,7 @@ const AlertDetails = ({alert, labelSettings, silencesKeyPayload, showInhibitedBy
     if(activeTab !== tab) setActiveTab(tab);
   }
 
-  const silences = useMemo(() => {
-    if(!alert.status || !alert.status.silencedBy) return []
-    let silenceIds = alert.status.silencedBy
-    if(!Array.isArray(silenceIds)) silenceIds = [silenceIds]
-    return silenceIds.map(id => ( {id, silence: silencesKeyPayload[id]} ))
-  },[alert.status,silencesKeyPayload])
+  const silences = useSilences(alert.status, silencesKeyPayload)
 
 
   return (
