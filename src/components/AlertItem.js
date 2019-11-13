@@ -1,12 +1,14 @@
 import React, { useMemo } from 'react'
 import { Button } from 'reactstrap'
 import moment from 'moment'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Markup } from 'interweave'
 
-import { useDispatch } from '../lib/globalState'
 import AlertActionButtons from './AlertActionButtons'
 import AlertLinks from './AlertLinks'
+import AlertLabels from './shared/AlertLabels'
+import AlertStatus from './shared/AlertStatus'
+import { descriptionParsed } from '../lib/utilities'
+import useSilences from '../lib/hooks/useSilences'
 
 moment.updateLocale('en', {
   relativeTime : {
@@ -14,98 +16,18 @@ moment.updateLocale('en', {
       past:   "%s ago",
       s  : 'a few sec',
       ss : '%d sec',
-      m:  "a min",
+      m:  "1 min",
       mm: "%d min",
-      h:  "an hour",
+      h:  "1 hour",
       hh: "%d hours",
-      d:  "a day",
+      d:  "1 day",
       dd: "%d days",
-      M:  "a month",
+      M:  "1 month",
       MM: "%d months",
-      y:  "a year",
+      y:  "1 year",
       yy: "%d years"
   }
 });
-
-const AlertLabels = ({labelSettings,labels}) => {
-  const dispatch = useDispatch()  
-
-  const isFilterActive = (label, value) => (
-    labelSettings[label].findIndex(val => val === value) >= 0
-  )
-  const handlePillClick = (name, value) => {
-    if (isFilterActive(name, value)) {
-      dispatch({type: 'REMOVE_FILTER', name, value})          
-    } else {
-      dispatch({type: 'ADD_FILTER', name, value}) 
-    }
-  }
-
-  return <React.Fragment>
-    {Object.keys(labelSettings).map((labelKey, index) =>
-        labels[labelKey] &&
-          <span 
-            className={`filter-pill ${isFilterActive(labelKey, labels[labelKey]) ? 'active' : ''}`}
-            key={ `pill-${labelKey}` } 
-            onClick={() => handlePillClick(labelKey, labels[labelKey])}>
-            {labelKey} = {labels[labelKey]}
-            { isFilterActive(labelKey, labels[labelKey]) &&
-              <FontAwesomeIcon icon="times-circle" fixedWidth />
-            }
-          </span>
-    )}
-  </React.Fragment>
-}
-
-const AlertStatus = ({status, showAckedBy,showSilencedBy,showInhibitedBy,silences}) => {
-  return (
-    <React.Fragment>
-      {status.state &&
-        <div>{status.state}</div>
-      }
-      {status.inhibitedBy && status.inhibitedBy.length ?
-          <div className="u-text-info u-text-small">
-            Inhibited by: 
-            <Button color="link" className="btn-inline-link" onClick={(e) => {e.preventDefault(); showInhibitedBy(status.inhibitedBy)}}>
-              {status.inhibitedBy}
-            </Button>
-          </div>
-        :
-        ""
-      }
-      {silences && silences.length>0 &&
-        <React.Fragment> 
-          <div className="u-text-info u-text-small">Silenced by:</div>
-          {
-            silences.map(data => 
-              <div key={data.id} className="u-text-info u-text-small">
-                { data.silence 
-                  ? <Button color="link" className="btn-inline-link" onClick={(e) => {e.preventDefault(); showSilencedBy(data.id)}}>
-                      {data.silence.createdBy}
-                    </Button>
-                  : data['id']  
-                }
-              </div>  
-            )
-          } 
-        </React.Fragment>  
-      }
-      {status.pagerDutyInfos && status.pagerDutyInfos.acknowledgements &&  status.pagerDutyInfos.acknowledgements.length>0 &&
-        <React.Fragment>
-          <div className="u-text-info u-text-small">Acked by:</div>
-          {status.pagerDutyInfos.acknowledgements.map((ack,i) => ack.user.name !== 'CC Supernova' && 
-            <div className="u-text-info u-text-small" key={i}>
-              <Button color="link" className="btn-inline-link" onClick={(e) => { e.preventDefault(); showAckedBy(ack)}}>
-                {ack.user.name || ack.user.email}
-              </Button>
-              <span className="u-nowrap">{' '}{moment(ack.at).fromNow(true)}</span>
-            </div>
-          )}          
-          </React.Fragment>
-      }      
-    </React.Fragment>
-  )
-}
 
 const AlertInfoForSmallScreens = ({alert}) => 
   <div className="alert-info-small-screen">
@@ -115,33 +37,13 @@ const AlertInfoForSmallScreens = ({alert}) =>
   </div>
 ;
 
-const descriptionParsed = (text) => {
-  if(!text) return ''
-  // urls in descriptions follow the schema: <URL|URL-NAME>
-  // Parse description and replace urls with a-tags
-  const regexUrl   = /<(http[^>|]+)\|([^>]+)>/g
-  const urlParsed  = text.replace(regexUrl, `<a href="$1">$2</a>`)
-
-  // replace text wrapped in *..* by strong tags
-  const regexBold  = /\*(.*)\*/g
-  const boldParsed = urlParsed.replace(regexBold, `<strong>$1</strong>`)
-
-  const regexCode = /`(.*)`/g
-  return boldParsed.replace(regexCode, `<code>$1</code>`)
-}
-
 const AlertItem = React.memo(({
   alert,visible,labelSettings,silencesKeyPayload,showDetails,
   showInhibitedBy,showSilencedBy,showAckedBy,createSilence}) => {
   
   if(!visible) return <tr><td colSpan={6}>Loading...</td></tr>  
 
-  const silences = useMemo(() => {
-    if(!alert.status || !alert.status.silencedBy) return []
-    let silenceIds = alert.status.silencedBy
-    if(!Array.isArray(silenceIds)) silenceIds = [silenceIds]
-    return silenceIds.map(id => ( {id, silence: silencesKeyPayload[id]} ))
-  },[alert.status,silencesKeyPayload])
+  const silences = useSilences(alert.status, silencesKeyPayload)
 
   return (
     <tr className={alert.labels.severity} >
@@ -164,7 +66,7 @@ const AlertItem = React.memo(({
         <small className="u-text-info">
           <Markup content={descriptionParsed(alert.annotations.description)} tagName="span"/> - {' '}
           <Button className="btn-inline-link" color="link" onClick={(e) => { e.preventDefault(); showDetails()}}>
-            Show raw data
+            Show details
           </Button>
           <AlertLinks alert={alert} />
         </small>

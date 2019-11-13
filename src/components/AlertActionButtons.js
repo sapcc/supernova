@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
+import classnames from 'classnames'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useGlobalState } from '../lib/globalState'
 
@@ -36,7 +37,7 @@ const AckButton = ({pagerDutyInfos,fingerprint}) => {
 
   return (
     pagerDutyInfos.incidentId &&
-      <button className="btn btn-xs" onClick={handleClick} disabled={isSending}>
+      <button className="btn" onClick={handleClick} disabled={isSending}>
         {isSending 
           ? <React.Fragment><FontAwesomeIcon icon="sun" className="fa-spin"/> Ack...</React.Fragment>
           : confirm ? 'Confirm' : 'Ack'
@@ -52,14 +53,21 @@ const SilenceButton = ({alert,createSilence}) => {
       //.then(() => alert('OK'))
       //.catch( error => alert('KO',error))
   }
-  return <button className="btn btn-xs" onClick={handleClick}>Silence</button>
+  return <button className="btn" onClick={handleClick}>Silence</button>
 }
 
-const AlertActionButtons = ({alert,createSilence}) => {
+const AlertActionButtons = ({alert,createSilence, containerClasses}) => {
   const {user} = useGlobalState()
 
+  var containerClassName = classnames({
+                        "action-buttons": true,
+                        [`${containerClasses}`]: containerClasses,
+                        "action-buttons-vertical": !containerClasses
+                      })
+
+
   return (
-    <div className="action-buttons-vertical">
+    <div className={containerClassName}>
       {user.profile.editor && alert.status && alert.status.pagerDutyInfos &&
         <AckButton pagerDutyInfos={alert.status.pagerDutyInfos} fingerprint={alert.fingerprint}/>
       }

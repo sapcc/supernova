@@ -15,7 +15,7 @@ $theme-colors: (
 
 .btn-inline-link {
     font-size: inherit;
-    padding: 0;
+    padding: 0 !important;
     margin-top: -2px;
 }
 
@@ -99,7 +99,9 @@ code {
 .critical td {
     background: $bg-danger;
     border-color: $border-danger;
+}
 
+.critical {
     a, .btn-inline-link {
         color: $danger;
     }
@@ -119,6 +121,9 @@ code {
 .warning td {
     background: $bg-warning;
     border-color: $border-warning;
+}
+
+.warning {
 
     a, .btn-inline-link {
         color: darken($warning, 20);
@@ -139,7 +144,9 @@ code {
 .info td {
     background: $bg-info;
     border-color: $border-info;
+}
 
+.info {
     a, .btn-inline-link {
         color: darken($info, 30);
     }
@@ -243,6 +250,18 @@ code {
             background-color: lighten($bg-dark, 5);
             border-color: lighten($bg-dark, 15);
             color: #ccc;
+        }
+    }
+}
+
+.nav-tabs {
+    margin-bottom: 1rem;
+
+    .nav-link {
+        cursor: pointer;
+
+        &.active {
+            cursor: default;
         }
     }
 }
@@ -374,6 +393,7 @@ code {
     }
 
     button {
+        @extend .btn-xs;
         white-space: nowrap;
     }
 }
@@ -387,15 +407,28 @@ td.snug {
     width: 1px;
 }
 
-.action-buttons-vertical {
+.action-buttons {
     display: flex;
+}
+
+.action-buttons-vertical {
     flex-direction: column;
     // wrap is problematic in column direction because the parent width doesn't increase. will have to think of something else to deal with too many buttons. maybe button dropdown.
-
 
     .btn {
         margin: 0 0 0.25rem 0.25rem;
         white-space: nowrap;
+    }
+}
+
+.modal-footer {
+    .action-buttons {
+        flex-direction: row;
+        margin-right: auto;
+
+        .btn {
+            margin: 0 0.8rem 0 0;
+        }
     }
 }
 
@@ -412,6 +445,14 @@ td.snug {
         border-left: 1px solid #bbb;
         margin-left: 0.5rem;
         padding-left: 0.5rem;
+    }
+}
+
+.alert-details {
+    .alert-links a:first-child {
+        border: none;
+        padding: 0;
+        margin: 0;
     }
 }
 

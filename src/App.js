@@ -50,11 +50,13 @@ const App = () => {
   const {alerts, silences, categories, labelFilters, user, layout} = state
   const display = layout.display
   const layoutMode = layout.layoutMode
+  const showTarget = alerts.showTarget
   const contentRef = useRef(null)
   const {modalIsShowing, closeModal,openModal} = useModal()
   const [modalContent, setModalContent] = useState([])
+  // const [showTarget, setShowTarget] = useState([])
 
-  const initialURLFilters = useUrlFilters({"category": categories.active, "label": labelFilters.settings, "display": [display], "layout": [layoutMode]})
+  const initialURLFilters = useUrlFilters({"category": categories.active, "label": labelFilters.settings, "display": [display], "layout": [layoutMode], "show": [showTarget]})
   // decide which display mode should be used
   // const currentDisplayMode = useMemo(() => {
   //   if(Array.isArray(initialURLFilters.display) && initialURLFilters.display.length>0) {
@@ -82,9 +84,12 @@ const App = () => {
       dispatch({type: 'INIT_LABEL_FILTERS', settings: initialURLFilters.label})
     }
 
+    if(Array.isArray(initialURLFilters.show) && initialURLFilters.show.length>0) {
+      if(initialURLFilters.show[0] !== showTarget) dispatch({type: 'SET_SHOW_TARGET', showTarget: initialURLFilters.show[0]})
+    }
     
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+  },[])  
 
   const setDisplay = (mode) => {
     dispatch({type: 'SET_DISPLAY_MODE', display: mode})
@@ -132,6 +137,7 @@ const App = () => {
                         labelFilters={labelFilters} 
                         categories={categories}
                         showModal={(content) => { setModalContent(content); openModal() }}
+                        showTarget={showTarget}
                       />
                     </React.Fragment> 
                 }

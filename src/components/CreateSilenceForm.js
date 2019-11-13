@@ -28,7 +28,7 @@ export default ({alert,onSuccess,onFailure,Body,Buttons,hide}) => {
         </div>}
         { success 
           ? <div className="alert alert-info" role="alert">
-              A Silcene object was created successfully. Please note, it may take up to 5 minutes for the alert to be silenced.
+              A silence object was created successfully. Please note that it may take up to 5 minutes for the alert to show up as silenced.
             </div>
           :
           <React.Fragment>
