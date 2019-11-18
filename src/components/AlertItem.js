@@ -63,14 +63,18 @@ const AlertItem = React.memo(({
         <AlertInfoForSmallScreens alert={alert}/>
         {alert.annotations.summary}
         <br/>
+        
         <small className="u-text-info">
           <Markup content={descriptionParsed(alert.annotations.description)} tagName="span"/> - {' '}
-          <Button className="btn-inline-link" color="link" onClick={(e) => { e.preventDefault(); showDetails()}}>
+          <a 
+            href={`${window.location.origin}?show=${alert.fingerprint}`} 
+            onClick={(e) => { e.preventDefault(); showDetails()}}>
             Show details
-          </Button>
+          </a>
           <AlertLinks alert={alert} />
         </small>
         <br />
+
         <AlertLabels labels={alert.labels} labelSettings={labelSettings}/>
       </td>
       <td>{moment(alert.startsAt).format('DD.MM.YYYY HH:mm:ss')}</td>
