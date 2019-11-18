@@ -4,6 +4,9 @@ const AlertLinks = ({alert}) => {
 
   return (
     <span className="alert-links">
+      {alert.generatorURL && 
+        <a href={alert.generatorURL} target="_blank" rel="noopener noreferrer">Prometheus</a>
+      }
       {alert.labels.playbook && 
         <a href={`https://operations.global.cloud.sap/${alert.labels.playbook}`} target="_blank" rel="noopener noreferrer">Playbook</a>
       }

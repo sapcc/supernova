@@ -14,7 +14,7 @@ $theme-colors: (
 @import "../../node_modules/bootstrap/scss/bootstrap";
 
 .btn-inline-link {
-    font-size: inherit;
+    font-size: inherit !important;  
     padding: 0 !important;
     margin-top: -2px;
 }
