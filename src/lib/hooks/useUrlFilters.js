@@ -94,8 +94,11 @@ const jsonToUrlString = (json) => {
   //console.log('::::::::jsonToUrlString->flatJson',flatJson)
   let urlString = ''
   for(let key in flatJson) {
-    if(urlString.length > 0) urlString += '&'
-    if(flatJson[key] instanceof Array) urlString += `${key}=`+flatJson[key].join(`&${key}=`)
+    // first check if value for key is not empty, if it is empty don't add key to URL
+    if (flatJson[key] && flatJson[key][0]) {
+      if(urlString.length > 0) urlString += '&'
+      if(flatJson[key] instanceof Array) urlString += `${key}=`+flatJson[key].join(`&${key}=`)
+    }
   }
   return urlString
 }
