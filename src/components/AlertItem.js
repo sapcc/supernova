@@ -1,5 +1,4 @@
-import React, { useMemo } from 'react'
-import { Button } from 'reactstrap'
+import React from 'react'
 import moment from 'moment'
 import { Markup } from 'interweave'
 

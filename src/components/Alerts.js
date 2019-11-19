@@ -1,12 +1,21 @@
 import React, {useMemo,useState,useRef, useEffect} from 'react'
 import ReactJson from 'react-json-view'
+
+import { useDispatch } from '../lib/globalState'
+import useAppError from '../lib/hooks/useAppError'
 import AlertItem from './AlertItem'
 import CreateSilenceForm from './CreateSilenceForm'
 import AlertDetails from './AlertDetails'
+import AppErrors from './AppErrors'
 
 const Alerts = React.memo(({alerts,silences,categories,labelFilters,showModal, showTarget}) => {
+
+  const dispatch = useDispatch()
+
   const tableElement = useRef(null)
   const labelSettings = labelFilters.settings
+  const showError = useAppError()
+
   const activeCategories = useMemo(() => categories.items.filter(c => c.active), [categories.items])
   const silencesKeyPayload = useMemo(() => 
     silences.items.reduce((hash,silence) => {hash[silence.id] = silence; return hash}, {})
@@ -62,12 +71,15 @@ const Alerts = React.memo(({alerts,silences,categories,labelFilters,showModal, s
       const showAlert = filteredAlerts.find(alert => alert.fingerprint === showTarget)
       if (showAlert) {
         showDetailsModal(showAlert)
+      } else {
+        showError("The alert you are trying to view isn't firing currently or doesn't exist so unfortunately we cannot display it at this time", "info", 10000)
       }
-      // if alert can't be found show a message
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) 
 
-  const showDetailsModal = (alert) => 
+
+  const showDetailsModal = (alert) => {
     showModal({
       header: <React.Fragment>Details for <span className="u-text-info">&quot;{alert.annotations.summary}&quot;</span></React.Fragment>,
       content: (props) => <AlertDetails 
@@ -82,6 +94,7 @@ const Alerts = React.memo(({alerts,silences,categories,labelFilters,showModal, s
               {...props}
               />
     })
+  }
   
   const toggleSilenceModal = (silenceId) => {
     if(!silencesKeyPayload[silenceId]) return
@@ -137,6 +150,7 @@ const Alerts = React.memo(({alerts,silences,categories,labelFilters,showModal, s
 
   return (
     <React.Fragment>
+      <AppErrors /> 
       <div className="toolbar toolbar-info">{alertCounts(filteredAlerts)}</div>
       <table className="alerts table table-main" ref={tableElement}>
         <thead>

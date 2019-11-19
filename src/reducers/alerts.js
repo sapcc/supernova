@@ -21,6 +21,7 @@ const requestFailure = (state, {error}) => ({...state, isLoading: false, error})
 
 const setShowTarget = (state, {showTarget}) => ({...state, showTarget: showTarget})
 
+
 export default (state = initialState, action) => {
   switch (action.type) {
     case 'REQUEST_ALERTS':

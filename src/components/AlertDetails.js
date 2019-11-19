@@ -1,4 +1,4 @@
-import React, {useState, useMemo, useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import ReactJson from 'react-json-view'
 import { Markup } from 'interweave'
 import classnames from 'classnames'
@@ -22,6 +22,8 @@ const AlertDetails = ({alert, labelSettings, silencesKeyPayload, showInhibitedBy
     dispatch({type: 'SET_SHOW_TARGET', showTarget: alert.fingerprint})
 
     return () => dispatch({type: 'SET_SHOW_TARGET', showTarget: null})
+    
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]) 
 
   if (!activeTabSelection) {
