@@ -1,16 +1,14 @@
 import React, {useMemo,useState,useRef, useEffect} from 'react'
 import ReactJson from 'react-json-view'
+import moment from 'moment'
 
-import { useDispatch } from '../lib/globalState'
 import useAppError from '../lib/hooks/useAppError'
 import AlertItem from './AlertItem'
 import CreateSilenceForm from './CreateSilenceForm'
 import AlertDetails from './AlertDetails'
 import AppErrors from './AppErrors'
 
-const Alerts = React.memo(({alerts,silences,categories,labelFilters,showModal, showTarget}) => {
-
-  const dispatch = useDispatch()
+const Alerts = React.memo(({alerts,updatedAt, silences,categories,labelFilters,showModal, showTarget}) => {
 
   const tableElement = useRef(null)
   const labelSettings = labelFilters.settings
@@ -151,7 +149,10 @@ const Alerts = React.memo(({alerts,silences,categories,labelFilters,showModal, s
   return (
     <React.Fragment>
       <AppErrors /> 
-      <div className="toolbar toolbar-info">{alertCounts(filteredAlerts)}</div>
+      <div className="toolbar toolbar-info">
+        {alertCounts(filteredAlerts)} 
+        <span className="info-low-prio u-margin-left-auto">updated: {moment(updatedAt).format('HH:mm:ss')}</span>
+      </div>
       <table className="alerts table table-main" ref={tableElement}>
         <thead>
           <tr>

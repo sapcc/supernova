@@ -54,7 +54,6 @@ const App = () => {
   const contentRef = useRef(null)
   const {modalIsShowing, closeModal,openModal} = useModal()
   const [modalContent, setModalContent] = useState([])
-  // const [showTarget, setShowTarget] = useState([])
 
   const initialURLFilters = useUrlFilters({"category": categories.active, "label": labelFilters.settings, "display": [display], "layout": [layoutMode], "show": [showTarget]})
   // decide which display mode should be used
@@ -133,6 +132,7 @@ const App = () => {
                       <Filters labelFilters={labelFilters} labelValues={alerts.labelValues} />
                       <Alerts 
                         alerts={alerts}
+                        updatedAt={alerts.updatedAt}
                         silences={silences}
                         labelFilters={labelFilters} 
                         categories={categories}

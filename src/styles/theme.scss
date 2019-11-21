@@ -67,6 +67,14 @@ $navbar-height: 55px;
     display: flex !important;
 }
 
+.u-margin-left-auto {
+    margin-left: auto;
+}
+
+.u-margin-right-auto {
+    margin-right: auto;
+}
+
 .u-break-all {
     word-break: break-all;
 }
@@ -492,7 +500,12 @@ td.snug {
     background: $bg-dark;
     border-radius: 3px 3px 0 0;
     color: #ccc;
+    display: flex;
     padding: 0.25rem 0.75rem;
+}
+
+.info-low-prio {
+    opacity: 0.4;
 }
 
 .react-json-view {
