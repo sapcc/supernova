@@ -462,6 +462,20 @@ td.snug {
         padding: 0;
         margin: 0;
     }
+
+    .alert-detail-tab {
+        div[class*="col-"] {
+            padding: 0.5rem 0 0.5rem 0;
+
+            &:first-child {
+                padding-left: 2rem;
+            }
+        }
+
+        .heading {
+            font-weight: bold;
+        }
+    }
 }
 
 .critical .alert-links a {
@@ -833,7 +847,7 @@ td.snug {
     .sidebar {
         display: flex;
         flex-direction: column;
-        transition: left 1s ease-out;
+        transition: left 0.3s ease-out;
         position: fixed;
         top: 0;
         left: -15rem;
@@ -879,10 +893,14 @@ td.snug {
     }
 
     .regions-panel {
-        display: none;
 
+        .region {
+            min-width: 96vmin;
+            margin: 0 0 0.4rem 0;
+        }
+        
+        
         &.fullscreen {
-            display: flex;
 
             .region {
                 min-width: 98vmin;
@@ -908,6 +926,10 @@ td.snug {
         }
     }
 
+    .toolbar.toolbar-info {
+        font-size: 80%;
+    }
+
     .alerts {
         th, td, td.alert-buttons {
             display: none;
@@ -920,6 +942,17 @@ td.snug {
 
     .alert-info-small-screen {
         display: block;
+    }
+
+    .alert-details .alert-detail-tab {
+        div[class*="col-"] {
+            padding: 0.2rem 0 0.5rem 1rem;
+
+            &:first-child {
+                padding-left: 1rem;
+                padding-top: 1rem;
+            }
+        }
     }
 
 }

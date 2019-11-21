@@ -29,24 +29,6 @@ const Sidebar = ({counts, currentDisplayMode}) => {
           <Categories categories={categories} counts={counts.category}/>
         </li>
       </ul> 
-      <div className="display-toggle">
-        <ButtonGroup className="display-toggle">
-          <Button 
-            color="primary" 
-            className={currentDisplayMode === 'overview' ? '' : 'active'}
-            onClick={() => setDisplayMode("dashboard")}
-            >
-            List view
-          </Button>
-          <Button 
-            color="primary" 
-            className={currentDisplayMode === 'overview' ? 'active' : ''}
-            onClick={() => setDisplayMode("overview")}
-            >
-            Overview
-          </Button>
-        </ButtonGroup> 
-      </div>
     </div> 
   ) 
 }

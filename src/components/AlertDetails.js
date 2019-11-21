@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import ReactJson from 'react-json-view'
 import { Markup } from 'interweave'
 import classnames from 'classnames'
-import { Button, Nav, NavItem, NavLink, TabContent, TabPane, Table } from 'reactstrap'
+import { Button, Nav, NavItem, NavLink, TabContent, TabPane, Row, Col } from 'reactstrap'
 
 import { useDispatch } from '../lib/globalState'
 import useSilences from '../lib/hooks/useSilences'
@@ -63,53 +63,51 @@ const AlertDetails = ({alert, labelSettings, silencesKeyPayload, showInhibitedBy
         {/* TAB DETAILS */}
 
         <TabContent activeTab={activeTab}>
-          <TabPane tabId="details">
-            <Table borderless>
-              <tbody>
-                <tr>
-                  <th>Region</th>
-                  <td>{alert.labels.region}</td>
-                </tr>
+          <TabPane tabId="details" className="alert-detail-tab">
+        
+            <Row>
+              <Col md="2" className="heading">Region</Col>
+              <Col md="10">{alert.labels.region}</Col>
+            </Row>
 
-                <tr>
-                  <th>Severity</th>
-                  <td>{alert.labels.severity}</td>
-                </tr>
+            <Row>
+              <Col md="2" className="heading">Severity</Col>
+              <Col md="10">{alert.labels.severity}</Col>
+            </Row>
 
-                <tr>
-                  <th>Service</th>
-                  <td>{alert.labels.service}</td>
-                </tr>
+            <Row>
+              <Col md="2" className="heading">Service</Col>
+              <Col md="10">{alert.labels.service}</Col>
+            </Row>
 
-                <tr>
-                  <th>Description</th>
-                  <td><Markup content={descriptionParsed(alert.annotations.description)} tagName="span"/></td>
-                </tr>
+            <Row>
+              <Col md="2" className="heading">Description</Col>
+              <Col md="10"><Markup content={descriptionParsed(alert.annotations.description)} tagName="span"/></Col>
+            </Row>
 
-                <tr>
-                  <th>Labels</th>
-                  <td><AlertLabels labels={alert.labels} labelSettings={labelSettings}/></td>
-                </tr>
+            <Row>
+              <Col md="2" className="heading">Labels</Col>
+              <Col md="10"><AlertLabels labels={alert.labels} labelSettings={labelSettings}/></Col>
+            </Row>
 
-                <tr>
-                  <th>Status</th>
-                  <td>
-                    <AlertStatus 
-                    status={alert.status} 
-                    showAckedBy={showAckedBy}
-                    showSilencedBy={showSilencedBy}
-                    showInhibitedBy={showInhibitedBy}
-                    silences={silences}
-                    />
-                  </td>
-                </tr>
+            <Row>
+              <Col md="2" className="heading">Status</Col>
+              <Col md="10">
+                <AlertStatus 
+                status={alert.status} 
+                showAckedBy={showAckedBy}
+                showSilencedBy={showSilencedBy}
+                showInhibitedBy={showInhibitedBy}
+                silences={silences}
+                />
+              </Col>
+            </Row>
 
-                <tr>
-                  <th>Links</th>
-                  <td><AlertLinks alert={alert} /></td>
-                </tr>
-              </tbody>
-            </Table>
+            <Row>
+              <Col md="2" className="heading">Links</Col>
+              <Col md="10"><AlertLinks alert={alert} /></Col>
+            </Row>
+
           </TabPane>
         </TabContent>
 
