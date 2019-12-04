@@ -15,6 +15,16 @@ const descriptionParsed = (text) => {
   return boldParsed.replace(regexCode, `<code>$1</code>`)
 }
 
+const severityToColor = (severity) => {
+  if (severity === "critical") {
+    return "danger"
+  } else {
+    return severity
+  }
+
+}
+
 export {
-  descriptionParsed
+  descriptionParsed,
+  severityToColor
 }

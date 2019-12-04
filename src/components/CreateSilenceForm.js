@@ -1,6 +1,9 @@
 import React, {useState} from 'react'
-import { Button, Form, FormGroup, Label, Input } from 'reactstrap'
+import { Button, Form, FormGroup, Label, Input, Alert } from 'reactstrap'
+import classnames from 'classnames'
 import axios from 'axios'
+
+import { severityToColor } from '../lib/utilities'
 
 //() => axios.post(`/api/silences/${fingerprint}`)
 export default ({alert,onSuccess,onFailure,Body,Buttons,hide}) => {
@@ -23,18 +26,22 @@ export default ({alert,onSuccess,onFailure,Body,Buttons,hide}) => {
   return(
     <Form onSubmit={handleSubmit}>
       <Body>
-        {error && <div className="alert alert-danger" role="alert">
+        {error && <Alert color="danger">
           {''+error}
-        </div>}
+          </Alert>
+        }
         { success 
-          ? <div className="alert alert-info" role="alert">
+          ? <Alert color="info">
               A silence object was created successfully. Please note that it may take up to 5 minutes for the alert to show up as silenced.
-            </div>
+            </Alert>
           :
           <React.Fragment>
+            <Alert color={classnames(severityToColor(alert.labels.severity))}>
+              {alert.annotations.description}
+            </Alert>
             <FormGroup>
               <Label>Description *</Label>
-              <Input type="textarea" name="comment" value={comment} onChange={(e) => setComment(e.target.value)}/>
+              <Input type="textarea" name="comment" value={comment} rows="5" onChange={(e) => setComment(e.target.value)}/>
             </FormGroup>
             <FormGroup>
               <Label>Duration</Label>
