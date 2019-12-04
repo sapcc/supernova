@@ -19,7 +19,10 @@ const createSilence = async ({alert,duration,comment,user}) => {
   endsAt.setHours(endsAt.getHours()+ Number.parseInt(duration || 4))
   const matchers = []
   for(let name in alert.labels) {
+    // remove some labels that we don't want to include in the silence
     if(['status'].indexOf(name) >= 0) continue
+    if(['pod'].indexOf(name) >= 0) continue
+    if(['instance'].indexOf(name) >= 0) continue
     let value = alert.labels[name]
     if(alert.labels.region === 'area51' && name === 'severity') value = 'test'
     matchers.push({name, value})
