@@ -5,7 +5,10 @@ const doPeriodical = (options = {}, func) => {
 
   const periodical = () => {
     let start = Date.now()
-    Promise.resolve(func()).then(() => {
+    // resolve the given function and re-queue new execution of this function.
+    // "finally" ensures that new execution takes place regardless of whether 
+    // the last execution was successful or not
+    Promise.resolve(func()).finally(() => {
       let timeout = start + interval - Date.now()
       if(timeout < 0) timeout = 0
       setTimeout(periodical,timeout)
