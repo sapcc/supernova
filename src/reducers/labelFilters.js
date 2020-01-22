@@ -35,11 +35,13 @@ const addFilter = (state, {name, value}) => {
 const removeFilter = (state, {name, value}) => {
   if(!Array.isArray(state.settings[name])) return 
 
+  // find index of value that is to be removed
   const index = state.settings[name].indexOf(value)
   if(index < 0) return
 
   const values = state.settings[name].slice()
-  values.splice(index)
+  // delete value at found index
+  values.splice(index, 1)
   return {...state, settings: {...state.settings, [name]: values} }
 }
 
