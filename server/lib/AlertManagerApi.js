@@ -4,7 +4,7 @@ const axios = require('axios')
 const endpoints = [process.env.REACT_APP_ALERTMANAGER_API_ENDPOINT, process.env.REACT_APP_ALERTMANAGER_API_ENDPOINT_BACKUP]
 
 let activeIndex = 0
-let activeUrl = endpoints[1] // hardcode to backup endpoint until TLS is sorted
+let activeUrl = process.env.REACT_APP_ALERTMANAGER_API_ENDPOINT_BACKUP // endpoints[activeIndex]  hardcode to backup endpoint until TLS is sorted
 
 const url = (path) => `${activeUrl}/${path}`
 
@@ -16,8 +16,9 @@ const alerts = async (params = {}) =>
     .catch(error => {
       console.log("ERROR fetching alerts from: ", activeUrl, "ERROR: ", error)
       // iterate through the endpoints array to try the next endpoint
-      activeIndex = (activeIndex + 1) % endpoints.length
-      activeUrl = endpoints[activeIndex]
+      // TEMPORARILY DISABLE FALLBACK LOGIC
+      // activeIndex = (activeIndex + 1) % endpoints.length
+      // activeUrl = endpoints[activeIndex]
     })
 ;
 
