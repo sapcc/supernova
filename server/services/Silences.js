@@ -25,7 +25,7 @@ const createSilence = async ({alert,duration,comment,user}) => {
     if(['instance'].indexOf(name) >= 0) continue
     let value = alert.labels[name]
     if(alert.labels.region === 'area51' && name === 'severity') value = 'test'
-    matchers.push({name, value})
+    matchers.push({name, value, isRegex: false}) // for now hardcode isRegex to false since we take the exact value
   }
   return AlertManagerApi.createSilence({
     matchers,
