@@ -7,8 +7,8 @@ const sort = (items) =>
   items.sort((a,b) => {
     if((a.labels.severity==='critical' && b.labels.severity!=='critical') || 
       (a.labels.severity==='warning' && ['critical','warning'].indexOf(b.labels.severity) < 0)) return -1  
-    else if((a.labels.severity===b.labels.severity) && (a.status.state !== b.status.state)) return a.status.state.localeCompare(b.status.state)
-    else if((a.labels.severity===b.labels.severity) && (a.status.state === b.status.state)) return a.labels.region.localeCompare(b.labels.region)
+    else if((a.labels.severity===b.labels.severity) && (a.status.state !== b.status.state) && a.status.state)  return a.status.state.localeCompare(b.status.state)
+    else if((a.labels.severity===b.labels.severity) && (a.status.state === b.status.state) && a.labels.region) return a.labels.region.localeCompare(b.labels.region)
     else return 1
   })
 ;
