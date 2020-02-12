@@ -12,7 +12,7 @@ let activeUrl = endpoints[activeIndex]
 
 const url = (path) => `${activeUrl}/${path}`
 const userCert = fs.readFileSync(process.env.PROMETHEUS_USER_CERT_LOCATION || path.join(certFilePath, 'sso.crt'))
-const userKey  = fs.readFileSync(process.env.PROMETHEUS_USER_KEY_LOCATION  || path.join(certFilePath, 'sso.key')
+const userKey  = fs.readFileSync(process.env.PROMETHEUS_USER_KEY_LOCATION  || path.join(certFilePath, 'sso.key'))
 
 const alerts = async (params = {}) =>
   axios
