@@ -28,3 +28,5 @@ yarn-error.log*
 .env
 
 report.20*
+
+/config/users/editors.json

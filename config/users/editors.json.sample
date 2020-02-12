@@ -1,0 +1,12 @@
+{
+  "D999999": {
+    "id": "D999999",
+    "fullName": "Jane Doe",
+    "email": "jane.doe@company.com"
+  },
+  "D999998": {
+    "id": "D999998",
+    "fullName": "Jim Doe",
+    "email": "jim.doe@company.com"
+  }
+}

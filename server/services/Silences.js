@@ -73,7 +73,7 @@ const load = () => AlertManagerApi.silences()
     return updateSilences(silences)
   })
   .catch(error => {
-    console.error(`[${moment().format('DD.MM.YYYY hh:mm')}] SILENCES LOADER: api error: `, error.message)
+    console.error(`[${moment().format('DD.MM.YYYY hh:mm')}] SILENCES LOADER: api error: `, error.message, error.response.data)
     return null
   })
 ;  
