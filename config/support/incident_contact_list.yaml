@@ -1,0 +1,165 @@
+dibs_ddos: 
+  hotline: "+49 6227 356 6699, Option 1"
+  service_area: "Network"
+  spc: 
+    service: "NW_CLOUD_INET"
+    queue: "ITI GNS SERVICEDESK"
+  responsible:
+    ops_area_owner: "Beata Basarova (D072051)"
+
+asr03_dmvpn: 
+  hotline: "+49 6227 356 6699, Option 1"
+  service_area: "Network"
+  spc: 
+    service: "NW_CLOUD_CC"
+    queue: "ITI NETWORK CC SERVICEDESK"
+  responsible:
+    ops_area_owner: "Chrisopher Franks (I505129)"
+
+asr04_n7k01: 
+  hotline: "+49 6227 356 6699, Option 1"
+  service_area: "Network"
+  spc: 
+    service: "NW_CLOUD_CC"
+    queue: "ITI NETWORK CC SERVICEDESK"
+  responsible:
+    ops_area_owner: "Chrisopher Franks (I505129)"
+
+asr11+_openstack: 
+  hotline: "+49 6227 356 6699, Option 1"
+  service_area: "Network"
+  spc: 
+    service: "NW_CLOUD_CC"
+    queue: "ITI NETWORK CC SERVICEDESK"
+  responsible:
+    ops_area_owner: "Chrisopher Franks (I505129)"
+
+arista: 
+  hotline: "+49 6227 356 6699, Option 1"
+  service_area: "Network"
+  spc: 
+    service: "NW_CLOUD_CC"
+    queue: "ITI NETWORK CC SERVICEDESK"
+  responsible:
+    ops_area_owner: "Chrisopher Franks (I505129)"
+
+asa: 
+  hotline: "+49 6227 356 6699, Option 1"
+  service_area: "Network"
+  spc: 
+    service: "NW_CLOUD_CC_FW"
+    queue: "ITI NETWORK CC SERVICEDESK"
+  responsible:
+    ops_area_owner: "Chrisopher Franks (I505129)"
+
+asr03_dmvpn: 
+  hotline: "+49 6227 356 6699, Option 1"
+  service_area: "Network"
+  spc: 
+    service: "NW_CLOUD_CC"
+    queue: "ITI NETWORK CC SERVICEDESK"
+  responsible:
+    ops_area_owner: "Chrisopher Franks (I505129)"
+
+lbaas_f5: 
+  hotline: "+49 6227 356 6699, Option 1"
+  service_area: "Network"
+  spc: 
+    service: "NW_CLOUD_CC_LB"
+    queue: "ITI NETWORK CC SERVICEDESK"
+  responsible:
+    ops_area_owner: "Chrisopher Franks (I505129)"
+
+aci: 
+  hotline: "+49 6227 356 6699, Option 1"
+  service_area: "Network"
+  spc: 
+    service: "NW_CLOUD_CC_FABRIC"
+    queue: "ITI NETWORK CC SERVICEDESK"
+  responsible:
+    ops_area_owner: "Chrisopher Franks (I505129)"
+
+vpod: 
+  hotline: 
+    - "+49 (6227) 7-48405​/-48400 (use with extreme care (on-call duty), only after MoD Bridge is opened!"
+    - "+1 (302) 2030507 (DXC)​"
+  service_area: "Compute & Infrastructure Applications"
+  spc: 
+    service: "SERVER_CCLOUD"
+    queue: "ITI INFRA OPS CSC"
+  responsible:
+    ops_area_owner: "Martin Pink (D060396)"
+
+bpod: 
+  hotline: "+49 (6227) 7-76031 (use with extreme care (on-call duty), only after MoD Bridge is opened!"
+  service_area: "Compute & Infrastructure Applications"
+  spc: 
+    service: "SERVER_CCLOUD_BMAAS"
+    queue: "ITI INFRA OPS BMOPS"
+  responsible:
+    ops_area_owner: "Christopher Mast (D074164)"
+
+manila_netapp: 
+  hotline: "+49 (161) 9146925"
+  service_area: "Storage"
+  spc: 
+    service: "NAS_OTHERS"
+    queue: "ITI Storage"
+  responsible:
+    ops_area_owner: "Sunit Arora (I871393)"
+
+vpod_netapp: 
+  hotline: "+49 (161) 9146925"
+  service_area: "Storage"
+  spc: 
+    service: "NAS_OTHERS"
+    queue: "ITI STORAGE"
+  responsible:
+    ops_area_owner: "Sunit Arora (I871393)"
+
+bpod_netapp: 
+  hotline: "+49 (161) 9146925"
+  service_area: "Storage"
+  spc: 
+    service: "NAS_OTHERS"
+    queue: "ITI STORAGE"
+  responsible:
+    ops_area_owner: "Sunit Arora (I871393)"
+
+ccloud_controlplane: 
+  hotline: "+49 (8457) 5859868 (use with extreme care (on-call duty), only after MoD Bridge is opened!"
+  service_area: "Compute & Infrastructure Applications"
+  spc: 
+    service: "APPL_CCLOUD"
+    queue: "ITI INFRA OPS CSC"
+  responsible:
+    ops_area_owner: "Fabian Kroenner (D042704)"
+
+backup: 
+  hotline: "+49 (6227) 7-47017"
+  service_area: "Backup"
+  spc: 
+    service: "BACKUP_INCIDENT"
+    queue: "ITI BACKUP CCLOUD"
+  responsible:
+    ops_area_owner: "Steffen Frehse (D055511)"
+
+cfm: 
+  hotline: "?"
+  service_area: "Compute & Infrastructure Applications"
+  spc: 
+    service: "APPL_CFM"
+    queue: "ITI INFRA OPS CFMOPS"
+  responsible:
+    ops_area_owner: "Philipp Taylor (I044230)"
+
+tic_gmp: 
+  hotline: "?"
+  service_area: "Internal Applications & Support"
+  spc: 
+    service: 
+      - "TIC_GMP"
+      - "TIC/GMP Development Support"
+    queue: "CIA TOOLS"
+  responsible:
+    ops_area_owner: "Frank Borell (D014624)"
