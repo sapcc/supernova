@@ -1,18 +1,21 @@
 const YAML = require('yaml')
 const fs = require('fs')
 const path = require('path')
-const contactListFilePath = path.join(__dirname,'/../../config/support/')
 
-const getContacts = () => {
-    const contactYaml = fs.readFileSync(path.join(contactListFilePath, 'incident_contact_list.yaml'))
-    const contactList = YAML.parse(contactYaml)
-    
-    return contactList
+
+const contactYaml = fs.readFileSync(path.join(__dirname, '/../../config/support/incident_contact_list.yaml'))
+
+const getContacts = async () => {
+    try {
+        const contactList = YAML.parse(contactYaml.toString())
+        return contactList
+    } catch (error) {
+        throw error
+    }   
 }
 
-const Alerts = {
+const Support = {
     getContacts
 }
 
-//Object.freeze(Alerts)
 module.exports = Support

@@ -2,7 +2,7 @@ import React from 'react'
 
 import { useGlobalState, useDispatch } from '../../lib/globalState'
 
-import { CustomInput, Navbar, NavbarBrand, NavbarToggler, Nav, Form, FormGroup, Input, Label, UncontrolledDropdown, DropdownToggle, DropdownMenu } from 'reactstrap'
+import { Button, CustomInput, Navbar, NavbarBrand, NavbarToggler, Nav, Form, FormGroup, Input, Label, UncontrolledDropdown, DropdownToggle, DropdownMenu } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 
@@ -14,6 +14,10 @@ const SuperNavbar = () => {
 
   const toggleResponsiveSidebar = () => {
     dispatch({type: 'TOGGLE_RESPONSIVE_SIDEBAR_VISIBLE'})
+  }
+
+  const toggleContactsList = () => {
+    dispatch({type: 'TOGGLE_CONTACTS_LIST_VISIBLE'})
   }
 
   const activateFullscreen = () => {
@@ -29,6 +33,13 @@ const SuperNavbar = () => {
       <NavbarToggler onClick={() => toggleResponsiveSidebar()}><FontAwesomeIcon icon="bars"/></NavbarToggler>
       <NavbarBrand className="brand" href="/">Supernova</NavbarBrand>
       <Nav className="utility-nav ml-auto" navbar>
+        <Button 
+          color="link"
+          onClick={() => toggleContactsList()}>
+          <FontAwesomeIcon icon="ambulance"/>
+          {layout.contactsListVisible ? "Hide " : "Show "}
+          Support Contacts List
+        </Button>
         <Form inline className="layout-nav">
           <FormGroup>
             <CustomInput type="switch" id="layoutMode" name="layoutMode" label="Fullscreen" onClick={() => activateFullscreen()}/>

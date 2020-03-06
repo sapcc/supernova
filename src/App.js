@@ -27,12 +27,13 @@ import './App.css'
 // import AlertDurationChart from './AlertDurationChart'
 import MapDisplay from './components/display/Map'
 import OverviewDisplay from './components/display/Overview'
+import ContactList from './components/display/contacts'
 
 // Icons --------------------------------------------------------
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { 
   faBars, faBell, faSun, faTimesCircle, faCode, 
-  faAngleUp, faAngleDown, faUser
+  faAngleUp, faAngleDown, faUser, faAmbulance
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faBellSlash as faBellSlashRegular
@@ -40,7 +41,7 @@ import {
 
 
 // build icon library, only needs to be done once, then the icon will be available everywhere, only the FontAwesomeIcon import is necessary in other components
-library.add( faBars, faBell, faBellSlashRegular, faSun, faTimesCircle, faCode, faAngleUp, faAngleDown, faUser )
+library.add( faBars, faBell, faBellSlashRegular, faSun, faTimesCircle, faCode, faAngleUp, faAngleDown, faUser, faAmbulance )
 // --------------------------------------------------------------
 
 const App = () => {
@@ -50,6 +51,7 @@ const App = () => {
   const {alerts, silences, categories, labelFilters, user, layout} = state
   const display = layout.display
   const layoutMode = layout.layoutMode
+  const contactsListVisible = layout.contactsListVisible
   const showTarget = alerts.showTarget
   const contentRef = useRef(null)
   const {modalIsShowing, closeModal,openModal} = useModal()
@@ -113,7 +115,7 @@ const App = () => {
           :
           <div className={`container-fluid page ${display}`}>
             
-            { layoutMode !== 'fullscreen' && <Sidebar counts={counts} currentDisplayMode={display} /> }
+            { layoutMode !== 'fullscreen' && <Sidebar counts={counts} currentDisplayMode={display} showModal={(content) => { setModalContent(content); openModal() }}/> }
 
             <div className="main">
               { layoutMode !== 'fullscreen' && <SuperNavbar /> }
@@ -123,24 +125,24 @@ const App = () => {
                   ? <MapDisplay regionCounts={counts.region}/>
                   : display === 'overview' 
                     ? <OverviewDisplay labelFilters={labelFilters} items={alerts.labelValues ? alerts.labelValues['region'] : null} counts={counts.region} />
-                    :
-                    <React.Fragment>
-                      <Regions
-                        labelFilters={labelFilters}
-                        counts={counts.region}/>
+                    : <React.Fragment>
+                        <Regions
+                          labelFilters={labelFilters}
+                          counts={counts.region}/>
 
-                      <Filters labelFilters={labelFilters} labelValues={alerts.labelValues} />
-                      <Alerts 
-                        alerts={alerts}
-                        updatedAt={alerts.updatedAt}
-                        silences={silences}
-                        labelFilters={labelFilters} 
-                        categories={categories}
-                        showModal={(content) => { setModalContent(content); openModal() }}
-                        showTarget={showTarget}
-                      />
-                    </React.Fragment> 
+                        <Filters labelFilters={labelFilters} labelValues={alerts.labelValues} />
+                        <Alerts 
+                          alerts={alerts}
+                          updatedAt={alerts.updatedAt}
+                          silences={silences}
+                          labelFilters={labelFilters} 
+                          categories={categories}
+                          showModal={(content) => { setModalContent(content); openModal() }}
+                          showTarget={showTarget}
+                        />
+                      </React.Fragment> 
                 }
+                { contactsListVisible && <ContactList /> }
               </div>
             </div> 
 

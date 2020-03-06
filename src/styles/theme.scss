@@ -98,6 +98,13 @@ code {
     border-radius: 2px;
 }
 
+// all icons in buttons should have a margin to the right
+button {
+    svg {
+        margin-right: 0.5rem;
+    }
+}
+
 // --------------------------------------------------------
 
 
@@ -212,6 +219,7 @@ code {
 }
 
 .content {
+    position: relative;
     padding: 2rem;
 }
 
@@ -317,6 +325,10 @@ code {
     }
 }
 
+.sidebar-folder {
+    padding-bottom: 1rem;
+}
+
 
 .sidebar-item {
     cursor: pointer;
@@ -363,11 +375,17 @@ code {
     }
 }
 
-.sidebar-folder > .sidebar-link {
+.sidebar-category {
+    display: block;
+    padding: 0.5rem 0.6rem;
     font-size: $font-size-lg;
 
     &.active {
-        font-weight: normal;
+        background: $bg-dark-active;
+    }
+
+    svg {
+        margin-right: 0.5rem;
     }
 }
 
@@ -628,6 +646,19 @@ td.snug {
             }
         }
     }
+}
+
+
+
+
+.contactlist {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #fff;
+    box-shadow: 0 4px 4px -4px #808080;
+    width: 100%;
+    padding: 2rem;  transition: top 1s ease-out;
 }
 
 // --------------------------------------------------------
