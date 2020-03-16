@@ -26,7 +26,7 @@ const alerts = async (params = {}) =>
         })
       }
     )
-    .then(console.log("activeUrl: ", activeUrl))
+    .then(response => { console.log("activeUrl: ", activeUrl); return response})
     .then(response => response.data)
     .catch(error => {
       console.log("ERROR fetching alerts from: ", activeUrl, "ERROR: ", error.message, error.response.data)
