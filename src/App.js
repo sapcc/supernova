@@ -33,7 +33,7 @@ import ContactList from './components/display/contacts'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { 
   faBars, faBell, faSun, faTimesCircle, faCode, 
-  faAngleUp, faAngleDown, faUser, faAmbulance
+  faAngleUp, faAngleDown, faUser, faAmbulance, faExclamationTriangle
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faBellSlash as faBellSlashRegular
@@ -41,7 +41,7 @@ import {
 
 
 // build icon library, only needs to be done once, then the icon will be available everywhere, only the FontAwesomeIcon import is necessary in other components
-library.add( faBars, faBell, faBellSlashRegular, faSun, faTimesCircle, faCode, faAngleUp, faAngleDown, faUser, faAmbulance )
+library.add( faBars, faBell, faBellSlashRegular, faSun, faTimesCircle, faCode, faAngleUp, faAngleDown, faUser, faAmbulance, faExclamationTriangle )
 // --------------------------------------------------------------
 
 const App = () => {
@@ -142,7 +142,7 @@ const App = () => {
                         />
                       </React.Fragment> 
                 }
-                { contactsListVisible && <ContactList /> }
+                <ContactList visible={contactsListVisible} /> 
               </div>
             </div> 
 

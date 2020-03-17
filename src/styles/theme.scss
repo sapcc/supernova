@@ -11,6 +11,8 @@ $theme-colors: (
     "danger":     $danger
 );
 
+$table-hover-bg: $hover-light-blue;
+
 @import "../../node_modules/bootstrap/scss/bootstrap";
 
 .btn-inline-link {
@@ -26,6 +28,10 @@ $theme-colors: (
 
 .custom-switch {
     cursor: pointer;
+}
+
+.popover .danger {
+    color: $danger;
 }
 
 // --------------------------------------------------------
@@ -81,6 +87,15 @@ $navbar-height: 55px;
 
 .u-nowrap {
     white-space: nowrap;
+}
+
+.u-clickable {
+    cursor: pointer;
+}
+
+.u-plain-list {
+    padding: 0;
+    list-style-type: none;
 }
 
 // --------------------------------------------------------
@@ -195,6 +210,15 @@ button {
 .severity-info {
     background: $info;
     fill: $info;
+}
+
+.icon-danger {
+    margin-left: 0.5rem;
+    color: $danger;
+
+    &:hover {
+        color: lighten($danger, 15);
+    }
 }
 
 
