@@ -111,7 +111,9 @@ const updateAlerts = (alerts) => {
  * @return Promise
  * @private
  */
-const load = () => AlertManagerApi.alerts()
+const load = async () => {
+  console.log("ALERTS LOADER: request alerts from API")
+  return AlertManagerApi.alerts()
   .then(alerts => {
     console.info(`[${moment().format('DD.MM.YYYY HH:mm')}] ALERTS LOADER: receive alerts from alert manager`, alerts.length)
     return updateAlerts(alerts)
@@ -120,7 +122,7 @@ const load = () => AlertManagerApi.alerts()
     console.error(`[${moment().format('DD.MM.YYYY HH:mm')}] ALERTS LOADER: api error: `, error.message)
     return null
   })
-;  
+}  
 
 /** 
  * This function loads open and acknowledged alerts from pagerduty.
