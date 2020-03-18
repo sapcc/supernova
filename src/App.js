@@ -49,9 +49,7 @@ const App = () => {
   const dispatch = useDispatch()
 
   const {alerts, silences, categories, labelFilters, user, layout} = state
-  const display = layout.display
-  const layoutMode = layout.layoutMode
-  const contactsListVisible = layout.contactsListVisible
+  const {display, layoutMode, contactsListVisible} = layout
   const showTarget = alerts.showTarget
   const contentRef = useRef(null)
   const {modalIsShowing, closeModal,openModal} = useModal()

@@ -6,7 +6,7 @@ import { Button, CustomInput, Navbar, NavbarBrand, NavbarToggler, Nav, Form, For
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 
-const SuperNavbar = () => {
+const SuperNavbar = React.memo(() => {
   const state = useGlobalState()
   const dispatch = useDispatch()
 
@@ -66,6 +66,6 @@ const SuperNavbar = () => {
       </Nav>
     </Navbar>
   ) 
-}
+})
 
 export default SuperNavbar

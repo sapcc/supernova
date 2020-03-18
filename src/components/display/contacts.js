@@ -3,23 +3,27 @@ import axios from 'axios'
 import { Alert, Table } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
+import { useGlobalState, useDispatch } from '../../lib/globalState'
 import ContactsDetailsList from './contactsDetails'
 import SimplePopover from './../shared/SimplePopover'
 
 
-const ContactList = ({visible}) => {
+const ContactList = React.memo(({visible}) => {
 
-  const [contacts, setContacts] = useState({})
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [visibleSubLevels, setVisibleSubLevels] = useState([])
+
+  const state = useGlobalState()
+  const dispatch = useDispatch()
+  const contacts = state.support.contacts
 
   useEffect(() => {
     // isSubscribed is used to check whether we are still subscribed to the promise. If not then don't try to fetch as this will result in a warning
     let isSubscribed = true
     axios.get('/api/support/contacts').then(response => {
       if (isSubscribed) {
-        setContacts(response.data)
+        dispatch({type: 'SET_SUPPORT_CONTACTS', contacts: response.data})
         setError(null)
         setIsLoading(false)
       } 
@@ -35,8 +39,10 @@ const ContactList = ({visible}) => {
 
   const toggleDetails = (key) => {
     if (visibleSubLevels.includes(key)) {
+      // remove key
       setVisibleSubLevels(visibleSubLevels.filter((lvlKey) => lvlKey !== key))
     } else {
+      // add key
       const temp = visibleSubLevels.slice()
       temp.push(key)
       setVisibleSubLevels(temp)
@@ -111,6 +117,6 @@ const ContactList = ({visible}) => {
       }
     </React.Fragment>
   )
-}
+})
 
 export default ContactList

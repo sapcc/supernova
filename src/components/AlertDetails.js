@@ -57,6 +57,15 @@ const AlertDetails = ({alert, labelSettings, silencesKeyPayload, showInhibitedBy
               Raw Data
             </NavLink>
           </NavItem>
+          { alert.labels.support_component &&
+            <NavItem>
+              <NavLink
+                className={classnames({ active: activeTab === 'support' })}
+                onClick={() => { toggle('support'); }}>
+                Support Channels
+              </NavLink>
+            </NavItem>
+          }
         </Nav>
 
 
@@ -120,6 +129,17 @@ const AlertDetails = ({alert, labelSettings, silencesKeyPayload, showInhibitedBy
             <ReactJson src={alert} collapsed={2} collapseStringsAfterLength={100} />
           </TabPane>
         </TabContent>
+
+
+        {/* TAB Support Channels Info */}
+
+        <TabContent activeTab={activeTab}>
+          <TabPane tabId="support">
+            
+          </TabPane>
+        </TabContent>
+
+
 
       </Body>
 
