@@ -682,7 +682,14 @@ td.snug {
     background: #fff;
     box-shadow: 0 4px 4px -4px #808080;
     width: 100%;
-    padding: 2rem;  transition: top 1s ease-out;
+    padding: 2rem;  
+    transition: top 1s ease-out;
+}
+
+.modal .contactlist {
+    position: static;
+    padding: 0;
+    box-shadow: none;
 }
 
 // --------------------------------------------------------

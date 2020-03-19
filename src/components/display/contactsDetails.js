@@ -36,7 +36,8 @@ const ContactsDetailsList = ({mainKey, details}) => {
                             </dl>
                         </Col>
                     )}
-                    <Col>
+                    <Col md="auto">
+                        <h6>Other Contacts</h6>
                         <dl>
                             <dt>Accountable Manager</dt>
                             <dd>{details.accountable_manager ? details.accountable_manager : "N/A"}</dd>

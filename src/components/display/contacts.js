@@ -4,19 +4,19 @@ import { Alert, Table } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { useGlobalState, useDispatch } from '../../lib/globalState'
-import ContactsDetailsList from './contactsDetails'
+import Contact from './contact'
 import SimplePopover from './../shared/SimplePopover'
 
 
-const ContactList = React.memo(({visible}) => {
+const ContactList = React.memo(({visible, componentKey}) => {
 
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [visibleSubLevels, setVisibleSubLevels] = useState([])
 
   const state = useGlobalState()
   const dispatch = useDispatch()
-  const contacts = state.support.contacts
+  // if a specific key was passed, filter all but that one contact
+  const contacts = componentKey ? {[componentKey]: state.support.contacts[componentKey]} : state.support.contacts
 
   useEffect(() => {
     // isSubscribed is used to check whether we are still subscribed to the promise. If not then don't try to fetch as this will result in a warning
@@ -37,17 +37,6 @@ const ContactList = React.memo(({visible}) => {
     return () => (isSubscribed = false)
   }, [])
 
-  const toggleDetails = (key) => {
-    if (visibleSubLevels.includes(key)) {
-      // remove key
-      setVisibleSubLevels(visibleSubLevels.filter((lvlKey) => lvlKey !== key))
-    } else {
-      // add key
-      const temp = visibleSubLevels.slice()
-      temp.push(key)
-      setVisibleSubLevels(temp)
-    }
-  }
 
   return (
     <React.Fragment>
@@ -58,7 +47,7 @@ const ContactList = React.memo(({visible}) => {
             : error 
               ? <Alert color="danger">{error.message}</Alert>
               :
-              <Table striped hover>
+              <Table striped>
                 <thead>
                   <tr>
                     <th>Component</th>
@@ -70,46 +59,19 @@ const ContactList = React.memo(({visible}) => {
                   </tr>
                 </thead>
                 <tbody>
-                  { Object.entries(contacts).map(([key, contactInfo]) =>
-                    <React.Fragment key={key}>
-                      <tr key={`${key}-main`} className="u-clickable" onClick={() => toggleDetails(key)}>
-                        <td>{contactInfo.label}</td>
-                        <td>
-                          {contactInfo.hotline.map((hotlineNumber, index) =>
-                            <div key={`${key}-number-${index}`}>
-                              {hotlineNumber.number}
-                              {hotlineNumber.note &&
-                                <React.Fragment>
-                                  <FontAwesomeIcon icon="exclamation-triangle" id={`note-${key}-number-${index}`} className="icon-danger" onClick={(e) => e.stopPropagation()} />
-                                  <SimplePopover type="danger" clickTarget={`note-${key}-number-${index}`} text={hotlineNumber.note} />
-                                </React.Fragment>
-                              }
-                            </div>
-                          )}
-                        </td>
-                        <td>{contactInfo.service_area}</td>
-                        <td>
-                          {Array.isArray(contactInfo.spc_service) 
-                            ? 
-                            contactInfo.spc_service.map((service) =>
-                              <div key={service}>{service}</div>
-                            )
-                            :
-                            contactInfo.spc_service
-                          }
-                        </td>
-                        <td>{contactInfo.spc_queue}</td>
-                        <td>{contactInfo.ops_area_owner}</td>
-                      </tr>
-                      {visibleSubLevels.includes(key) &&
-                        <tr key={`${key}-sub`}>
-                          <td colSpan="6">
-                            <ContactsDetailsList mainKey={key} details={contactInfo.details} />
-                          </td>
-                        </tr>
-                      }
-                    </React.Fragment>
-                  )}
+                  { contacts 
+                    ? 
+                    Object.entries(contacts).map(([key, contactInfo]) =>
+                      <Contact key={`contact-${key}`} contact={key} contactInfo={contactInfo} detailsExpanded={componentKey ? true : false} />
+                    )
+                    :
+                    <tr>
+                      <td colSpan="6">
+                        Support contact information is empty
+                        {componentKey && <span> for component {componentKey}</span>}
+                      </td>
+                    </tr>
+                  }
                 </tbody>
               </Table>
           }

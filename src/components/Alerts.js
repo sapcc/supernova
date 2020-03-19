@@ -81,7 +81,7 @@ const Alerts = React.memo(({alerts,updatedAt, silences,categories,labelFilters,s
     showModal({
       header: <React.Fragment>Details for <span className="u-text-info">&quot;{alert.annotations.summary}&quot;</span></React.Fragment>,
       content: (props) => <AlertDetails 
-              alert={alert} 
+              alert={{...alert, labels: {...alert.labels, "support_component": "asr03"}}} 
               labelSettings={labelSettings}
               silencesKeyPayload={silencesKeyPayload}
               showDetails={() => showDetailsModal(alert)}

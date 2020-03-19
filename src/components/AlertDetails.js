@@ -10,6 +10,7 @@ import AlertActionButtons from './AlertActionButtons'
 import AlertLinks from './AlertLinks'
 import AlertLabels from './shared/AlertLabels'
 import AlertStatus from './shared/AlertStatus'
+import ContactList from './display/contacts'
 import { descriptionParsed } from '../lib/utilities'
 
 
@@ -132,12 +133,13 @@ const AlertDetails = ({alert, labelSettings, silencesKeyPayload, showInhibitedBy
 
 
         {/* TAB Support Channels Info */}
-
-        <TabContent activeTab={activeTab}>
-          <TabPane tabId="support">
-            
-          </TabPane>
-        </TabContent>
+        { alert.labels.support_component &&
+          <TabContent activeTab={activeTab}>
+            <TabPane tabId="support">
+              <ContactList visible={true} componentKey={alert.labels.support_component} />
+            </TabPane>
+          </TabContent>
+        }
 
 
 
