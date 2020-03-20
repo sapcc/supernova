@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import axios from 'axios'
-import { Alert, Table } from 'reactstrap'
+import { Alert, Row, Col } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { useGlobalState, useDispatch } from '../../lib/globalState'
@@ -47,33 +47,28 @@ const ContactList = React.memo(({visible, componentKey}) => {
             : error 
               ? <Alert color="danger">{error.message}</Alert>
               :
-              <Table striped>
-                <thead>
-                  <tr>
-                    <th>Component</th>
-                    <th>Hotline</th>
-                    <th>Service Area</th>
-                    <th>SPC Service</th>
-                    <th>SPC Queue</th>
-                    <th>OPS Area Owner</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  { contacts 
-                    ? 
-                    Object.entries(contacts).map(([key, contactInfo]) =>
-                      <Contact key={`contact-${key}`} contact={key} contactInfo={contactInfo} detailsExpanded={componentKey ? true : false} />
-                    )
-                    :
-                    <tr>
-                      <td colSpan="6">
-                        Support contact information is empty
-                        {componentKey && <span> for component {componentKey}</span>}
-                      </td>
-                    </tr>
-                  }
-                </tbody>
-              </Table>
+              <div className="tabular-grid">
+                <Row className="row-header">
+                  <Col md="2">Component</Col>
+                  <Col md="2">Hotline</Col>
+                  <Col md="2">Service Area</Col>
+                  <Col md="2">SPC Service</Col>
+                  <Col md="2">SPC Queue</Col>
+                  <Col md="2">OPS Area Owner</Col>
+                </Row>
+                { contacts 
+                  ? 
+                  Object.entries(contacts).map(([key, contactInfo]) =>
+                    <Contact key={`contact-${key}`} contact={key} contactInfo={contactInfo} detailsExpanded={componentKey ? true : false} />
+                  )
+                  :
+                  <div>
+                    Support contact information is empty
+                    {componentKey && <span> for component {componentKey}</span>}
+                  </div>
+                }
+              </div>
+
           }
         </div>
       }

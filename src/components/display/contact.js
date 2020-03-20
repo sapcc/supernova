@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 
+import { Row, Col } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import ContactsDetailsList from './contactsDetails'
@@ -21,9 +22,11 @@ const Contact = React.memo(({contact, contactInfo, detailsExpanded}) => {
 
   return (
     <React.Fragment>
-      <tr className="u-clickable" onClick={() => toggleDetails(contact)}>
-        <td>{contactInfo.label}</td>
-        <td>
+      <Row className="u-clickable" onClick={() => toggleDetails(contact)}>
+        <Col md="2">
+          {contactInfo.label}
+        </Col>
+        <Col md="2">
           {contactInfo.hotline.map((hotlineNumber, index) =>
             <div key={`${contact}-number-${index}`}>
               {hotlineNumber.number}
@@ -35,27 +38,29 @@ const Contact = React.memo(({contact, contactInfo, detailsExpanded}) => {
               }
             </div>
           )}
-        </td>
-        <td>{contactInfo.service_area}</td>
-        <td>
+        </Col>
+        <Col md="2">
+          {contactInfo.service_area}
+        </Col>
+        <Col md="2">
           {Array.isArray(contactInfo.spc_service) 
             ? 
             contactInfo.spc_service.map((service) =>
-              <div key={service}>{service}</div>
+            <div key={service}>{service}</div>
             )
             :
             contactInfo.spc_service
           }
-        </td>
-        <td>{contactInfo.spc_queue}</td>
-        <td>{contactInfo.ops_area_owner}</td>
-      </tr>
+        </Col>
+        <Col md="2">
+          {contactInfo.spc_queue}
+        </Col>
+        <Col md="2">
+          {contactInfo.ops_area_owner}
+        </Col>
+      </Row>
       {detailsVisible &&
-        <tr key={`${contact}-sub`}>
-          <td colSpan="6">
-            <ContactsDetailsList mainKey={contact} details={contactInfo.details} />
-          </td>
-        </tr>
+        <ContactsDetailsList mainKey={contact} details={contactInfo.details} />
       }
     </React.Fragment>
   )

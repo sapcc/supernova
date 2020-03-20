@@ -692,6 +692,22 @@ td.snug {
     box-shadow: none;
 }
 
+.tabular-grid {
+    .row {
+        padding: 0.5rem 0;
+
+        &:nth-child(even) {
+            background: #efefef;
+        }
+    }
+
+    .row-header {
+        background: $bg-dark;
+        color: #fff;
+        font-weight: bold;
+    }
+}
+
 // --------------------------------------------------------
 
 
