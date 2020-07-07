@@ -1,14 +1,13 @@
 @import "./variables.scss";
 
-
 // Bootstrap Overrides and Extensions---------------
 
 $theme-colors: (
-    "primary":    $bright-blue,
-    "success":    $bright-green,
-    "info":       $info,
-    "warning":    $light-sapgold,
-    "danger":     $danger
+  "primary": $bright-blue,
+  "success": $bright-green,
+  "info": $info,
+  "warning": $light-sapgold,
+  "danger": $danger,
 );
 
 $table-hover-bg: $hover-light-blue;
@@ -16,27 +15,25 @@ $table-hover-bg: $hover-light-blue;
 @import "../../node_modules/bootstrap/scss/bootstrap";
 
 .btn-inline-link {
-    font-size: inherit !important;  
-    padding: 0 !important;
-    margin-top: -2px;
+  font-size: inherit !important;
+  padding: 0 !important;
+  margin-top: -2px;
 }
 
 .btn-xs {
-    @extend .btn-sm;
-    line-height: 1.2;
+  @extend .btn-sm;
+  line-height: 1.2;
 }
 
 .custom-switch {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .popover .danger {
-    color: $danger;
+  color: $danger;
 }
 
 // --------------------------------------------------------
-
-
 
 // Layout sizes -------------------------------------------
 
@@ -44,995 +41,970 @@ $navbar-height: 55px;
 
 // --------------------------------------------------------
 
-
-
-
 // Shared Utilities ----------------------------------------
 
 .u-hidden {
-    display: none !important;
+  display: none !important;
 }
 
 .u-text-info-light {
-    color: $gray-500;
+  color: $gray-500;
 }
 
 .u-text-info {
-    opacity: 0.7;
+  opacity: 0.7;
 }
 
 .u-text-small {
-    font-size: $small-font-size;
+  font-size: $small-font-size;
 }
 
 .u-v-align-middle {
-    vertical-align: middle !important;
+  vertical-align: middle !important;
 }
 
 .u-display-flex {
-    display: flex !important;
+  display: flex !important;
 }
 
 .u-margin-left-auto {
-    margin-left: auto;
+  margin-left: auto;
 }
 
 .u-margin-right-auto {
-    margin-right: auto;
+  margin-right: auto;
 }
 
 .u-break-all {
-    word-break: break-all;
+  word-break: break-all;
 }
 
 .u-nowrap {
-    white-space: nowrap;
+  white-space: nowrap;
 }
 
 .u-clickable {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .u-plain-list {
-    padding: 0;
-    list-style-type: none;
+  padding: 0;
+  list-style-type: none;
 }
 
 // --------------------------------------------------------
-
-
 
 // HTML elements ----------------------------------------
 
 body {
-    background: $bg-dark-active;
+  background: $bg-dark-active;
 }
 
 code {
-    padding: 0.1rem 0.2rem;
-    border-radius: 2px;
+  padding: 0.1rem 0.2rem;
+  border-radius: 2px;
 }
 
 // all icons in buttons should have a margin to the right
 button {
-    svg {
-        margin-right: 0.5rem;
-    }
+  svg {
+    margin-right: 0.5rem;
+  }
 }
 
 // --------------------------------------------------------
-
-
 
 // Status elements ----------------------------------------
 
 .critical td {
-    background: $bg-danger;
-    border-color: $border-danger;
+  background: $bg-danger;
+  border-color: $border-danger;
 }
 
 .critical {
-    a, .btn-inline-link {
-        color: $danger;
-    }
+  a,
+  .btn-inline-link {
+    color: $danger;
+  }
 
-    .btn:not(.btn-link) {
-        background-color: lighten($danger, 25);
-        border-color: lighten($danger, 10);
-        color: #fff;
-    }
+  .btn:not(.btn-link) {
+    background-color: lighten($danger, 25);
+    border-color: lighten($danger, 10);
+    color: #fff;
+  }
 
-    code {
-        background: rgba(255, 255,255, 0.5);
-        color: lighten($danger, 5);
-    }
+  code {
+    background: rgba(255, 255, 255, 0.5);
+    color: lighten($danger, 5);
+  }
 }
 
 .warning td {
-    background: $bg-warning;
-    border-color: $border-warning;
+  background: $bg-warning;
+  border-color: $border-warning;
 }
 
 .warning {
+  a,
+  .btn-inline-link {
+    color: darken($warning, 20);
+  }
 
-    a, .btn-inline-link {
-        color: darken($warning, 20);
-    }
+  .btn:not(.btn-link) {
+    background-color: darken($warning, 4);
+    border-color: darken($warning, 6);
+    color: #fff;
+  }
 
-    .btn:not(.btn-link) {
-        background-color: darken($warning, 4);
-        border-color: darken($warning, 6);
-        color: #fff;
-    }
-
-    code {
-        background: rgba(255, 255, 255, 0.8);
-        color: darken($warning, 15);
-    }
+  code {
+    background: rgba(255, 255, 255, 0.8);
+    color: darken($warning, 15);
+  }
 }
 
 .info td {
-    background: $bg-info;
-    border-color: $border-info;
+  background: $bg-info;
+  border-color: $border-info;
 }
 
 .info {
-    a, .btn-inline-link {
-        color: darken($info, 30);
-    }
+  a,
+  .btn-inline-link {
+    color: darken($info, 30);
+  }
 
-    .btn:not(.btn-link) {
-        background-color: darken($info, 10);
-        border-color: darken($info, 15);
-        color: #fff;
-    }
+  .btn:not(.btn-link) {
+    background-color: darken($info, 10);
+    border-color: darken($info, 15);
+    color: #fff;
+  }
 
-    code {
-        background: rgba(255, 255,255, 0.5);
-        color: darken($info, 20);
-    }
+  code {
+    background: rgba(255, 255, 255, 0.5);
+    color: darken($info, 20);
+  }
 }
 
 .resolved td {
-    background: none;
+  background: none;
 }
 
 .severity-critical {
-    background: $danger;
-    fill: $danger;
+  background: $danger;
+  fill: $danger;
 }
 
 .severity-warning {
-    background: $warning;
-    fill: $warning;
+  background: $warning;
+  fill: $warning;
 }
 
 .severity-info {
-    background: $info;
-    fill: $info;
+  background: $info;
+  fill: $info;
 }
 
 .icon-danger {
-    margin-left: 0.5rem;
-    color: $danger;
+  margin-left: 0.5rem;
+  color: $danger;
 
-    &:hover {
-        color: lighten($danger, 15);
-    }
+  &:hover {
+    color: lighten($danger, 15);
+  }
 }
-
 
 // Layout components --------------------------------------
 
-
 .page {
-    display: flex;
-    padding-left: 0;
-    padding-right: 0; 
-    background: $bg-light;
-    
-    &.overview, &.map {
-        background: $bg-dark-active;
-    }
+  display: flex;
+  padding-left: 0;
+  padding-right: 0;
+  background: $bg-light;
 
+  &.overview,
+  &.map {
+    background: $bg-dark-active;
+  }
 }
 
 .main {
-    flex: 0 1 100%;
-    min-height: 100vh;
+  flex: 0 1 100%;
+  min-height: 100vh;
 }
 
 .content {
-    position: relative;
-    padding: 2rem;
+  position: relative;
+  padding: 2rem;
 }
 
 .navbar {
-    @supports (position: sticky) {
-        position: sticky;
-        top: 0;
-        z-index: 1001;
-    }
-    background: $bg-light;
-    border-bottom: 1px solid $border-light;
+  @supports (position: sticky) {
+    position: sticky;
+    top: 0;
+    z-index: 1001;
+  }
+  background: $bg-light;
+  border-bottom: 1px solid $border-light;
+  color: #666;
+  box-shadow: 0 0 1px 1px rgba(100, 100, 100, 0.05);
+  height: $navbar-height;
+
+  .brand {
+    display: none;
+  }
+
+  .form-control {
     color: #666;
-    box-shadow: 0 0 1px 1px rgba(100, 100, 100, 0.05);
-    height: $navbar-height;
+    line-height: 1;
+    height: calc(#{$input-height} - 0.5em);
+    margin-left: 0.5rem;
+  }
 
-    .brand {
-        display: none;
-    }
-
-    .form-control {
-        color: #666;
-        line-height: 1;
-        height: calc(#{$input-height} - 0.5em);
-        margin-left: 0.5rem;
-    }
-
-    .form-group, .nav-item {
-        margin: 0 0.8rem;
-    }
-
+  .form-group,
+  .nav-item {
+    margin: 0 0.8rem;
+  }
 }
 
 .navbar-toggler {
-    color: #ccc;
+  color: #ccc;
 }
 
-.overview, .map {
-    .navbar {
-        background: darken($bg-dark, 5);
-        border-bottom-color:$bg-dark;
-        color: #ccc;
+.overview,
+.map {
+  .navbar {
+    background: darken($bg-dark, 5);
+    border-bottom-color: $bg-dark;
+    color: #ccc;
 
-        .form-control {
-            background-color: lighten($bg-dark, 5);
-            border-color: lighten($bg-dark, 15);
-            color: #ccc;
-        }
+    .form-control {
+      background-color: lighten($bg-dark, 5);
+      border-color: lighten($bg-dark, 15);
+      color: #ccc;
     }
+  }
 }
 
 .nav-tabs {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 
-    .nav-link {
-        cursor: pointer;
+  .nav-link {
+    cursor: pointer;
 
-        &.active {
-            cursor: default;
-        }
+    &.active {
+      cursor: default;
     }
+  }
 }
 
-
 // --------------------------------------------------------
-
-
-
 
 // SIDEBAR ------------------------------------------------
 .sidebar {
-    @supports (position: sticky) {
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        height: 100vh;
-    }
-    background: $bg-dark;
-    border-right: 1px solid rgba(0, 0, 0, .1);    
-    color: $light-grey;
-    flex: 0 1 23rem;
+  @supports (position: sticky) {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    height: 100vh;
+  }
+  background: $bg-dark;
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  color: $light-grey;
+  flex: 0 1 23rem;
 
-    ul {
-        list-style: none;
-        padding: 0;
-    }
+  ul {
+    list-style: none;
+    padding: 0;
+  }
 
-    .display-toggle {
-        display: none;
-    }
+  .display-toggle {
+    display: none;
+  }
 }
 
 .sidebar-brand {
-    font-size: $h4-font-size;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    height: 55px;
-    padding-left: 0.6rem;
+  font-size: $h4-font-size;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  height: 55px;
+  padding-left: 0.6rem;
 
-    .logo {
-        color: lighten($bright-blue, 10);
-        margin-right: 0.75rem;
-    }
+  .logo {
+    color: lighten($bright-blue, 10);
+    margin-right: 0.75rem;
+  }
 }
 
 .sidebar-folder {
-    padding-bottom: 1rem;
+  padding-bottom: 1rem;
 }
-
 
 .sidebar-item {
+  cursor: pointer;
+  padding-left: 0.4rem;
+
+  input {
+    margin-right: 0.25rem;
     cursor: pointer;
-    padding-left: 0.4rem;
+  }
 
-    input {
-        margin-right: 0.25rem;
-        cursor: pointer;
-    }
-
-    // ADDED BY ANDREAS
-    &.head {
-        display: block;
-        color: #808080;
-        margin-top: 20px;
-        margin-bottom: 5px;
-        text-transform: uppercase;
-    }
+  // ADDED BY ANDREAS
+  &.head {
+    display: block;
+    color: #808080;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+  }
 }
 
-
-
 .sidebar-link {
-    display: block;
-    padding: 0.5rem 0.6rem;
+  display: block;
+  padding: 0.5rem 0.6rem;
 
-    &.active {
-        background: $bg-dark-active;
-        font-weight: bold;
-        color: #fff;
-    }
+  &.active {
+    background: $bg-dark-active;
+    font-weight: bold;
+    color: #fff;
+  }
 
-    &:hover {
-        background: darken($bg-dark, 3);
-        color: #fff;
-    }
+  &:hover {
+    background: darken($bg-dark, 3);
+    color: #fff;
+  }
 
-    svg {
-        margin-right: 0.5rem;
-    }
+  svg {
+    margin-right: 0.5rem;
+  }
 
-    .severity-badges {
-        margin-left: auto;
-    }
+  .severity-badges {
+    margin-left: auto;
+  }
 }
 
 .sidebar-category {
-    display: block;
-    padding: 0.5rem 0.6rem;
-    font-size: $font-size-lg;
+  display: block;
+  padding: 0.5rem 0.6rem;
+  font-size: $font-size-lg;
 
-    &.active {
-        background: $bg-dark-active;
-    }
+  &.active {
+    background: $bg-dark-active;
+  }
 
-    svg {
-        margin-right: 0.5rem;
-    }
+  svg {
+    margin-right: 0.5rem;
+  }
 }
 
 .sidebar-dropdown {
-    padding: 0.5rem 0 1rem 0;
+  padding: 0.5rem 0 1rem 0;
 
-    .sidebar-link {
-        padding: 0.25rem 0.6rem;
+  .sidebar-link {
+    padding: 0.25rem 0.6rem;
 
-        &.active {
-            background: darken($bg-dark, 5);
+    &.active {
+      background: darken($bg-dark, 5);
 
-            &:hover {
-                background: darken($bg-dark, 5);
-            }
-        }
+      &:hover {
+        background: darken($bg-dark, 5);
+      }
     }
+  }
 }
 
-
 // --------------------------------------------------------
-
 
 // Tables / Alerts -------------------------------------------------
 
 .table-main {
-    th {
-        border-top: none;
-        border-color: lighten($bg-dark,7) !important;
-        padding: 0.5rem 0.75rem;
-    }
+  th {
+    border-top: none;
+    border-color: lighten($bg-dark, 7) !important;
+    padding: 0.5rem 0.75rem;
+  }
 
-    button {
-        @extend .btn-xs;
-        white-space: nowrap;
-    }
+  button {
+    @extend .btn-xs;
+    white-space: nowrap;
+  }
 }
 
 thead {
-    background: lighten($bg-dark, 10);
-    color: #fff;
+  background: lighten($bg-dark, 10);
+  color: #fff;
 }
 
 td.snug {
-    width: 1px;
+  width: 1px;
 }
 
 .action-buttons {
-    display: flex;
+  display: flex;
 }
 
 .action-buttons-vertical {
-    flex-direction: column;
-    // wrap is problematic in column direction because the parent width doesn't increase. will have to think of something else to deal with too many buttons. maybe button dropdown.
+  flex-direction: column;
+  // wrap is problematic in column direction because the parent width doesn't increase. will have to think of something else to deal with too many buttons. maybe button dropdown.
 
-    .btn {
-        margin: 0 0 0.25rem 0.25rem;
-        white-space: nowrap;
-    }
+  .btn {
+    margin: 0 0 0.25rem 0.25rem;
+    white-space: nowrap;
+  }
 }
 
 .modal-footer {
-    .action-buttons {
-        flex-direction: row;
-        margin-right: auto;
+  .action-buttons {
+    flex-direction: row;
+    margin-right: auto;
 
-        .btn {
-            margin: 0 0.8rem 0 0;
-        }
+    .btn {
+      margin: 0 0.8rem 0 0;
     }
+  }
 }
 
 .alerts td.alert-main {
-    word-break: break-word;
+  word-break: break-word;
 
-    a, .btn-inline-link {
-        text-decoration: underline;
-    }
+  a,
+  .btn-inline-link {
+    text-decoration: underline;
+  }
 }
 
 .alert-links {
-    a {
-        border-left: 1px solid #bbb;
-        margin-left: 0.5rem;
-        padding-left: 0.5rem;
-    }
+  a {
+    border-left: 1px solid #bbb;
+    margin-left: 0.5rem;
+    padding-left: 0.5rem;
+  }
 }
 
 .alert-details {
-    .alert-links a:first-child {
-        border: none;
-        padding: 0;
-        margin: 0;
+  .alert-links a:first-child {
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .alert-detail-tab {
+    div[class*="col-"] {
+      padding: 0.5rem 0 0.5rem 0;
+
+      &:first-child {
+        padding-left: 2rem;
+      }
     }
 
-    .alert-detail-tab {
-        div[class*="col-"] {
-            padding: 0.5rem 0 0.5rem 0;
-
-            &:first-child {
-                padding-left: 2rem;
-            }
-        }
-
-        .heading {
-            font-weight: bold;
-        }
+    .heading {
+      font-weight: bold;
     }
+  }
 }
 
 .critical .alert-links a {
-    border-color: lighten($danger, 5);
+  border-color: lighten($danger, 5);
 }
 
 .warning .alert-links a {
-    border-color: darken($warning, 15);
+  border-color: darken($warning, 15);
 }
 
 .info .alert-links a {
-    border-color: darken($info, 20);
+  border-color: darken($info, 20);
 }
 
 .alert-info-small-screen {
-    display: none;
+  display: none;
 
-    .u-text-info {
-        border-right: 1px solid rgba(0,0,0,0.5);
-        padding-right: 1rem;
-        margin-right: 1rem;
+  .u-text-info {
+    border-right: 1px solid rgba(0, 0, 0, 0.5);
+    padding-right: 1rem;
+    margin-right: 1rem;
 
-        &:last-child {
-            border: none;
-        }
+    &:last-child {
+      border: none;
     }
+  }
 }
 
 // --------------------------------------------------------
-
-
 
 // Components ----------------------------------------------
 
 .toolbar.toolbar-info {
-    background: $bg-dark;
-    border-radius: 3px 3px 0 0;
-    color: #ccc;
-    display: flex;
-    padding: 0.25rem 0.75rem;
+  background: $bg-dark;
+  border-radius: 3px 3px 0 0;
+  color: #ccc;
+  display: flex;
+  padding: 0.25rem 0.75rem;
 }
 
 .info-low-prio {
-    opacity: 0.4;
+  opacity: 0.4;
 }
 
 .react-json-view {
-    word-break: break-all;
+  word-break: break-all;
 }
 
 .filter-pill {
-    background: rgba(255, 255, 255, 0.5);
-    color: $gray-600;
-    cursor: pointer;
-    display: inline-block;
-    font-size: $small-font-size;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: 12px;
-    margin: 0.5rem 1rem 0 0;
-    padding: 0.1rem 0.4rem;
+  background: rgba(255, 255, 255, 0.5);
+  color: $gray-600;
+  cursor: pointer;
+  display: inline-block;
+  font-size: $small-font-size;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  margin: 0.5rem 1rem 0 0;
+  padding: 0.1rem 0.4rem;
 
-    &:hover, &.active {
-        background: rgba(0,0,0,0.05);
+  &:hover,
+  &.active {
+    background: rgba(0, 0, 0, 0.05);
+    color: $gray-700;
+    border-color: rgba(0, 0, 0, 0.2);
+  }
+
+  &.active {
+    padding-right: 0.2rem;
+
+    svg {
+      color: #888;
+      margin-left: 0.4rem;
+    }
+
+    &:hover {
+      text-decoration: line-through;
+
+      svg {
         color: $gray-700;
-        border-color: rgba(0,0,0,0.2);
+      }
     }
-
-    &.active {
-        padding-right: 0.2rem;
-
-        svg {
-            color: #888;
-            margin-left: 0.4rem;
-        }
-
-        &:hover {
-            text-decoration: line-through;
-
-            svg {
-                color: $gray-700;
-            }
-        }
-    }
+  }
 }
 
 .critical .filter-pill {
-    border-color: $border-danger;
-    color: lighten($danger, 25);
+  border-color: $border-danger;
+  color: lighten($danger, 25);
 
-    &:hover, &.active {
-        background: darken($bg-danger, 5);
-        border-color: darken($border-danger, 8);
+  &:hover,
+  &.active {
+    background: darken($bg-danger, 5);
+    border-color: darken($border-danger, 8);
+    color: lighten($danger, 10);
+  }
+
+  &.active {
+    svg {
+      color: lighten($danger, 25);
+    }
+
+    &:hover {
+      svg {
         color: lighten($danger, 10);
+      }
     }
-
-    &.active {
-        svg {
-            color: lighten($danger, 25);
-        }
-
-        &:hover {
-            svg {
-                color: lighten($danger, 10)
-            }
-        }
-    }
+  }
 }
 
 .warning .filter-pill {
-    border-color: $border-warning;
-    color: darken($warning, 10);
+  border-color: $border-warning;
+  color: darken($warning, 10);
 
-    &:hover, &.active {
-        background: darken($bg-warning, 7);
-        border-color: darken($border-warning, 10);
-        color: darken($warning, 15);
+  &:hover,
+  &.active {
+    background: darken($bg-warning, 7);
+    border-color: darken($border-warning, 10);
+    color: darken($warning, 15);
+  }
+
+  &.active {
+    svg {
+      color: darken($warning, 10);
     }
 
-    &.active {
-        svg {
-            color: darken($warning, 10);
-        }
-
-        &:hover {
-            svg {
-                color: darken($warning, 16);
-            }
-        }
+    &:hover {
+      svg {
+        color: darken($warning, 16);
+      }
     }
+  }
 }
 
 .info .filter-pill {
-    border-color: $border-info;
-    color: darken($info, 10);
+  border-color: $border-info;
+  color: darken($info, 10);
 
-    &:hover, &.active {
-        background: darken($bg-info, 5);
-        border-color: darken($border-info, 8);
-        color: darken($info, 15);
+  &:hover,
+  &.active {
+    background: darken($bg-info, 5);
+    border-color: darken($border-info, 8);
+    color: darken($info, 15);
+  }
+
+  &.active {
+    svg {
+      color: darken($info, 10);
     }
 
-    &.active {
-        svg {
-            color: darken($info, 10);
-        }
-
-        &:hover {
-            svg {
-                color: darken($info, 20);
-            }
-        }
+    &:hover {
+      svg {
+        color: darken($info, 20);
+      }
     }
+  }
 }
 
-
-
-
 .contactlist {
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: #fff;
-    box-shadow: 0 4px 4px -4px #808080;
-    width: 100%;
-    padding: 2rem;  
-    transition: top 1s ease-out;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #fff;
+  box-shadow: 0 4px 4px -4px #808080;
+  width: 100%;
+  transition: top 1s ease-out;
 }
 
 .modal .contactlist {
-    position: static;
-    padding: 0;
-    box-shadow: none;
+  position: static;
+  padding: 0;
+  box-shadow: none;
 }
 
 .tabular-grid {
-    .row {
-        padding: 0.5rem 0;
+  .row {
+    padding: 0.5rem 0;
 
-        &:nth-child(even) {
-            background: #efefef;
-        }
+    &:nth-child(even) {
+      background: #efefef;
     }
+  }
 
-    .row-header {
-        background: $bg-dark;
-        color: #fff;
-        font-weight: bold;
-    }
+  .row-header {
+    background: $bg-dark;
+    color: #fff;
+    font-weight: bold;
+  }
 }
 
 // --------------------------------------------------------
-
-
 
 // Filters -------------------------------------------------
 
 .filters {
-    .filter-section {
-        display: flex;
-        flex-wrap: wrap;
-    }
+  .filter-section {
+    display: flex;
+    flex-wrap: wrap;
+  }
 
-    .form-group {
-        flex: 0 1 25%;
-    }
+  .form-group {
+    flex: 0 1 25%;
+  }
 
-    .filter {
-        min-width: 370px;
-        margin: 0 0.75rem 0.75rem 0;
-    }
+  .filter {
+    min-width: 370px;
+    margin: 0 0.75rem 0.75rem 0;
+  }
 
-    .toggle-show {
-        display: block;
-        margin-bottom: 1rem;
-        padding-left: 0;
-    }
-
+  .toggle-show {
+    display: block;
+    margin-bottom: 1rem;
+    padding-left: 0;
+  }
 }
 
 // --------------------------------------------------------
 
-
 // Regions -------------------------------------------------
 
 .regions-panel {
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 
-    .region-wrapper {
-        flex: 0 1 25%;
+  .region-wrapper {
+    flex: 0 1 25%;
 
-        &:hover {
-            opacity: 0.8
-        }
+    &:hover {
+      opacity: 0.8;
     }
+  }
 
-    &.fullscreen .region-wrapper {
-        flex-basis: 50%;
+  &.fullscreen .region-wrapper {
+    flex-basis: 50%;
+  }
+
+  &.active .region-wrapper {
+    opacity: 0.5;
+
+    &:hover,
+    &.active {
+      opacity: 1;
     }
-
-    &.active .region-wrapper {
-        opacity: 0.5;
-
-        &:hover, &.active {
-            opacity: 1;
-        }
-    }
+  }
 }
 
 .region {
+  display: flex;
+  justify-content: space-between;
+  min-width: 370px;
+  background: $bg-dark-active;
+  border: 1px solid $gray-900;
+  border-radius: 3px;
+  color: $gray-100;
+  cursor: pointer;
+  margin: 0 0.75rem 0.75rem 0;
+
+  .region-name {
+    flex: 1 1 27%;
     display: flex;
-    justify-content: space-between;
-    min-width: 370px;
-    background: $bg-dark-active;
-    border: 1px solid $gray-900;
-    border-radius: 3px;
-    color: $gray-100;
-    cursor: pointer;
-    margin: 0 0.75rem 0.75rem 0;
+    align-items: center;
+    font-size: $h4-font-size;
+    padding-left: 0.75rem;
+    white-space: nowrap;
+  }
 
-    .region-name {
-        flex: 1 1 27%;
-        display: flex;
-        align-items: center;
-        font-size: $h4-font-size;
-        padding-left: 0.75rem;
-        white-space: nowrap;
-    }
-
-    .region-severity {
-        flex-basis: 24%;
-        border-left: 1px solid lighten($bg-dark, 7);
-        display: flex;
-        align-items: baseline;
-        justify-content: center;
-
-        &.allclear {
-            background: $bg-dark;
-        }
-    }
-
-    .region-severity-open {
-        font-size: $h2-font-size;
-    }
-
-    .region-severity-silenced {
-        font-size: $font-size-sm;
-        padding-left: 0.3rem;
-    }
-}
-
-.fullscreen .region {
-    min-width: 750px;
-
-    .region-name, .region-severity {
-        margin: 0 0.4rem;
-    }
-
-    .region-severity {
-        border: 1px solid lighten($bg-dark, 5);
-    }
-
-    .region-name {
-        background: #000;
-        font-size: $h1-font-size * 1.2;
-    }
-
-    .region-severity-open {
-        font-size: $h1-font-size * 1.5;
-    }
-
-    .region-severity-silenced {
-        font-size: $h4-font-size;
-    }
-}
-
-.region-severity {
+  .region-severity {
+    flex-basis: 24%;
     border-left: 1px solid lighten($bg-dark, 7);
     display: flex;
     align-items: baseline;
     justify-content: center;
 
     &.allclear {
-        background: $bg-dark;
+      background: $bg-dark;
     }
+  }
+
+  .region-severity-open {
+    font-size: $h2-font-size;
+  }
+
+  .region-severity-silenced {
+    font-size: $font-size-sm;
+    padding-left: 0.3rem;
+  }
 }
 
+.fullscreen .region {
+  min-width: 750px;
+
+  .region-name,
+  .region-severity {
+    margin: 0 0.4rem;
+  }
+
+  .region-severity {
+    border: 1px solid lighten($bg-dark, 5);
+  }
+
+  .region-name {
+    background: #000;
+    font-size: $h1-font-size * 1.2;
+  }
+
+  .region-severity-open {
+    font-size: $h1-font-size * 1.5;
+  }
+
+  .region-severity-silenced {
+    font-size: $h4-font-size;
+  }
+}
+
+.region-severity {
+  border-left: 1px solid lighten($bg-dark, 7);
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+
+  &.allclear {
+    background: $bg-dark;
+  }
+}
 
 // --------------------------------------------------------
-
 
 // Severity Badges ----------------------------------------
 
 .severity-badges {
-    .badge {
-        margin-left: 0.5rem;
-    }
+  .badge {
+    margin-left: 0.5rem;
+  }
 }
 
 // severity counts as a minimalized view
 .severity-counts-mini {
-    display: flex;
-    border: 1px solid $gray-900;
-    border-radius: 1px;
-    font-size: $small-font-size;
-    min-width: 60px;
+  display: flex;
+  border: 1px solid $gray-900;
+  border-radius: 1px;
+  font-size: $small-font-size;
+  min-width: 60px;
 
-    .region-severity {
-        flex: 1 1 50%;
-        color: #fff;
+  .region-severity {
+    flex: 1 1 50%;
+    color: #fff;
 
-        &:first-child {
-            border: none;
-        }
-
-        &.allclear {
-            background: $bg-dark-active;
-        }
+    &:first-child {
+      border: none;
     }
+
+    &.allclear {
+      background: $bg-dark-active;
+    }
+  }
 }
 
-
-
 // --------------------------------------------------------
-
-
 
 // Layout responsive --------------------------------------
 
 @include media-breakpoint-down(lg) {
+  .sidebar {
+    flex-basis: 18rem;
+  }
 
-    .sidebar {
-        flex-basis: 18rem;
-    }
-    
-    .alerts {
-        th, td {
-            display: none;
-        }
-
-        td.alert-main, td.alert-buttons {
-            display: table-cell;
-        }
+  .alerts {
+    th,
+    td {
+      display: none;
     }
 
-    .alert-info-small-screen {
-        display: block;
+    td.alert-main,
+    td.alert-buttons {
+      display: table-cell;
     }
+  }
+
+  .alert-info-small-screen {
+    display: block;
+  }
 }
 
-
 @include media-breakpoint-down(md) {
-    
+  .content {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .overview,
+  .map {
     .content {
-        padding-left: 0.5rem;
-        padding-right: 0.5rem;
+      padding: 0.5rem 0 0.5rem 0;
+    }
+  }
+
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    transition: left 0.3s ease-out;
+    position: fixed;
+    top: 0;
+    left: -15rem;
+    width: 14rem;
+
+    &.responsive-visible {
+      left: 0;
     }
 
-    .overview, .map {
-        .content {
-            padding: 0.5rem 0 0.5rem 0 ;
-        }
+    .display-toggle {
+      display: block;
+      margin-top: auto;
+      padding: 0 0 0.6rem 0.6rem;
     }
-    
-    .sidebar {
-        display: flex;
-        flex-direction: column;
-        transition: left 0.3s ease-out;
-        position: fixed;
-        top: 0;
-        left: -15rem;
-        width: 14rem;
+  }
 
-        &.responsive-visible {
-            left: 0;
-        }
+  .navbar {
+    background: $bg-dark-active !important;
+    border-bottom-color: #000;
 
-        .display-toggle {
-            display: block;
-            margin-top: auto;
-            padding: 0 0 0.6rem 0.6rem;
-        }
+    .nav-link {
+      color: rgba(255, 255, 255, 0.8) !important;
     }
 
-    .navbar {
-        background: $bg-dark-active !important;
-        border-bottom-color: #000;
-        
-        .nav-link {
-            color: rgba(255, 255, 255, 0.8) !important;
-        }
-
-        .layout-nav {
-            display: none;
-        }
-
-        .brand {
-            display: block;
-            color: #fff;
-            font-weight: bold;
-        }
+    .layout-nav {
+      display: none;
     }
 
-    // for some reason bootstrap changes this to static for these small screens and prevents the dropdown menu to be right aligned ¯\_(ツ)_/¯
-    .navbar-nav .dropdown-menu {
-        position: absolute;
+    .brand {
+      display: block;
+      color: #fff;
+      font-weight: bold;
+    }
+  }
+
+  // for some reason bootstrap changes this to static for these small screens and prevents the dropdown menu to be right aligned ¯\_(ツ)_/¯
+  .navbar-nav .dropdown-menu {
+    position: absolute;
+  }
+
+  .sidebar-toggler {
+    display: block;
+  }
+
+  .regions-panel {
+    .region {
+      min-width: 96vmin;
+      margin: 0 0 0.4rem 0;
     }
 
-    .sidebar-toggler {
-        display: block;
+    &.fullscreen {
+      .region {
+        min-width: 98vmin;
+        margin: 0 0.2rem 0.4rem 0;
+        line-height: 1.8;
+      }
+
+      .region-name,
+      .region-severity {
+        margin: 0 0.2rem;
+      }
+
+      .region-name {
+        font-size: $font-size-base * 1.2;
+      }
+
+      .region-severity-open {
+        font-size: $font-size-base * 1.4;
+      }
+
+      .region-severity-silenced {
+        font-size: $font-size-base * 0.8;
+      }
+    }
+  }
+
+  .toolbar.toolbar-info {
+    font-size: 80%;
+  }
+
+  .alerts {
+    th,
+    td,
+    td.alert-buttons {
+      display: none;
     }
 
-    .regions-panel {
-
-        .region {
-            min-width: 96vmin;
-            margin: 0 0 0.4rem 0;
-        }
-        
-        
-        &.fullscreen {
-
-            .region {
-                min-width: 98vmin;
-                margin: 0 0.2rem 0.4rem 0;
-                line-height: 1.8;
-            }
-    
-            .region-name, .region-severity {
-                margin: 0 0.2rem;
-            }
-    
-            .region-name {
-                font-size: $font-size-base * 1.2;
-            }
-        
-            .region-severity-open {
-                font-size: $font-size-base * 1.4;
-            }
-        
-            .region-severity-silenced {
-                font-size: $font-size-base * 0.8;
-            }
-        }
+    td.alert-main {
+      display: table-cell;
     }
+  }
 
-    .toolbar.toolbar-info {
-        font-size: 80%;
+  .alert-info-small-screen {
+    display: block;
+  }
+
+  .alert-details .alert-detail-tab {
+    div[class*="col-"] {
+      padding: 0.2rem 0 0.5rem 1rem;
+
+      &:first-child {
+        padding-left: 1rem;
+        padding-top: 1rem;
+      }
     }
-
-    .alerts {
-        th, td, td.alert-buttons {
-            display: none;
-        }
-
-        td.alert-main {
-            display: table-cell;
-        }
-    }
-
-    .alert-info-small-screen {
-        display: block;
-    }
-
-    .alert-details .alert-detail-tab {
-        div[class*="col-"] {
-            padding: 0.2rem 0 0.5rem 1rem;
-
-            &:first-child {
-                padding-left: 1rem;
-                padding-top: 1rem;
-            }
-        }
-    }
-
+  }
 }
 
 // --------------------------------------------------------
