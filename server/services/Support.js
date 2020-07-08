@@ -7,7 +7,7 @@ const fs = require("fs"),
     }`
   )
 
-const loadContactList = () => JSON.parse(fs.readFileSync(filePath))["services"]
+const loadContactList = () => JSON.parse(fs.readFileSync(filePath))
 let contactList = loadContactList()
 
 // This is the fs watch function.

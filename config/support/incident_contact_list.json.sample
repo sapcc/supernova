@@ -1,5 +1,5 @@
 {
-  "services": {
+
     "serviceA": {
       "label": "Service A",
       "hotline": [
@@ -50,4 +50,4 @@
       }
     }
   }
-}
+
