@@ -1,6 +1,11 @@
 const fs = require("fs"),
   path = require("path"),
-  filePath = path.join(__dirname, "/../../config/users/editors.json")
+  filePath = path.join(
+    __dirname,
+    `/../../config/users/editors.json${
+      process.env.NODE_ENV === "test" ? ".sample" : ""
+    }`
+  )
 
 const loadSuperUsers = () => JSON.parse(fs.readFileSync(filePath))
 let superUsers = loadSuperUsers()

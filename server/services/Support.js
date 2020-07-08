@@ -2,7 +2,9 @@ const fs = require("fs"),
   path = require("path"),
   filePath = path.join(
     __dirname,
-    "/../../config/support/incident_contact_list.json"
+    `/../../config/support/incident_contact_list.json${
+      process.env.NODE_ENV === "test" ? ".sample" : ""
+    }`
   )
 
 const loadContactList = () => JSON.parse(fs.readFileSync(filePath))["services"]

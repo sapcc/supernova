@@ -34,7 +34,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "concurrently --kill-others-on-fail \"jest server\" \"react-scripts test\" ",
+    "test": "NODE_ENV=test concurrently --kill-others-on-fail \"jest server\" \"react-scripts test\" ",
     "eject": "react-scripts eject",
     "production": "NODE_ENV=production node server",
     "server": "nodemon server",
