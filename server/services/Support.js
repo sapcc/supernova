@@ -5,7 +5,7 @@ const fs = require("fs"),
     "/../../config/support/incident_contact_list.json"
   )
 
-const loadContactList = () => JSON.parse(fs.readFileSync(filePath))
+const loadContactList = () => JSON.parse(fs.readFileSync(filePath))["services"]
 let contactList = loadContactList()
 
 // This is the fs watch function.
