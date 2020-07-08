@@ -10,6 +10,7 @@ import AlertActionButtons from './AlertActionButtons'
 import AlertLinks from './AlertLinks'
 import AlertLabels from './shared/AlertLabels'
 import AlertStatus from './shared/AlertStatus'
+import ContactList from './display/contacts'
 import { descriptionParsed } from '../lib/utilities'
 
 
@@ -57,6 +58,15 @@ const AlertDetails = ({alert, labelSettings, silencesKeyPayload, showInhibitedBy
               Raw Data
             </NavLink>
           </NavItem>
+          { alert.labels.support_component &&
+            <NavItem>
+              <NavLink
+                className={classnames({ active: activeTab === 'support' })}
+                onClick={() => { toggle('support'); }}>
+                Support Channels
+              </NavLink>
+            </NavItem>
+          }
         </Nav>
 
 
@@ -120,6 +130,18 @@ const AlertDetails = ({alert, labelSettings, silencesKeyPayload, showInhibitedBy
             <ReactJson src={alert} collapsed={2} collapseStringsAfterLength={100} />
           </TabPane>
         </TabContent>
+
+
+        {/* TAB Support Channels Info */}
+        { alert.labels.support_component &&
+          <TabContent activeTab={activeTab}>
+            <TabPane tabId="support">
+              <ContactList visible={true} componentKey={alert.labels.support_component} />
+            </TabPane>
+          </TabContent>
+        }
+
+
 
       </Body>
 

@@ -1,0 +1,53 @@
+{
+  "services": {
+    "serviceA": {
+      "label": "Service A",
+      "hotline": [
+        {
+          "number": "+49 111111111, Option 1"
+        }
+      ],
+      "service_area": "Network",
+      "spc_service": "SPC_SERVICE_ID",
+      "spc_queue": "SPC QUEUE ID",
+      "ops_area_owner": "Test User (I000000)"
+    },
+    "serviceB": {
+      "label": "Service B",
+      "hotline": [
+        {
+          "number": "+49 2222222222, Option 1"
+        }
+      ],
+      "service_area": "Network",
+      "spc_service": "SPC_SERVICE_ID",
+      "spc_queue": "SPC QUEUE ID",
+      "ops_area_owner": "Test USer (I111111)",
+      "details": {
+        "change_coordinator": [
+          "Test User2",
+          "Test User3"
+        ],
+        "change_validation_experts": [
+          "Test User4",
+          "Test User5"
+        ],
+        "accountable_manager": "Super User",
+        "levels": {
+          "l1": {
+            "label": "L1",
+            "hotline": [
+              {
+                "number": "+49 33333333, Option 1"
+              }
+            ],
+            "spc_queue": "SPC QUEUE ID",
+            "team_dl": "TEAM DL",
+            "operational_lead": "Test User 6 (C333333)",
+            "accountable_manager": "Test, User (test.user@test.com)"
+          }
+        }
+      }
+    }
+  }
+}

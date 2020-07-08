@@ -5,5 +5,6 @@ const router = express.Router()
 router.use('/auth', require('./auth'))
 router.use('/alerts', require('./alerts'))
 router.use('/silences', require('./silences'))
+router.use('/support', require('./support'))
 
 module.exports = router
