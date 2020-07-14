@@ -11,12 +11,12 @@ const ContactList = React.memo(({ visible, componentKey }) => {
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  const state = useGlobalState()
+  const { contactList } = useGlobalState()
   const dispatch = useDispatch()
   // if a specific key was passed, filter all but that one contact
   const contacts = componentKey
-    ? { [componentKey]: state.support.contacts[componentKey] }
-    : state.support.contacts
+    ? { [componentKey]: contactList.contacts[componentKey] }
+    : contactList.contacts
 
   useEffect(() => {
     // isSubscribed is used to check whether we are still subscribed to the promise. If not then don't try to fetch as this will result in a warning

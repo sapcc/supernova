@@ -1,0 +1,20 @@
+[
+  {
+    "title": "VmWare silence stuff",
+    "description": "This silence silences VmWare related alerts and this description should be better",
+    "fixed_labels": {
+      "service": "compute",
+      "tier": "vmware"
+    },
+    "editable_labels": ["vccluster", "alertname", "cluster"]
+  },
+  {
+    "title": "VmWare silence other",
+    "description": "This silence silences some other VmWare related alerts and this description should also be better",
+    "fixed_labels": {
+      "service": "compute",
+      "tier": "vmware"
+    },
+    "editable_labels": ["vccluster", "cluster"]
+  }
+]

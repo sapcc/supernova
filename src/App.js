@@ -47,11 +47,14 @@ import {
   faUser,
   faAmbulance,
   faExclamationTriangle,
+  faPlusCircle,
 } from "@fortawesome/free-solid-svg-icons"
 import { faBellSlash as faBellSlashRegular } from "@fortawesome/free-regular-svg-icons"
+import CreateSilenceButton from "./components/silences/NewButton"
 
 // build icon library, only needs to be done once, then the icon will be available everywhere, only the FontAwesomeIcon import is necessary in other components
 library.add(
+  faPlusCircle,
   faBars,
   faBell,
   faBellSlashRegular,
@@ -202,6 +205,16 @@ const App = () => {
               ) : (
                 <React.Fragment>
                   <Regions labelFilters={labelFilters} counts={counts.region} />
+
+                  <CreateSilenceButton
+                    className="float-right"
+                    showModal={(content) => {
+                      setModalContent(content)
+                      openModal()
+                    }}
+                  >
+                    Create Silence
+                  </CreateSilenceButton>
 
                   <Filters
                     labelFilters={labelFilters}
