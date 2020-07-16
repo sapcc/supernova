@@ -50,12 +50,14 @@ const SuperNavbar = React.memo(() => {
         Supernova
       </NavbarBrand>
       <Nav className="utility-nav ml-auto" navbar>
-        {window.location.host !== "supernova.global.cloud.sap" &&
-          window.location.host !== "supernova.eu-nl-1.cloud.sap" && (
+        {window.location.host && !window.location.host.includes("supernova.global") &&
+          !window.location.host.includes("supernova.eu-nl-1") && (
             <Button color="link" onClick={() => toggleContactsList()}>
               <FontAwesomeIcon icon="ambulance" />
-              {layout.contactsListVisible ? "Hide " : "Show "}
-              Support Contacts List
+              <span className="nav-support-link">
+                {layout.contactsListVisible ? "Hide " : "Show "}
+                Support Contacts
+              </span>
             </Button>
           )}
         <Form inline className="layout-nav">
@@ -85,7 +87,7 @@ const SuperNavbar = React.memo(() => {
             </Input>
           </FormGroup>
         </Form>
-        <UncontrolledDropdown nav inNavbar>
+        <UncontrolledDropdown nav inNavbar className="user-profile-nav">
           <DropdownToggle nav caret>
             <FontAwesomeIcon icon="user" /> {user.profile.fullName}
           </DropdownToggle>

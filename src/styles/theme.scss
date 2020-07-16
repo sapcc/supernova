@@ -933,7 +933,9 @@ td.snug {
       color: rgba(255, 255, 255, 0.8) !important;
     }
 
-    .layout-nav {
+    .layout-nav,
+    .user-profile-nav,
+    .nav-support-link {
       display: none;
     }
 
