@@ -5,13 +5,13 @@ import { Container, Row, Col } from 'reactstrap'
 const ContactsDetailsList = ({mainKey, details}) => {
 
     return (
-        <Container fluid={true}>
+        <Container fluid={true} className="support-contact-details">
             <Row>
               { details && details.levels
                 ? 
                 <React.Fragment>
                     {Object.entries(details.levels).map(([key, level]) =>
-                        <Col key={key}>
+                        <Col key={key} lg>
                             <h6>{level.label}</h6>
                             <dl>
                                 <dt>Hotline</dt>

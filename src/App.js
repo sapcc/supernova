@@ -43,6 +43,7 @@ import {
   faCode,
   faAngleUp,
   faAngleDown,
+  faAngleRight,
   faUser,
   faAmbulance,
   faExclamationTriangle,
@@ -59,6 +60,7 @@ library.add(
   faCode,
   faAngleUp,
   faAngleDown,
+  faAngleRight,
   faUser,
   faAmbulance,
   faExclamationTriangle

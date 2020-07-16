@@ -205,12 +205,16 @@ button {
 }
 
 .icon-danger {
-  margin-left: 0.5rem;
+  margin: 0 0.5rem 0 0.5rem;
   color: $danger;
 
   &:hover {
     color: lighten($danger, 15);
   }
+}
+
+.icon-info {
+  color: $info;
 }
 
 // Layout components --------------------------------------
@@ -295,6 +299,12 @@ button {
       cursor: default;
     }
   }
+}
+
+.support-contact-details {
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  padding-top: 0.5rem;
 }
 
 // --------------------------------------------------------

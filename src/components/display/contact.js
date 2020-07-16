@@ -24,6 +24,7 @@ const Contact = React.memo(({contact, contactInfo, detailsExpanded}) => {
     <React.Fragment>
       <Row className="u-clickable" onClick={() => toggleDetails(contact)}>
         <Col md="2">
+          <FontAwesomeIcon icon={detailsVisible ? "angle-down" : "angle-right"} fixedWidth className="icon-info" />
           {contactInfo.label}
         </Col>
         <Col md="2">
