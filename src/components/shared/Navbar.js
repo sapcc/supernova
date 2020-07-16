@@ -18,8 +18,9 @@ import {
   DropdownMenu,
 } from "reactstrap"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import CreateMaintenanceSilenceButton from "../silences/NewButton"
 
-const SuperNavbar = React.memo(() => {
+const SuperNavbar = React.memo(({ showModal }) => {
   const state = useGlobalState()
   const dispatch = useDispatch()
 
@@ -50,8 +51,15 @@ const SuperNavbar = React.memo(() => {
         Supernova
       </NavbarBrand>
       <Nav className="utility-nav ml-auto" navbar>
-        {window.location.host && !window.location.host.includes("supernova.global") &&
-          !window.location.host.includes("supernova.eu-nl-1") && (
+        <CreateMaintenanceSilenceButton
+          className="float-right"
+          showModal={showModal}
+        >
+          Create Maintenance Silence
+        </CreateMaintenanceSilenceButton>
+
+        {window.location.host !== "supernova.global.cloud.sap" &&
+          window.location.host !== "supernova.eu-nl-1.cloud.sap" && (
             <Button color="link" onClick={() => toggleContactsList()}>
               <FontAwesomeIcon icon="ambulance" />
               <span className="nav-support-link">

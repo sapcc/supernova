@@ -21,6 +21,7 @@
     "nodemon": "^1.18.11",
     "prom-client": "^11.5.3",
     "react": "^16.9.0",
+    "react-datepicker": "^3.1.3",
     "react-dom": "^16.8.5",
     "react-json-view": "^1.19.1",
     "react-scripts": "3.0.1",

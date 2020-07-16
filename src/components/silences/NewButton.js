@@ -7,7 +7,7 @@ const NewButton = ({ className, children, showModal }) => {
     showModal({
       header: (
         <React.Fragment>
-          <span className="u-text-info">New Silence</span>
+          <span className="u-text-info">Maintenance Silence</span>
         </React.Fragment>
       ),
       content: NewForm,
@@ -15,8 +15,8 @@ const NewButton = ({ className, children, showModal }) => {
   }
 
   return (
-    <button className={`btn btn-primary ${className}`} onClick={handleClick}>
-      <FontAwesomeIcon icon="plus-circle" className="logo" /> {children}
+    <button className={`btn btn-link ${className}`} onClick={handleClick}>
+      <FontAwesomeIcon icon="tools" /> {children}
     </button>
   )
 }

@@ -1,5 +1,6 @@
 import React from "react"
 import { useGlobalState } from "../../lib/globalState"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 // Do not use global state
 // the silence templates are loaded every time this form is mounted!
@@ -105,79 +106,117 @@ const NewForm = ({ Body, Buttons, hide }) => {
                 </div>
 
                 <div className="form-group">
-                  <label>Creator</label>: {user.profile.id}
-                </div>
-                <div className="form-group">
-                  <label>Fixed labels</label>
-
-                  <div>
-                    {selectedFixedLabelsKeys.map((key, i) => (
-                      <span>
-                        <strong>{key}</strong>:{" "}
-                        {silenceTemplates.selected.fixed_labels[key]}
-                        {i < selectedFixedLabelsKeys.length - 1 && ", "}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="form-group">
                   <div className="form-row">
                     <div className="col">
-                      <label>Starts at</label>
+                      <label>
+                        Starts at <span className="text-danger">*</span>
+                      </label>
+
                       <input
                         className="form-control"
                         type="date"
-                        test={console.log(
-                          `${now.getFullYear()}-${
-                            now.getMonth() + 1
-                          }-${now.getDate()}`
-                        )}
                         value={`${now.getFullYear()}-${
-                          now.getMonth() + 1
-                        }-${now.getDate()}`}
+                          now.getMonth() < 9 ? "0" : ""
+                        }${now.getMonth() + 1}-${
+                          now.getDate() < 10 ? "0" : ""
+                        }${now.getDate()}`}
+                        placeholder="dd.mm.yyyy"
                         onChange={(e) => console.log(e.target.value)}
                       />
                     </div>
                     <div className="col">
-                      <label>Time</label>
-                      <input className="form-control" type="time" value={now} />
+                      <label>
+                        Time <span className="text-danger">*</span>
+                      </label>
+                      <input
+                        className="form-control"
+                        type="time"
+                        value="12:10"
+                      />
                     </div>
                     <div className="col">
-                      <label>Ends at</label>
+                      <label>
+                        Ends at <span className="text-danger">*</span>
+                      </label>
                       <input className="form-control" type="date" value={now} />
                     </div>
                     <div className="col">
-                      <label>Time</label>
+                      <label>
+                        Time <span className="text-danger">*</span>
+                      </label>
                       <input className="form-control" type="time" value={now} />
                     </div>
                   </div>
                 </div>
 
                 <div className="form-group">
-                  <label>Required labels</label>
+                  <label>Labels</label>
+                  <div className="alert alert-info">
+                    Please use regular expressions for labels
+                  </div>
 
                   {chunkArray(silenceTemplates.selected.editable_labels, 3).map(
-                    (labels) => (
-                      <div className="form-row">
-                        {labels.map((label) => (
-                          <div className="col">
-                            <label>{label}</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder={label}
-                            />
+                    (labels, i) => (
+                      <div key={i} className="form-row">
+                        {labels.map((label, j) => (
+                          <div key={j} className="col-4">
+                            <div className="input-group mb-3">
+                              <div className="input-group-prepend ">
+                                <span className="input-group-text">
+                                  {label}{" "}
+                                  <span className="text-danger"> *</span>
+                                </span>
+                              </div>
+                              <input
+                                type="text"
+                                className="form-control"
+                                placeholder={label}
+                              />
+                            </div>
                           </div>
                         ))}
                       </div>
                     )
                   )}
+
+                  {chunkArray(selectedFixedLabelsKeys, 3).map((keys, i) => (
+                    <div key={i} className="form-row">
+                      {keys.map((key) => (
+                        <div key={key} className="col-4">
+                          <div className="input-group mb-3">
+                            <div className="input-group-prepend">
+                              <span className="input-group-text">{key}</span>
+                            </div>
+                            <input
+                              type="text"
+                              className="form-control"
+                              defaultValue={
+                                silenceTemplates.selected.fixed_labels[key]
+                              }
+                              disabled
+                            />
+                            <div className="input-group-append">
+                              <span className="input-group-text">
+                                <FontAwesomeIcon
+                                  icon="thumbtack"
+                                  className="logo"
+                                />
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ))}
                 </div>
 
                 <div className="form-group">
-                  <label>Comments</label>
+                  <label>Comment</label>
                   <input type="textarea" className="form-control" />
+                </div>
+
+                <div className="form-group">
+                  <label>Creator</label>: {user.profile.id}
                 </div>
 
                 {/* {JSON.stringify(selected)} */}
