@@ -1,107 +1,333 @@
 import React from "react"
-import { useGlobalState } from "../../lib/globalState"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { chunkArray } from "../../lib/utilities"
+import { useGlobalState } from "../../lib/globalState"
 
 // Do not use global state
-// the silence templates are loaded every time this form is mounted!
 const initialState = {
-  items: [],
+  templates: {
+    items: [],
+    error: null,
+    isLoading: false,
+    selected: null,
+    current: null,
+  },
+
+  startDate: "",
+  startTime: "",
+  startDateValid: false,
+  startTimeValid: false,
+  endDate: "",
+  endTime: "",
+  endDateValid: false,
+  endTimeValid: false,
+
+  comment: "",
   error: null,
-  isLoading: false,
-  selected: null,
+  isSaving: false,
+  submitted: false,
+  labelValues: {},
+}
+
+const init = (state) => {
+  const now = new Date(Date.now() + 60 * 60 * 1000)
+  const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000)
+  return {
+    ...state,
+    startDate: formatDateForInput(now),
+    startDateValid: true,
+    startTime: formatTimeForInput(now),
+    startTimeValid: true,
+    endDate: formatDateForInput(tomorrow),
+    endDateValid: true,
+    endTime: formatTimeForInput(tomorrow),
+    endTimeValid: true,
+    submitted: false,
+  }
+}
+
+const formatDateForInput = (date) =>
+  `${date.getFullYear()}-${date.getMonth() < 9 ? "0" : ""}${
+    date.getMonth() + 1
+  }-${date.getDate() < 10 ? "0" : ""}${date.getDate()}`
+
+const formatTimeForInput = (date) =>
+  `${date.getHours() < 9 ? "0" : ""}${date.getHours()}:${
+    date.getMinutes() < 10 ? "0" : ""
+  }${date.getMinutes()}`
+
+const validateInputDate = (value) =>
+  value && value.match(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/)
+const validateInputTime = (value) => value && value.match(/^[0-9]{2}:[0-9]{2}$/)
+const validateLabelValue = (value) => {
+  try {
+    return !!new RegExp(value)
+  } catch (e) {
+    return false
+  }
+}
+
+const valueToDate = (date, time) => {
+  let dateValues = date.split("-")
+  dateValues[1] = dateValues[1] - 1
+  if (time) dateValues = dateValues.concat(time.split(":"))
+  dateValues = dateValues.map((v) => parseInt(v))
+  return new Date(...dateValues)
+}
+
+const today = () => {
+  const d = new Date()
+  d.setHours(0, 0, 0, 0)
+  return d
 }
 
 function reducer(state, action) {
   switch (action.type) {
-    case "REQUEST":
-      return { ...state, isLoading: true, error: null }
-    case "RECEIVE":
+    case "REQUEST_TEMPLATES":
       return {
         ...state,
-        isLoading: false,
-        error: null,
-        items: action.templates,
+        templates: { ...state.templates, isLoading: true, error: null },
       }
+    case "RECEIVE_TEMPLATES":
+      return {
+        ...state,
+        templates: {
+          ...state.templates,
+          isLoading: false,
+          error: null,
+          items: action.templates,
+        },
+      }
+    case "TEMPLATES_ERROR":
+      return {
+        ...state,
+        templates: {
+          ...state.templates,
+          isLoading: false,
+          error: action.error,
+        },
+      }
+    case "SELECT_TEMPLATE":
+      return {
+        ...state,
+        templates: {
+          ...state.templates,
+          selected: action.value,
+          current: state.templates.items[action.value],
+        },
+      }
+
+    case "START_DATE":
+      let startDateValidation =
+        valueToDate(state.endDate, state.endTime) >
+        valueToDate(action.value, state.startTime)
+
+      return {
+        ...state,
+        startDate: action.value,
+        startDateValid: validateInputDate(action.value),
+        endDateValid: startDateValidation,
+        endTimeValid: startDateValidation,
+      }
+    case "START_TIME":
+      let startTimeValidation =
+        valueToDate(state.endDate, state.endTime) >
+        valueToDate(state.startDate, action.value)
+      return {
+        ...state,
+        startTime: action.value,
+        startTimeValid: validateInputTime(action.value),
+        endDateValid: startTimeValidation,
+        endTimeValid: startTimeValidation,
+      }
+    case "END_DATE":
+      let endDateValidation =
+        valueToDate(action.value, state.endTime) >
+        valueToDate(state.startDate, state.startTime)
+
+      return {
+        ...state,
+        endDate: action.value,
+        endDateValid: validateInputDate(action.value) && endDateValidation,
+        endTimeValid: endDateValidation,
+      }
+    case "END_TIME":
+      let endTimeValidation =
+        valueToDate(state.endDate, action.value) >
+        valueToDate(state.startDate, state.startTime)
+
+      return {
+        ...state,
+        endTime: action.value,
+        endDateValid: endTimeValidation,
+        endTimeValid: validateInputTime(action.value) && endTimeValidation,
+      }
+    case "LABEL_VALUE":
+      return {
+        ...state,
+        labelValues: {
+          ...state.labelValues,
+          [action.name]: {
+            value: action.value,
+            valid: validateLabelValue(action.valid),
+          },
+        },
+      }
+
+    case "COMMENT":
+      return {
+        ...state,
+        comment: action.value,
+      }
+
     case "ERROR":
-      return { ...state, isLoading: false, error: action.error }
-    case "SELECT":
-      return { ...state, selected: state.items[action.index] }
+      return { ...state, isSaving: false, error: action.error }
+    case "SUBMIT":
+      return { ...state, isSaving: true }
+    case "SUCCESS":
+      return { ...state, isSaving: false, submitted: true }
+    case "RESET":
+      return init(state)
     default:
       throw new Error()
   }
 }
 
-function chunkArray(myArray, chunk_size) {
-  var index = 0
-  var arrayLength = myArray.length
-  var tempArray = []
-
-  for (index = 0; index < arrayLength; index += chunk_size) {
-    const myChunk = myArray.slice(index, index + chunk_size)
-    // Do something if you want with the group
-    tempArray.push(myChunk)
-  }
-
-  return tempArray
-}
-
 const NewForm = ({ Body, Buttons, hide }) => {
   const { user } = useGlobalState()
-  const [isSaving, setIsSaving] = React.useState(false)
+  const [form, dispatch] = React.useReducer(reducer, initialState, init)
 
-  const [silenceTemplates, dispatch] = React.useReducer(reducer, initialState)
   const selectedFixedLabelsKeys = React.useMemo(
     () =>
-      silenceTemplates.selected &&
-      Object.keys(silenceTemplates.selected.fixed_labels),
-    [silenceTemplates.selected]
+      form.templates.current &&
+      Object.keys(form.templates.current.fixed_labels),
+    [form.templates.current]
   )
 
   React.useEffect(() => {
-    dispatch({ type: "REQUEST" })
+    dispatch({ type: "REQUEST_TEMPLATES" })
+    //dispatch({ type: "RESET" })
 
     fetch("/api/support/silence-templates")
       .then((response) => response.json())
       .then((templates) => {
-        dispatch({ type: "RECEIVE", templates })
+        dispatch({ type: "RECEIVE_TEMPLATES", templates })
       })
-      .catch((error) => dispatch({ type: "ERROR", error }))
-
-    return () => {
-      dispatch({ type: "SELECT", index: -1 })
-    }
+      .catch((error) => dispatch({ type: "TEMPLATES_ERROR", error }))
   }, [])
 
-  const now = new Date()
+  const valid = () => {
+    let isValid =
+      form.startDateValid &&
+      form.startTimeValid &&
+      form.endDateValid &&
+      form.endTimeValid &&
+      form.templates.current.editable_labels.reduce(
+        (bool, label) =>
+          bool && !!form.labelValues[label] && !!form.labelValues[label].valid,
+        [true]
+      )
+    return isValid
+  }
+
+  const submit = () => {
+    if (!valid) return
+    const silence = {
+      startsAt: valueToDate(form.startDate, form.startTime),
+      endsAt: valueToDate(form.endDate, form.endTime),
+      matchers: [],
+      createdBy: user.profile.id,
+      comment: form.comment,
+    }
+    for (let label in form.templates.current.fixed_labels) {
+      silence.matchers.push({
+        name: label,
+        value: form.templates.current.fixed_labels[label],
+        isRegex: false,
+      })
+    }
+    form.templates.current.editable_labels.forEach((label) => {
+      silence.matchers.push({
+        name: label,
+        value: form.labelValues[label].value,
+        isRegex: true,
+      })
+    })
+
+    console.log("========================", silence)
+  }
+
+  if (form.submitted)
+    return (
+      <>
+        <Body>
+          <div className="alert alert-success">
+            Silence was created successfully!
+            <a
+              href={process.env.REACT_APP_ALERTMANAGER_API_ENDPOINT.replace(
+                "/api/v2",
+                "#/silences"
+              )}
+              target="_blank"
+            >
+              <br />
+              Show in Alert Manager
+            </a>
+          </div>
+
+          <br />
+          <button
+            className="btn btn-primary"
+            onClick={(e) => dispatch({ type: "RESET" })}
+          >
+            Create New
+          </button>
+        </Body>
+        <Buttons>
+          <button type="button" onClick={hide} className="btn btn-secondary">
+            Close
+          </button>
+        </Buttons>
+      </>
+    )
 
   return (
-    <form style={{ overflow: "auto" }}>
+    <form
+      style={{ overflow: "auto" }}
+      onSubmit={(e) => {
+        e.preventDefault()
+        submit()
+      }}
+    >
       <Body>
-        {silenceTemplates.isLoading ? (
+        {form.templates.isLoading ? (
           "Loading templates ..."
         ) : (
           <>
             <div className="form-group">
               <select
                 className="form-control"
-                value={silenceTemplates.selected || ""}
+                value={form.templates.selected || ""}
                 onChange={(e) =>
-                  dispatch({ type: "SELECT", index: e.target.value })
+                  dispatch({
+                    type: "SELECT_TEMPLATE",
+                    value: e.target.value,
+                  })
                 }
               >
                 <option>Select template</option>
-                {silenceTemplates.items.map((template, index) => (
+                {form.templates.items.map((template, index) => (
                   <option key={index} value={index}>
                     {template.title}
                   </option>
                 ))}
               </select>
             </div>
-            {silenceTemplates.selected && (
+            {form.templates.selected && (
               <>
                 <div className="form-group">
                   <div className="alert alert-secondary" role="alert">
-                    {silenceTemplates.selected.description}
+                    {form.templates.current.description}
                   </div>
                 </div>
 
@@ -113,38 +339,94 @@ const NewForm = ({ Body, Buttons, hide }) => {
                       </label>
 
                       <input
-                        className="form-control"
+                        className={`form-control ${
+                          form.startDateValid ? "is-valid" : "is-invalid"
+                        }`}
                         type="date"
-                        value={`${now.getFullYear()}-${
-                          now.getMonth() < 9 ? "0" : ""
-                        }${now.getMonth() + 1}-${
-                          now.getDate() < 10 ? "0" : ""
-                        }${now.getDate()}`}
-                        placeholder="dd.mm.yyyy"
-                        onChange={(e) => console.log(e.target.value)}
+                        value={form.startDate}
+                        placeholder="yyyy-mm-dd"
+                        onChange={(e) =>
+                          dispatch({
+                            type: "START_DATE",
+                            value: e.target.value,
+                          })
+                        }
                       />
+                      {!form.startDateValid && (
+                        <div className="invalid-feedback">
+                          The start date must be in the correct format
+                        </div>
+                      )}
                     </div>
                     <div className="col">
                       <label>
                         Time <span className="text-danger">*</span>
                       </label>
                       <input
-                        className="form-control"
+                        className={`form-control ${
+                          form.startTimeValid ? "is-valid" : "is-invalid"
+                        }`}
                         type="time"
-                        value="12:10"
+                        value={form.startTime}
+                        placeholder="hh:mm"
+                        onChange={(e) =>
+                          dispatch({
+                            type: "START_TIME",
+                            value: e.target.value,
+                          })
+                        }
                       />
+                      {!form.startDateValid && (
+                        <div className="invalid-feedback">
+                          The start time must be in the correct format
+                        </div>
+                      )}
                     </div>
                     <div className="col">
                       <label>
                         Ends at <span className="text-danger">*</span>
                       </label>
-                      <input className="form-control" type="date" value={now} />
+                      <input
+                        className={`form-control ${
+                          form.endDateValid ? "is-valid" : "is-invalid"
+                        }`}
+                        type="date"
+                        value={form.endDate}
+                        placeholder="yyyy-mm-dd"
+                        onChange={(e) =>
+                          dispatch({
+                            type: "END_DATE",
+                            value: e.target.value,
+                          })
+                        }
+                      />
+                      <div className="invalid-feedback">
+                        The end date must be in the correct format and must be
+                        after the start date
+                      </div>
                     </div>
                     <div className="col">
                       <label>
                         Time <span className="text-danger">*</span>
                       </label>
-                      <input className="form-control" type="time" value={now} />
+                      <input
+                        className={`form-control ${
+                          form.endTimeValid ? "is-valid" : "is-invalid"
+                        }`}
+                        type="time"
+                        value={form.endTime}
+                        placeholder="hh:mm"
+                        onChange={(e) =>
+                          dispatch({
+                            type: "END_TIME",
+                            value: e.target.value,
+                          })
+                        }
+                      />
+                      <div className="invalid-feedback">
+                        The end time must be in the correct format and must be
+                        after the start date
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -155,7 +437,7 @@ const NewForm = ({ Body, Buttons, hide }) => {
                     Please use regular expressions for labels
                   </div>
 
-                  {chunkArray(silenceTemplates.selected.editable_labels, 3).map(
+                  {chunkArray(form.templates.current.editable_labels, 3).map(
                     (labels, i) => (
                       <div key={i} className="form-row">
                         {labels.map((label, j) => (
@@ -169,8 +451,25 @@ const NewForm = ({ Body, Buttons, hide }) => {
                               </div>
                               <input
                                 type="text"
-                                className="form-control"
+                                className={`form-control ${
+                                  form.labelValues[label] &&
+                                  form.labelValues[label].valid
+                                    ? "is-valid"
+                                    : "is-invalid"
+                                }`}
                                 placeholder={label}
+                                value={
+                                  (form.labelValues[label] &&
+                                    form.labelValues[label].value) ||
+                                  ""
+                                }
+                                onChange={(e) =>
+                                  dispatch({
+                                    type: "LABEL_VALUE",
+                                    name: label,
+                                    value: e.target.value,
+                                  })
+                                }
                               />
                             </div>
                           </div>
@@ -191,7 +490,7 @@ const NewForm = ({ Body, Buttons, hide }) => {
                               type="text"
                               className="form-control"
                               defaultValue={
-                                silenceTemplates.selected.fixed_labels[key]
+                                form.templates.current.fixed_labels[key]
                               }
                               disabled
                             />
@@ -212,11 +511,14 @@ const NewForm = ({ Body, Buttons, hide }) => {
 
                 <div className="form-group">
                   <label>Comment</label>
-                  <input type="textarea" className="form-control" />
-                </div>
-
-                <div className="form-group">
-                  <label>Creator</label>: {user.profile.id}
+                  <input
+                    type="textarea"
+                    className="form-control"
+                    value={form.comment}
+                    onChange={(e) =>
+                      dispatch({ type: "COMMENT", value: e.target.value })
+                    }
+                  />
                 </div>
 
                 {/* {JSON.stringify(selected)} */}
@@ -233,7 +535,10 @@ const NewForm = ({ Body, Buttons, hide }) => {
           type="submit"
           className="btn btn-primary"
           disabled={
-            isSaving || silenceTemplates.isLoading || !silenceTemplates.selected
+            form.isSaving ||
+            form.templates.isLoading ||
+            !form.templates.current ||
+            !valid()
           }
         >
           Submit
