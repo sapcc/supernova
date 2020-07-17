@@ -18,6 +18,16 @@ $table-hover-bg: $hover-light-blue;
   font-size: inherit !important;
   padding: 0 !important;
   margin-top: -2px;
+
+  &, &:focus, &:active, &:hover {
+    box-shadow: none;
+  }
+}
+
+.btn-link {
+  &, &:focus, &:active, &:hover {
+    box-shadow: none;
+  }
 }
 
 .btn-xs {

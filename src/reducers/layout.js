@@ -9,6 +9,8 @@ const toggleResponsiveSidebarVisible = (state) => ({...state, responsiveSidebarV
 
 const toggleContactsListVisible = (state) => ({...state, contactsListVisible: !state.contactsListVisible})
 
+const setContactsListVisible = (state, {contactsListVisible}) => ({...state, contactsListVisible: contactsListVisible})
+
 const setDisplayMode = (state, {display}) => ({...state, display})
 
 const setLayoutMode = (state, {layoutMode}) => ({...state, layoutMode})
@@ -21,6 +23,8 @@ export default (state = initialState, action) => {
       return toggleResponsiveSidebarVisible(state,action)
     case 'TOGGLE_CONTACTS_LIST_VISIBLE':
       return toggleContactsListVisible(state,action)
+    case 'SET_CONTACTS_LIST_VISIBLE':
+      return setContactsListVisible(state,action)
     case 'SET_DISPLAY_MODE':
       return setDisplayMode(state,action)
     case 'SET_LAYOUT_MODE':
