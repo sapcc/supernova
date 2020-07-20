@@ -1,12 +1,12 @@
-import app from './app'
-import categories from './categories'
-import labelFilters from './labelFilters'
-import layout from './layout'
-import alerts from './alerts'
-import silences from './silences'
-import support from './support'
-import user from './user'
-
+import app from "./app"
+import categories from "./categories"
+import labelFilters from "./labelFilters"
+import layout from "./layout"
+import alerts from "./alerts"
+import silences from "./silences"
+import contactList from "./contactList"
+import silenceTemplates from "./silenceTemplates"
+import user from "./user"
 
 export default {
   app,
@@ -15,6 +15,7 @@ export default {
   layout,
   alerts,
   silences,
-  support,
-  user
+  contactList,
+  silenceTemplates,
+  user,
 }

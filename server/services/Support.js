@@ -1,38 +1,37 @@
 const fs = require("fs"),
-  path = require("path"),
-  filePath = path.join(
+  path = require("path")
+
+const supportFiles = ["incident_contact_list", "silence_templates"]
+const data = {}
+
+const loadData = (filePath) => {
+  try {
+    return JSON.parse(fs.readFileSync(filePath))
+  } catch (e) {
+    throw e
+  }
+}
+
+supportFiles.forEach((file) => {
+  const filePath = path.join(
     __dirname,
-    `/../../config/support/incident_contact_list.json${
+    `/../../config/support/${file}.json${
       process.env.NODE_ENV === "test" ? ".sample" : ""
     }`
   )
 
-let contactList
-
-if (fs.existsSync(filePath)) {
-  const loadContactList = () => {
-    let json = {}
-    try {
-      json = JSON.parse(fs.readFileSync(filePath))
-    } catch (e) {
-      console.error("ERROR")
-    }
-    return json
-  }
-  contactList = loadContactList()
-
-  // This is the fs watch function.
   if (fs.existsSync(filePath)) {
     fs.watch(filePath, (event, _) => {
-      if (event === "change") contactList = loadContactList()
+      if (event === "change") data[file] = loadData(filePath)
     })
-  }
-}
 
-const getContacts = async () => contactList
+    data[file] = loadData(filePath)
+  }
+})
 
 const Support = {
-  getContacts,
+  getContacts: async () => data["incident_contact_list"],
+  getSilenceTemplates: async () => data["silence_templates"],
 }
 
 module.exports = Support
