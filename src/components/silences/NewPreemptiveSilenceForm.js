@@ -2,6 +2,7 @@ import React from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { chunkArray } from "../../lib/utilities"
 import { useGlobalState } from "../../lib/globalState"
+import { Button, Form, FormGroup, Alert, Label, Input, Col } from "reactstrap"
 
 // Do not use global state
 const initialState = {
@@ -268,7 +269,7 @@ const NewForm = ({ Body, Buttons, hide }) => {
     return (
       <>
         <Body>
-          <div className="alert alert-success">
+          <Alert color="success">
             Silence was created successfully!
             <a
               href={process.env.REACT_APP_ALERTMANAGER_API_ENDPOINT.replace(
@@ -280,26 +281,26 @@ const NewForm = ({ Body, Buttons, hide }) => {
               <br />
               Show in Alert Manager
             </a>
-          </div>
+          </Alert>
 
           <br />
-          <button
+          <Button
             className="btn btn-primary"
             onClick={(e) => dispatch({ type: "RESET" })}
           >
             Create New
-          </button>
+          </Button>
         </Body>
         <Buttons>
-          <button type="button" onClick={hide} className="btn btn-secondary">
+          <Button type="button" onClick={hide} className="btn btn-secondary">
             Close
-          </button>
+          </Button>
         </Buttons>
       </>
     )
 
   return (
-    <form
+    <Form
       style={{ overflow: "auto" }}
       onSubmit={(e) => {
         e.preventDefault()
@@ -312,8 +313,9 @@ const NewForm = ({ Body, Buttons, hide }) => {
         ) : (
           <>
             {templatesItems.length > 0 ? (
-              <div className="form-group">
-                <select
+              <FormGroup>
+                <Input
+                  type="select"
                   className="form-control"
                   value={form.templates.selected || ""}
                   onChange={(e) =>
@@ -329,123 +331,119 @@ const NewForm = ({ Body, Buttons, hide }) => {
                       {template.title}
                     </option>
                   ))}
-                </select>
-              </div>
+                </Input>
+              </FormGroup>
             ) : (
-              <div className="alert alert-info" role="alert">
-                This feature is coming soon!
-              </div>
+              <Alert color="info">This feature is coming soon!</Alert>
             )}
             {form.templates.selected && (
               <>
-                <div className="form-group">
-                  <div className="alert alert-secondary" role="alert">
+                <FormGroup>
+                  <Alert color="secondary">
                     {form.templates.current.description}
-                  </div>
-                </div>
+                  </Alert>
+                </FormGroup>
 
-                <div className="form-group">
-                  <div className="form-row">
-                    <div className="col">
-                      <label>
-                        Starts at <span className="text-danger">*</span>
-                      </label>
+                <FormGroup row>
+                  <Col sm="3">
+                    <Label>
+                      Starts at <span className="text-danger">*</span>
+                    </Label>
 
-                      <input
-                        className={`form-control ${
-                          form.startDateValid ? "is-valid" : "is-invalid"
-                        }`}
-                        type="date"
-                        value={form.startDate}
-                        placeholder="yyyy-mm-dd"
-                        onChange={(e) =>
-                          dispatch({
-                            type: "START_DATE",
-                            value: e.target.value,
-                          })
-                        }
-                      />
-                      {!form.startDateValid && (
-                        <div className="invalid-feedback">
-                          The start date must be in the correct format
-                        </div>
-                      )}
-                    </div>
-                    <div className="col">
-                      <label>
-                        Time <span className="text-danger">*</span>
-                      </label>
-                      <input
-                        className={`form-control ${
-                          form.startTimeValid ? "is-valid" : "is-invalid"
-                        }`}
-                        type="time"
-                        value={form.startTime}
-                        placeholder="hh:mm"
-                        onChange={(e) =>
-                          dispatch({
-                            type: "START_TIME",
-                            value: e.target.value,
-                          })
-                        }
-                      />
-                      {!form.startDateValid && (
-                        <div className="invalid-feedback">
-                          The start time must be in the correct format
-                        </div>
-                      )}
-                    </div>
-                    <div className="col">
-                      <label>
-                        Ends at <span className="text-danger">*</span>
-                      </label>
-                      <input
-                        className={`form-control ${
-                          form.endDateValid ? "is-valid" : "is-invalid"
-                        }`}
-                        type="date"
-                        value={form.endDate}
-                        placeholder="yyyy-mm-dd"
-                        onChange={(e) =>
-                          dispatch({
-                            type: "END_DATE",
-                            value: e.target.value,
-                          })
-                        }
-                      />
+                    <Input
+                      className={`form-control ${
+                        form.startDateValid ? "is-valid" : "is-invalid"
+                      }`}
+                      type="date"
+                      value={form.startDate}
+                      placeholder="yyyy-mm-dd"
+                      onChange={(e) =>
+                        dispatch({
+                          type: "START_DATE",
+                          value: e.target.value,
+                        })
+                      }
+                    />
+                    {!form.startDateValid && (
                       <div className="invalid-feedback">
-                        The end date must be in the correct format and must be
-                        after the start date
+                        The start date must be in the correct format
                       </div>
-                    </div>
-                    <div className="col">
-                      <label>
-                        Time <span className="text-danger">*</span>
-                      </label>
-                      <input
-                        className={`form-control ${
-                          form.endTimeValid ? "is-valid" : "is-invalid"
-                        }`}
-                        type="time"
-                        value={form.endTime}
-                        placeholder="hh:mm"
-                        onChange={(e) =>
-                          dispatch({
-                            type: "END_TIME",
-                            value: e.target.value,
-                          })
-                        }
-                      />
+                    )}
+                  </Col>
+                  <Col sm="3">
+                    <Label>
+                      Time <span className="text-danger">*</span>
+                    </Label>
+                    <Input
+                      className={`form-control ${
+                        form.startTimeValid ? "is-valid" : "is-invalid"
+                      }`}
+                      type="time"
+                      value={form.startTime}
+                      placeholder="hh:mm"
+                      onChange={(e) =>
+                        dispatch({
+                          type: "START_TIME",
+                          value: e.target.value,
+                        })
+                      }
+                    />
+                    {!form.startDateValid && (
                       <div className="invalid-feedback">
-                        The end time must be in the correct format and must be
-                        after the start date
+                        The start time must be in the correct format
                       </div>
+                    )}
+                  </Col>
+                  <Col sm="3">
+                    <Label>
+                      Ends at <span className="text-danger">*</span>
+                    </Label>
+                    <Input
+                      className={`form-control ${
+                        form.endDateValid ? "is-valid" : "is-invalid"
+                      }`}
+                      type="date"
+                      value={form.endDate}
+                      placeholder="yyyy-mm-dd"
+                      onChange={(e) =>
+                        dispatch({
+                          type: "END_DATE",
+                          value: e.target.value,
+                        })
+                      }
+                    />
+                    <div className="invalid-feedback">
+                      The end date must be in the correct format and must be
+                      after the start date
                     </div>
-                  </div>
-                </div>
+                  </Col>
+                  <Col sm="3">
+                    <Label>
+                      Time <span className="text-danger">*</span>
+                    </Label>
+                    <input
+                      className={`form-control ${
+                        form.endTimeValid ? "is-valid" : "is-invalid"
+                      }`}
+                      type="time"
+                      value={form.endTime}
+                      placeholder="hh:mm"
+                      onChange={(e) =>
+                        dispatch({
+                          type: "END_TIME",
+                          value: e.target.value,
+                        })
+                      }
+                    />
+                    <div className="invalid-feedback">
+                      The end time must be in the correct format and must be
+                      after the start date
+                    </div>
+                  </Col>
+                </FormGroup>
 
-                <div className="form-group">
-                  <label>Labels</label>
+                <FormGroup>
+                  <Label>Labels</Label>
                   <div className="alert alert-info">
                     Please use regular expressions for labels
                   </div>
@@ -454,7 +452,7 @@ const NewForm = ({ Body, Buttons, hide }) => {
                     (labels, i) => (
                       <div key={i} className="form-row">
                         {labels.map((label, j) => (
-                          <div key={j} className="col-4">
+                          <div key={j} className="col-sm-4">
                             <div className="input-group mb-3">
                               <div className="input-group-prepend ">
                                 <span className="input-group-text">
@@ -500,7 +498,7 @@ const NewForm = ({ Body, Buttons, hide }) => {
                   {chunkArray(selectedFixedLabelsKeys, 3).map((keys, i) => (
                     <div key={i} className="form-row">
                       {keys.map((key) => (
-                        <div key={key} className="col-4">
+                        <div key={key} className="col-sm-4">
                           <div className="input-group mb-3">
                             <div className="input-group-prepend">
                               <span className="input-group-text">{key}</span>
@@ -526,10 +524,10 @@ const NewForm = ({ Body, Buttons, hide }) => {
                       ))}
                     </div>
                   ))}
-                </div>
+                </FormGroup>
 
-                <div className="form-group">
-                  <label>Comment</label>
+                <FormGroup>
+                  <Label>Comment</Label>
                   <input
                     type="textarea"
                     className="form-control"
@@ -538,7 +536,7 @@ const NewForm = ({ Body, Buttons, hide }) => {
                       dispatch({ type: "COMMENT", value: e.target.value })
                     }
                   />
-                </div>
+                </FormGroup>
 
                 {/* {JSON.stringify(selected)} */}
               </>
@@ -547,10 +545,10 @@ const NewForm = ({ Body, Buttons, hide }) => {
         )}
       </Body>
       <Buttons>
-        <button type="button" onClick={hide} className="btn btn-secondary">
+        <Button type="button" onClick={hide} className="btn btn-secondary">
           Cancel
-        </button>
-        <button
+        </Button>
+        <Button
           type="submit"
           className="btn btn-primary"
           disabled={
@@ -561,9 +559,9 @@ const NewForm = ({ Body, Buttons, hide }) => {
           }
         >
           Submit
-        </button>
+        </Button>
       </Buttons>
-    </form>
+    </Form>
   )
 }
 
