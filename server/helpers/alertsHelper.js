@@ -2,13 +2,15 @@ const config = require('./configLoader')
 
 // This function sorts alerts by severity critical > warning > info
 // then by state
-// then alphabetically
+// then by age (newest first)
+// then alphabetically by region (I'm leaving this in as this was our previous way of sorting but since it's unlikely that startAt is the same for multiple alerts this part will probably never be reached)
 const sort = (items) => 
   items.sort((a,b) => {
     if((a.labels.severity==='critical' && b.labels.severity!=='critical') || 
       (a.labels.severity==='warning' && ['critical','warning'].indexOf(b.labels.severity) < 0)) return -1  
     else if((a.labels.severity===b.labels.severity) && (a.status.state !== b.status.state) && a.status.state)  return a.status.state.localeCompare(b.status.state)
-    else if((a.labels.severity===b.labels.severity) && (a.status.state === b.status.state) && a.labels.region) return a.labels.region.localeCompare(b.labels.region)
+    else if((a.labels.severity===b.labels.severity) && (a.status.state === b.status.state) && (a.startsAt !== b.startsAt) && b.startsAt)  return b.startsAt.localeCompare(a.startsAt)
+    else if((a.labels.severity===b.labels.severity) && (a.status.state === b.status.state) && (a.startsAt === b.startsAt) && a.labels.region) return a.labels.region.localeCompare(b.labels.region)
     else return 1
   })
 ;
