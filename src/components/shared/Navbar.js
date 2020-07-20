@@ -59,19 +59,23 @@ const SuperNavbar = React.memo(({ showModal }) => {
         Supernova
       </NavbarBrand>
       <Nav className="utility-nav ml-auto" navbar>
-        <button className="btn btn-link float-right" onClick={createSilence}>
-          <FontAwesomeIcon icon="tools" /> Create Maintenance Silence
-        </button>
-
         {window.location.host !== "supernova.global.cloud.sap" &&
           window.location.host !== "supernova.eu-nl-1.cloud.sap" && (
-            <Button color="link" onClick={() => toggleContactsList()}>
-              <FontAwesomeIcon icon="ambulance" />
-              <span className="nav-support-link">
-                {layout.contactsListVisible ? "Hide " : "Show "}
-                Support Contacts
-              </span>
-            </Button>
+            <>
+              <button
+                className="btn btn-link float-right"
+                onClick={createSilence}
+              >
+                <FontAwesomeIcon icon="tools" /> Create Maintenance Silence
+              </button>
+              <Button color="link" onClick={() => toggleContactsList()}>
+                <FontAwesomeIcon icon="ambulance" />
+                <span className="nav-support-link">
+                  {layout.contactsListVisible ? "Hide " : "Show "}
+                  Support Contacts
+                </span>
+              </Button>
+            </>
           )}
         <Form inline className="layout-nav">
           <FormGroup>
