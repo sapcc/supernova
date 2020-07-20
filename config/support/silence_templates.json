@@ -1,5 +1,16 @@
 [
   {
+    "status": "active",
+    "title": "Test",
+    "description": "This a test silence template",
+    "fixed_labels": {
+      "service": "limes",
+      "severity": "info"
+    },
+    "editable_labels": ["region"]
+  },
+  {
+    "status": "disabled",
     "title": "VmWare silence stuff",
     "description": "This silence silences VmWare related alerts and this description should be better",
     "fixed_labels": {
@@ -9,6 +20,7 @@
     "editable_labels": ["vccluster", "alertname", "cluster"]
   },
   {
+    "status": "disabled",
     "title": "VmWare silence other",
     "description": "This silence silences some other VmWare related alerts and this description should also be better",
     "fixed_labels": {

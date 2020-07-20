@@ -18,7 +18,7 @@ import {
   DropdownMenu,
 } from "reactstrap"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import CreateMaintenanceSilenceButton from "../silences/NewButton"
+import NewPreemptiveSilenceForm from "../silences/NewPreemptiveSilenceForm"
 
 const SuperNavbar = React.memo(({ showModal }) => {
   const state = useGlobalState()
@@ -42,6 +42,14 @@ const SuperNavbar = React.memo(({ showModal }) => {
     dispatch({ type: "SET_DISPLAY_MODE", display: mode })
   }
 
+  // opens a modal window with silence form
+  const createSilence = React.useCallback(() => {
+    showModal({
+      header: <span className="u-text-info">Maintenance Silence</span>,
+      content: NewPreemptiveSilenceForm,
+    })
+  }, [])
+
   return (
     <Navbar expand="md">
       <NavbarToggler onClick={() => toggleResponsiveSidebar()}>
@@ -51,12 +59,9 @@ const SuperNavbar = React.memo(({ showModal }) => {
         Supernova
       </NavbarBrand>
       <Nav className="utility-nav ml-auto" navbar>
-        <CreateMaintenanceSilenceButton
-          className="float-right"
-          showModal={showModal}
-        >
-          Create Maintenance Silence
-        </CreateMaintenanceSilenceButton>
+        <button className="btn btn-link float-right" onClick={createSilence}>
+          <FontAwesomeIcon icon="tools" /> Create Maintenance Silence
+        </button>
 
         {window.location.host !== "supernova.global.cloud.sap" &&
           window.location.host !== "supernova.eu-nl-1.cloud.sap" && (

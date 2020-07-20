@@ -4,7 +4,7 @@ import moment from "moment"
 
 import useAppError from "../lib/hooks/useAppError"
 import AlertItem from "./AlertItem"
-import CreateSilenceForm from "./CreateSilenceForm"
+import NewAlertSilenceForm from "./silences/NewAlertSilenceForm"
 import AlertDetails from "./AlertDetails"
 import AppErrors from "./AppErrors"
 
@@ -107,51 +107,28 @@ const Alerts = React.memo(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const showDetailsModal = (alert) => {
-      showModal({
-        header: (
-          <React.Fragment>
-            Details for{" "}
-            <span className="u-text-info">
-              &quot;{alert.annotations.summary}&quot;
-            </span>
-          </React.Fragment>
-        ),
-        content: (props) => (
-          <AlertDetails
-            alert={{
-              ...alert,
-              labels: { ...alert.labels, support_component: "asr03" },
-            }}
-            labelSettings={labelSettings}
-            silencesKeyPayload={silencesKeyPayload}
-            showDetails={() => showDetailsModal(alert)}
-            showInhibitedBy={(fingerprint) => toggleInhibitedModal(fingerprint)}
-            showSilencedBy={(silenceId) => toggleSilenceModal(silenceId)}
-            showAckedBy={(payload) => toggleAckedModal(payload)}
-            createSilence={createSilence}
-            {...props}
-          />
-        ),
-      })
-    }
+    // opens a modal window with silence form
+    const createAlertSilence = React.useCallback((alert) => {
+      return new Promise((resolve, reject) =>
+        showModal({
+          size: "lg",
+          header: `New Silence ${
+            alert.labels.alertname && `for alert ${alert.labels.alertname}`
+          } in ${alert.labels.region} `,
+          // props are Body, Buttons and hide
+          content: (props) => (
+            <NewAlertSilenceForm
+              alert={alert}
+              onSuccess={resolve}
+              onFailure={reject}
+              {...props}
+            />
+          ),
+        })
+      )
+    }, [])
 
-    const toggleSilenceModal = (silenceId) => {
-      if (!silencesKeyPayload[silenceId]) return
-      showModal({
-        header: <React.Fragment>Silence</React.Fragment>,
-        body: (
-          <ReactJson
-            src={silencesKeyPayload[silenceId]}
-            collapsed={2}
-            collapseStringsAfterLength={100}
-          />
-        ),
-        cancelButtonText: "Close",
-      })
-    }
-
-    const toggleInhibitedModal = (fingerprint) => {
+    const toggleInhibitedModal = React.useCallback((fingerprint) => {
       if (Array.isArray(fingerprint)) fingerprint = fingerprint[0]
       const alert = alerts.items.find((a) => a.fingerprint === fingerprint)
       if (!alert) return
@@ -166,9 +143,9 @@ const Alerts = React.memo(
         ),
         cancelButtonText: "Close",
       })
-    }
+    }, [])
 
-    const toggleAckedModal = (payload) => {
+    const toggleAckedModal = React.useCallback((payload) => {
       showModal({
         header: <React.Fragment>Acknowledgement</React.Fragment>,
         body: (
@@ -180,30 +157,9 @@ const Alerts = React.memo(
         ),
         cancelButtonText: "Close",
       })
-    }
+    }, [])
 
-    // opens a modal window with silence form
-    const createSilence = (alert) => {
-      return new Promise((resolve, reject) =>
-        showModal({
-          size: "lg",
-          header: `New Silence ${
-            alert.labels.alertname && `for alert ${alert.labels.alertname}`
-          } in ${alert.labels.region} `,
-          // props are Body, Buttons and hide
-          content: (props) => (
-            <CreateSilenceForm
-              alert={alert}
-              onSuccess={resolve}
-              onFailure={reject}
-              {...props}
-            />
-          ),
-        })
-      )
-    }
-
-    const alertCounts = (alerts) => {
+    const alertCounts = React.useCallback((alerts) => {
       const criticals = alerts.filter(
         (alert) => alert.labels.severity === "critical"
       ).length
@@ -221,7 +177,59 @@ const Alerts = React.memo(
           </span>
         </React.Fragment>
       )
-    }
+    }, [])
+
+    const showDetailsModal = React.useCallback(
+      (alert) => {
+        showModal({
+          header: (
+            <React.Fragment>
+              Details for{" "}
+              <span className="u-text-info">
+                &quot;{alert.annotations.summary}&quot;
+              </span>
+            </React.Fragment>
+          ),
+          content: (props) => (
+            <AlertDetails
+              alert={{
+                ...alert,
+                labels: { ...alert.labels, support_component: "asr03" },
+              }}
+              labelSettings={labelSettings}
+              silencesKeyPayload={silencesKeyPayload}
+              showDetails={() => showDetailsModal(alert)}
+              showInhibitedBy={(fingerprint) =>
+                toggleInhibitedModal(fingerprint)
+              }
+              showSilencedBy={(silenceId) => toggleSilenceModal(silenceId)}
+              showAckedBy={(payload) => toggleAckedModal(payload)}
+              createSilence={createAlertSilence}
+              {...props}
+            />
+          ),
+        })
+      },
+      [labelSettings, silencesKeyPayload, createAlertSilence]
+    )
+
+    const toggleSilenceModal = React.useCallback(
+      (silenceId) => {
+        if (!silencesKeyPayload[silenceId]) return
+        showModal({
+          header: <React.Fragment>Silence</React.Fragment>,
+          body: (
+            <ReactJson
+              src={silencesKeyPayload[silenceId]}
+              collapsed={2}
+              collapseStringsAfterLength={100}
+            />
+          ),
+          cancelButtonText: "Close",
+        })
+      },
+      [silencesKeyPayload]
+    )
 
     return (
       <React.Fragment>
@@ -258,7 +266,7 @@ const Alerts = React.memo(
                 }
                 showSilencedBy={(silenceId) => toggleSilenceModal(silenceId)}
                 showAckedBy={(payload) => toggleAckedModal(payload)}
-                createSilence={createSilence}
+                createSilence={createAlertSilence}
               />
             ))}
           </tbody>

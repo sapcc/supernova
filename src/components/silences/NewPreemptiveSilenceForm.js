@@ -75,12 +75,6 @@ const valueToDate = (date, time) => {
   return new Date(...dateValues)
 }
 
-const today = () => {
-  const d = new Date()
-  d.setHours(0, 0, 0, 0)
-  return d
-}
-
 function reducer(state, action) {
   switch (action.type) {
     case "REQUEST_TEMPLATES":
@@ -197,6 +191,11 @@ const NewForm = ({ Body, Buttons, hide }) => {
   const { user } = useGlobalState()
   const [form, dispatch] = React.useReducer(reducer, initialState, init)
 
+  const templatesItems = React.useMemo(
+    () => form.templates.items.filter((t) => t.status === "active"),
+    [form.templates]
+  )
+
   const selectedFixedLabelsKeys = React.useMemo(
     () =>
       form.templates.current &&
@@ -236,7 +235,6 @@ const NewForm = ({ Body, Buttons, hide }) => {
       startsAt: valueToDate(form.startDate, form.startTime),
       endsAt: valueToDate(form.endDate, form.endTime),
       matchers: [],
-      createdBy: user.profile.id,
       comment: form.comment,
     }
     for (let label in form.templates.current.fixed_labels) {
@@ -254,7 +252,16 @@ const NewForm = ({ Body, Buttons, hide }) => {
       })
     })
 
-    console.log("========================", silence)
+    dispatch({ type: "SUBMIT" })
+    fetch("/api/silences", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(silence),
+    })
+      .then(() => dispatch({ type: "SUCCESS" }))
+      .catch((error) => dispatch({ type: "ERROR", error }))
   }
 
   if (form.submitted)
@@ -304,25 +311,31 @@ const NewForm = ({ Body, Buttons, hide }) => {
           "Loading templates ..."
         ) : (
           <>
-            <div className="form-group">
-              <select
-                className="form-control"
-                value={form.templates.selected || ""}
-                onChange={(e) =>
-                  dispatch({
-                    type: "SELECT_TEMPLATE",
-                    value: e.target.value,
-                  })
-                }
-              >
-                <option>Select template</option>
-                {form.templates.items.map((template, index) => (
-                  <option key={index} value={index}>
-                    {template.title}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {templatesItems.length > 0 ? (
+              <div className="form-group">
+                <select
+                  className="form-control"
+                  value={form.templates.selected || ""}
+                  onChange={(e) =>
+                    dispatch({
+                      type: "SELECT_TEMPLATE",
+                      value: e.target.value,
+                    })
+                  }
+                >
+                  <option>Select template</option>
+                  {templatesItems.map((template, index) => (
+                    <option key={index} value={index}>
+                      {template.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ) : (
+              <div className="alert alert-info" role="alert">
+                This feature is coming soon!
+              </div>
+            )}
             {form.templates.selected && (
               <>
                 <div className="form-group">
@@ -471,6 +484,12 @@ const NewForm = ({ Body, Buttons, hide }) => {
                                   })
                                 }
                               />
+                              {(!form.labelValues[label] ||
+                                !form.labelValues[label].valid) && (
+                                <div className="invalid-feedback">
+                                  {`${label} is required`}
+                                </div>
+                              )}
                             </div>
                           </div>
                         ))}
