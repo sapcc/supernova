@@ -445,7 +445,7 @@ const NewForm = ({ Body, Buttons, hide }) => {
                 <FormGroup>
                   <Label>Labels</Label>
                   <div className="alert alert-info">
-                    Please use regular expressions for labels
+                    You may use regular expressions for labels
                   </div>
 
                   {chunkArray(form.templates.current.editable_labels, 3).map(

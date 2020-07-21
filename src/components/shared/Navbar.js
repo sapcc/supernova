@@ -45,7 +45,7 @@ const SuperNavbar = React.memo(({ showModal }) => {
   // opens a modal window with silence form
   const createSilence = React.useCallback(() => {
     showModal({
-      header: <span className="u-text-info">Maintenance Silence</span>,
+      header: <span className="u-text-info">Schedule Silence for Maintenance Window</span>,
       content: NewPreemptiveSilenceForm,
     })
   }, [])
@@ -63,16 +63,17 @@ const SuperNavbar = React.memo(({ showModal }) => {
           window.location.host !== "supernova.eu-nl-1.cloud.sap" && (
             <>
               <button
-                className="btn btn-link float-right"
+                className="btn btn-link float-right nav-support-link"
                 onClick={createSilence}
               >
-                <FontAwesomeIcon icon="tools" /> Create Maintenance Silence
+                <FontAwesomeIcon icon="tools" /> 
+                Schedule Maintenance
               </button>
               <Button color="link" onClick={() => toggleContactsList()}>
                 <FontAwesomeIcon icon="ambulance" />
-                <span className="nav-support-link">
-                  {layout.contactsListVisible ? "Hide " : "Show "}
-                  Support Contacts
+                  <span className="nav-support-link">
+                    {layout.contactsListVisible ? "Hide " : "Show "}
+                    Support Contacts
                 </span>
               </Button>
             </>
