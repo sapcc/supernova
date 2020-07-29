@@ -218,13 +218,17 @@ button {
   margin: 0 0.5rem 0 0.5rem;
   color: $danger;
 
-  &:hover {
+  &.icon-clickable:hover {
     color: lighten($danger, 15);
   }
 }
 
 .icon-info {
   color: $info;
+}
+
+.icon-clickable {
+  cursor: pointer;
 }
 
 // Layout components --------------------------------------

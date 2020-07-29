@@ -1,6 +1,10 @@
 import React from 'react'
 import { Container, Row, Col } from 'reactstrap'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+import SimplePopover from './../shared/SimplePopover'
+
 
 const ContactsDetailsList = ({mainKey, details}) => {
 
@@ -18,7 +22,15 @@ const ContactsDetailsList = ({mainKey, details}) => {
                                 <dd>
                                     <ul className="u-plain-list">
                                         {level.hotline.map((hotlineNumber, index) =>
-                                            <li key={`${mainKey}-${key}-number-${index}`}>{hotlineNumber.number}</li>
+                                            <li key={`${mainKey}-${key}-number-${index}`}>
+                                                {hotlineNumber.number}
+                                                {hotlineNumber.note &&
+                                                    <React.Fragment>
+                                                        <FontAwesomeIcon icon="exclamation-triangle" id={`note-${key}-number-${index}`} className="icon-danger icon-clickable" onClick={(e) => e.stopPropagation()} />
+                                                        <SimplePopover type="danger" clickTarget={`note-${key}-number-${index}`} text={hotlineNumber.note} />
+                                                    </React.Fragment>
+                                                }
+                                            </li>
                                         )}
                                     </ul>
                                 </dd>

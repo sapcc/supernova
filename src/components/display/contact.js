@@ -11,7 +11,6 @@ const Contact = React.memo(({contact, contactInfo, detailsExpanded}) => {
 
   const [detailsVisible, setDetailsVisible] = useState(detailsExpanded)
 
-
   const toggleDetails = (target) => {
     // only allow the toggling of details if it isn't predefined as being expanded
     if (!detailsExpanded) {
@@ -33,7 +32,7 @@ const Contact = React.memo(({contact, contactInfo, detailsExpanded}) => {
               {hotlineNumber.number}
               {hotlineNumber.note &&
                 <React.Fragment>
-                  <FontAwesomeIcon icon="exclamation-triangle" id={`note-${contact}-number-${index}`} className="icon-danger" onClick={(e) => e.stopPropagation()} />
+                  <FontAwesomeIcon icon="exclamation-triangle" id={`note-${contact}-number-${index}`} className="icon-danger icon-clickable" onClick={(e) => e.stopPropagation()} />
                   <SimplePopover type="danger" clickTarget={`note-${contact}-number-${index}`} text={hotlineNumber.note} />
                 </React.Fragment>
               }
