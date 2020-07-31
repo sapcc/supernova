@@ -30,6 +30,8 @@ function watchFile(path, callback) {
                 // Watch the real file if it exists
                 if (fs.existsSync(realPath)) {
                   fs.watch(realPath, callback)
+                } else {
+                  setTimeout(watchFile(path, callback), 5000);
                 }
             });
         } else {
@@ -39,7 +41,7 @@ function watchFile(path, callback) {
         }
     })
   } else {
-    setTimeout(watchFile(path, callback), 5000);
+    setTimeout(watchFile(path, callback), 5000)
   }
 }
 
