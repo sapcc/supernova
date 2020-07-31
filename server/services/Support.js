@@ -25,8 +25,10 @@ function watchFile(path, callback) {
               console.log("---- readlink");
               // Handle errors
               if(err) return callback(err);
-              // Watch the real file
-              fs.watch(realPath, callback);
+              // Watch the real file if it exists
+              if (fs.existsSync(realPath)) {
+                fs.watch(realPath, callback);
+              }
           });
       } else {
           console.log("watch");
