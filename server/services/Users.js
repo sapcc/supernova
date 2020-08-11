@@ -11,10 +11,10 @@ const fs = require("fs"),
 const loadSuperUsers = () => JSON.parse(fs.readFileSync(filePath))
 let superUsers = loadSuperUsers()
 
-// This is the fs watch function.
-chokidar.watch(filePath).on("all", (event, path) => {
-  // console.log("====================", event, path)
-  if (event === "change") superUsers = loadSuperUsers()
+// This is the chokidar watch function.
+chokidar.watch(filePath).on("change", (path) => {
+  // console.log("====================", path)
+  superUsers = loadSuperUsers()
 })
 
 const map = (id, attributes = {}) => {
