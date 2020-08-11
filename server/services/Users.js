@@ -1,4 +1,5 @@
 const fs = require("fs"),
+  chokidar = require("chokidar"),
   path = require("path"),
   filePath = path.join(
     __dirname,
@@ -11,7 +12,8 @@ const loadSuperUsers = () => JSON.parse(fs.readFileSync(filePath))
 let superUsers = loadSuperUsers()
 
 // This is the fs watch function.
-fs.watch(filePath, (event, filename) => {
+chokidar.watch(filePath).on("all", (event, path) => {
+  // console.log("====================", event, path)
   if (event === "change") superUsers = loadSuperUsers()
 })
 

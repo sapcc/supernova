@@ -13,7 +13,6 @@ const loadData = (filePath) => {
   }
 }
 
-
 supportFiles.forEach((file) => {
   const filePath = path.join(
     __dirname,
