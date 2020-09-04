@@ -144,7 +144,8 @@ const load = async () => {
 // const loadPagerDutyAlerts = () => PagerDutyApi.incidents({"statuses[]": "acknowledged", "statuses[]": "triggered"})
 const loadPagerDutyAlerts = () => {
   const date = new Date()
-  date.setDate(date.getDate() - 2) // two days in the past
+  //date.setDate(date.getDate() - 2) // two days in the past
+  date.setHours(date.getHours() - 9) // 9 hours in the past
 
   return PagerDutyApi.incidents({
     statuses: ["acknowledged", "triggered"],
