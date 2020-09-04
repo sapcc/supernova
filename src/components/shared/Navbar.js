@@ -59,8 +59,7 @@ const SuperNavbar = React.memo(({ showModal }) => {
         Supernova
       </NavbarBrand>
       <Nav className="utility-nav ml-auto" navbar>
-        { window.location.host !== "supernova.global.cloud.sap" &&
-          window.location.host !== "supernova.eu-nl-1.cloud.sap" && (
+       
             <button
               className="btn btn-link float-right nav-support-link"
               onClick={createSilence}
@@ -69,7 +68,7 @@ const SuperNavbar = React.memo(({ showModal }) => {
               Schedule Maintenance
             </button>
 
-        )}
+       
         <Button color="link" onClick={() => toggleContactsList()}>
           <FontAwesomeIcon icon="ambulance" />
             <span className="nav-support-link">
