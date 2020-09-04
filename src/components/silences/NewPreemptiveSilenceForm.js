@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { chunkArray } from "../../lib/utilities"
 import { useGlobalState } from "../../lib/globalState"
 import { Button, Form, FormGroup, Alert, Label, Input, Col } from "reactstrap"
+import apiClient from "../../lib/apiClient"
 
 // Do not use global state
 const initialState = {
@@ -208,7 +209,8 @@ const NewForm = ({ Body, Buttons, hide }) => {
     dispatch({ type: "REQUEST_TEMPLATES" })
     //dispatch({ type: "RESET" })
 
-    fetch("/api/support/silence-templates")
+    apiClient
+      .request("/api/support/silence-templates")
       .then((response) => response.json())
       .then((templates) => {
         dispatch({ type: "RECEIVE_TEMPLATES", templates })
@@ -254,13 +256,14 @@ const NewForm = ({ Body, Buttons, hide }) => {
     })
 
     dispatch({ type: "SUBMIT" })
-    fetch("/api/silences", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(silence),
-    })
+    apiClient
+      .request("/api/silences", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(silence),
+      })
       .then(() => dispatch({ type: "SUCCESS" }))
       .catch((error) => dispatch({ type: "ERROR", error }))
   }

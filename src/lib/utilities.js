@@ -37,4 +37,8 @@ function chunkArray(myArray, chunk_size) {
   return tempArray
 }
 
-export { chunkArray, descriptionParsed, severityToColor }
+const randomString = () =>
+  Math.random().toString(36).substring(2, 15) +
+  Math.random().toString(36).substring(2, 15)
+
+export { chunkArray, descriptionParsed, severityToColor, randomString }

@@ -1,11 +1,10 @@
 import React, { useState } from "react"
 import { Button, Form, FormGroup, Label, Input, Alert } from "reactstrap"
 import classnames from "classnames"
-import axios from "axios"
+import apiClient from "../../lib/apiClient"
 
 import { severityToColor } from "../../lib/utilities"
 
-//() => axios.post(`/api/silences/${fingerprint}`)
 export default ({ alert, onSuccess, Body, Buttons, hide }) => {
   const [duration, setDuration] = useState(4)
   const [comment, setComment] = useState("")
@@ -17,14 +16,25 @@ export default ({ alert, onSuccess, Body, Buttons, hide }) => {
     e.preventDefault()
     setSubmitting(true)
     setSuccess(false)
-    axios
-      .post(`/api/silences/alert/${alert.fingerprint}`, { duration, comment })
+    apiClient
+      .request(`/api/silences/alert/${alert.fingerprint}`, {
+        method: "POST",
+        body: JSON.stringify({ duration, comment }),
+      })
       .then(() => {
         setSuccess(true)
         onSuccess()
       })
-      .catch((error) => setError(error.response.data))
+      .catch((error) => setError(error.message))
       .finally(() => setSubmitting(false))
+    // axios
+    //   .post(`/api/silences/alert/${alert.fingerprint}`, { duration, comment })
+    //   .then(() => {
+    //     setSuccess(true)
+    //     onSuccess()
+    //   })
+    //   .catch((error) => setError(error.response.data))
+    //   .finally(() => setSubmitting(false))
   }
 
   return (

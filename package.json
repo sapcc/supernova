@@ -7,7 +7,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.10.2",
     "@fortawesome/free-solid-svg-icons": "^5.9.0",
     "@fortawesome/react-fontawesome": "^0.1.4",
-    "axios": "^0.18.1",
+    "axios": "^0.20.0",
     "bootstrap": "^4.3.1",
     "chokidar": "^3.4.2",
     "classnames": "^2.2.6",
@@ -18,6 +18,8 @@
     "interweave": "^11.1.0",
     "ldapjs": "^1.0.2",
     "moment": "^2.24.0",
+    "node-fetch": "^2.6.0",
+    "node-jose": "^1.1.4",
     "node-sass": "^4.12.0",
     "nodemon": "^1.18.11",
     "prom-client": "^11.5.3",
@@ -40,7 +42,7 @@
     "eject": "react-scripts eject",
     "production": "NODE_ENV=production node server",
     "server": "nodemon server",
-    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn start\" "
+    "dev": "HTTPS=true concurrently --kill-others-on-fail \"yarn server\" \"yarn start\" "
   },
   "eslintConfig": {
     "extends": "react-app"

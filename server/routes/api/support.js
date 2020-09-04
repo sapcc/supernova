@@ -1,9 +1,9 @@
-const auth = require("../../middlewares/auth")
+const verifyToken = require("../../middlewares/verifyToken")
 const express = require("express")
 const Support = require("../../services/Support")
 const router = express.Router()
 
-router.get("/contacts", auth, async (req, res) => {
+router.get("/contacts", verifyToken, async (req, res) => {
   Support.getContacts()
     .then((result) => res.status(200).json(result))
     .catch((error) =>
@@ -15,7 +15,7 @@ router.get("/contacts", auth, async (req, res) => {
     )
 })
 
-router.get("/silence-templates", auth, async (req, res) => {
+router.get("/silence-templates", verifyToken, async (req, res) => {
   Support.getSilenceTemplates()
     .then((result) => res.status(200).json(result))
     .catch((error) =>

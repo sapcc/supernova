@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import axios from "axios"
+import apiClient from "../../lib/apiClient"
 import { Alert, Row, Col, Collapse, Card, CardBody } from "reactstrap"
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -21,11 +21,12 @@ const ContactList = React.memo(({ visible, componentKey }) => {
   useEffect(() => {
     // isSubscribed is used to check whether we are still subscribed to the promise. If not then don't try to fetch as this will result in a warning
     let isSubscribed = true
-    axios
-      .get("/api/support/contacts")
-      .then((response) => {
+    apiClient
+      .request("/api/support/contacts")
+      .then((response) => response.json())
+      .then((data) => {
         if (isSubscribed) {
-          dispatch({ type: "SET_SUPPORT_CONTACTS", contacts: response.data })
+          dispatch({ type: "SET_SUPPORT_CONTACTS", contacts: data })
           setError(null)
           setIsLoading(false)
         }

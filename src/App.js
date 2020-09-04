@@ -23,6 +23,7 @@ import SuperModal from "./components/shared/SuperModal"
 import useUrlFilters from "./lib/hooks/useUrlFilters"
 import useActiveCategoryCounts from "./lib/hooks/useActiveCategoryCounts"
 import useInitialLoader from "./lib/hooks/useInitialLoader"
+import useOidc from "./lib/hooks/useOidc"
 
 import "./styles/theme.scss"
 import "./App.css"
@@ -84,16 +85,16 @@ const App = () => {
   const { modalIsShowing, closeModal, openModal } = useModal()
   const [modalContent, setModalContent] = useState([])
 
-
-  const initialURLFilters = useUrlFilters({
+  const loggedIn = useOidc()
+  const initialURLFilters = useUrlFilters(loggedIn, {
     category: categories.active,
     label: labelFilters.settings,
     display: [display],
     layout: [layoutMode],
     show: [showTarget],
-    supportcontacts: [contactsListVisible]
+    supportcontacts: [contactsListVisible],
   })
-  
+
   // decide which display mode should be used
   // const currentDisplayMode = useMemo(() => {
   //   if(Array.isArray(initialURLFilters.display) && initialURLFilters.display.length>0) {
@@ -107,6 +108,7 @@ const App = () => {
 
   // get settings from URL and update the state
   useEffect(() => {
+    if (!loggedIn) return
     if (
       Array.isArray(initialURLFilters.display) &&
       initialURLFilters.display.length > 0
@@ -133,10 +135,13 @@ const App = () => {
         settings: initialURLFilters.label,
       })
     }
-    if (Array.isArray(initialURLFilters.supportcontacts) && initialURLFilters.supportcontacts.length > 0) {
+    if (
+      Array.isArray(initialURLFilters.supportcontacts) &&
+      initialURLFilters.supportcontacts.length > 0
+    ) {
       dispatch({
         type: "SET_CONTACTS_LIST_VISIBLE",
-        contactsListVisible: initialURLFilters.supportcontacts[0] === "true"
+        contactsListVisible: initialURLFilters.supportcontacts[0] === "true",
       })
     }
 
@@ -152,8 +157,7 @@ const App = () => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
+  }, [loggedIn])
 
   const setDisplay = (mode) => {
     dispatch({ type: "SET_DISPLAY_MODE", display: mode })
@@ -168,9 +172,7 @@ const App = () => {
     categories: categories.items,
   })
 
-  //useAlertsLoader(initialURLFilters)
-  //useUserProfileLoader()
-  useInitialLoader({ urlFilters: initialURLFilters, userProfile: user.profile })
+  useInitialLoader({ userProfile: user.profile })
 
   return (
     <React.Fragment>
