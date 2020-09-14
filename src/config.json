@@ -3,6 +3,13 @@
   [
     {
       "area": "landscape",
+      "name": "All",
+      "match_re": {
+        "region": "^(?:.*)$"
+      }
+    },
+    {
+      "area": "landscape",
       "name": "Productive",
       "match_re": {
         "region": "^(?!staging|admin|qa-de-[2-9]+)"
