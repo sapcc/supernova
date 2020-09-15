@@ -5,7 +5,7 @@ import { testHook } from './testHook'
 describe('useUrlFilters', () => {
   let initialURLFilters
   beforeEach(() => 
-    testHook(() => initialURLFilters = useUrlFilters({'test1': ['value1'],'test2': ['value21','value22']}))
+    testHook(() => initialURLFilters = useUrlFilters(true,{'test1': ['value1'],'test2': ['value21','value22']}))
   )
 
   it('returns a json object', () => {
@@ -25,7 +25,7 @@ describe('useUrlFilters', () => {
         }
       })
       
-      testHook(() => initialURLFilters = useUrlFilters({'category': [],'filter': []}))
+      testHook(() => initialURLFilters = useUrlFilters(true,{'category': [],'filter': []}))
     })
 
     it('returns current url filters', () => {
@@ -41,7 +41,7 @@ describe('useUrlFilters', () => {
           search: '?category=All&filter_severity=critical&filter_severity=warning&test=value'
         }
       })
-      testHook(() => initialURLFilters = useUrlFilters({'category': ['API'],'filter': []}))
+      testHook(() => initialURLFilters = useUrlFilters(true,{'category': ['API'],'filter': []}))
     })
 
     it('returns current url filters', () => {
