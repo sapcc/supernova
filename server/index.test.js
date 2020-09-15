@@ -1,10 +1,12 @@
 require("dotenv").config()
 const request = require("supertest")
 const axios = require("axios")
-const auth = require("./middlewares/auth")
+// const auth = require("./middlewares/auth")
+const verifyToken = require("./middlewares/verifyToken")
 
 jest.mock("axios")
-jest.mock("./middlewares/auth")
+// jest.mock("./middlewares/auth")
+jest.mock("./middlewares/verifyToken")
 
 describe("Server", () => {
   let server
@@ -32,18 +34,18 @@ describe("Server", () => {
   describe("/api/auth/profile", () => {
     describe("not logged in", () => {
       beforeEach(() => {
-        auth.mockImplementation(async (req, res, next) => {
-          res.status(401).send("Access denied. No token provided.")
+        verifyToken.mockImplementation(async (req, res, next) => {
+          res.status(403).send("Access denied. No token provided.")
         })
       })
-      test("should return 401", (done) => {
-        request(server).get("/api/auth/profile").expect(401, done)
+      test("should return 403", (done) => {
+        request(server).get("/api/auth/profile").expect(403, done)
       })
     })
 
     describe("logged in", () => {
       beforeEach(() => {
-        auth.mockImplementation(async (req, res, next) => {
+        verifyToken.mockImplementation(async (req, res, next) => {
           req.user = { id: "test", fullName: "Test Test", groups: [] }
           next()
         })
