@@ -3,6 +3,7 @@
  */
 const fetch = require("node-fetch")
 const jose = require("node-jose")
+const AbortController = require('abort-controller')
 
 const storedJwks = {
   "keys": [
@@ -52,9 +53,12 @@ class IDToken {
     // If this steps are failing then the stored jwks is used. This happens in 
     // regions which cannot reach the jwks URL. 
     if (!IDToken.jwks) {
+      const controller = new AbortController()
+      setTimeout(() => {controller.abort()}, 3000)
+
       IDToken.jwks = await fetch(
         `${this.payloadData.iss}/.well-known/openid-configuration`
-      )
+      ,{signal: controller.signal})
         .then((response) => response.json())
         .then((data) => fetch(data.jwks_uri))
         .then((res) => res.json())
