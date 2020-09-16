@@ -4,6 +4,22 @@
 const fetch = require("node-fetch")
 const jose = require("node-jose")
 
+const storedJwks = {
+  "keys": [
+    {
+      "kty": "RSA",
+      "x5t#S256": "EeJhxa695FZWW4hfU4Z4EGM-aF0Z16NjrzU6b834npk",
+      "e": "AQAB",
+      "use": "sig",
+      "kid": "Q9nBB84IXChHTOl98bS_RldizmI",
+      "x5c": [
+        "MIIDEjCCAfqgAwIBAQIGAXQRHY+QMA0GCSqGSIb3DQEBCwUAMEgxCzAJBgNVBAYTAkRFMQ8wDQYDVQQKEwZTQVAtU0UxKDAmBgNVBAMTH2FqZmMxanBoei5hY2NvdW50cy5vbmRlbWFuZC5jb20wHhcNMjAwODIxMTMwMzA0WhcNMzAwODIxMTMwMzA0WjBIMQswCQYDVQQGEwJERTEPMA0GA1UEChMGU0FQLVNFMSgwJgYDVQQDEx9hamZjMWpwaHouYWNjb3VudHMub25kZW1hbmQuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgqcpnvyQNWoplb0Ynaepd+NsJMXu/U57aqaP1Ahso+geshLjYCP1N1aPYjM2UKLwK9/frB9Yyok9hE58p/wYLm4eoeBvcV22P73aENg3W9wIHTYwITdLgMQ8YKJ+SmBlyKun2ewUpqaYWj/pLbboEInhA16Ji+xuKocOxCslytZ6lihYjOGx4S9vJc0rahHdLYaHEB6HC4dWYRn/diYrTSLFFtthRo/HM+Ah8ADqdvWx+jnuttcF0waS13YW2SlULBf+usX5reTXfTElBaRfZ1iEvSO3fNRA4sDw+W7pEFV8d1a+0GoSM0zZpIHmKdz/l+TCeSsMeA2IK9M1a/wEMQIDAQABggIAADANBgkqhkiG9w0BAQsFAAOCAQEAUEnOw+JDIZIY4zUvabeLgXiMHJr5r70G+tOaqTcacFQyMFkfW2FuGN4ix8io8WusSWRCJsK9UeMWjKd+RWZ2+hHfSd5g8AcFxKK+sgC7aP8syeohRA6uCayXvuQlz3uH1H967oEayL9QrHBLemqUJzWdr33es54/+hCKJeAfgoLoTP1fVPrLmJ/reZqq6u0I2Jt1d42OvqB4/hNkMy8oWieokvI/SFl5nEl7L+Ubz1r/xY3K92s+6chz3zgqhHgucMuPDBW7fSIhiqiY9mIDUGOG83EhLElerRQdgVWN27Bg83nkJkXXp0NZGsMl2aQkSN6Ut74thuSzG9rOyHWIQg=="
+      ],
+      "n": "gqcpnvyQNWoplb0Ynaepd-NsJMXu_U57aqaP1Ahso-geshLjYCP1N1aPYjM2UKLwK9_frB9Yyok9hE58p_wYLm4eoeBvcV22P73aENg3W9wIHTYwITdLgMQ8YKJ-SmBlyKun2ewUpqaYWj_pLbboEInhA16Ji-xuKocOxCslytZ6lihYjOGx4S9vJc0rahHdLYaHEB6HC4dWYRn_diYrTSLFFtthRo_HM-Ah8ADqdvWx-jnuttcF0waS13YW2SlULBf-usX5reTXfTElBaRfZ1iEvSO3fNRA4sDw-W7pEFV8d1a-0GoSM0zZpIHmKdz_l-TCeSsMeA2IK9M1a_wEMQ"
+    }
+  ]
+}
+
 class IDToken {
   constructor(jwt) {
     this.jwt = jwt
@@ -33,6 +49,8 @@ class IDToken {
     // Flow:
     //   1. request /.well-known/openid-configuration to get the jwks url
     //   2. request the jwks url to get the public key
+    // If this steps are failing then the stored jwks is used. This happens in 
+    // regions which cannot reach the jwks URL. 
     if (!IDToken.jwks) {
       IDToken.jwks = await fetch(
         `${this.payloadData.iss}/.well-known/openid-configuration`
@@ -41,6 +59,7 @@ class IDToken {
         .then((data) => fetch(data.jwks_uri))
         .then((res) => res.json())
         .then((data) => data.keys)
+        .catch(error => storedJwks)
     }
 
     // convert jwks to jose store and verify the signature
