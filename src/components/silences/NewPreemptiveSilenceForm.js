@@ -497,7 +497,6 @@ const NewForm = ({ Body, Buttons, hide }) => {
                       </div>
                     )
                   )}
-
                   {chunkArray(selectedFixedLabelsKeys, 3).map((keys, i) => (
                     <div key={i} className="form-row">
                       {keys.map((key) => (
@@ -509,9 +508,7 @@ const NewForm = ({ Body, Buttons, hide }) => {
                             <input
                               type="text"
                               className="form-control"
-                              defaultValue={
-                                form.templates.current.fixed_labels[key]
-                              }
+                              value={form.templates.current.fixed_labels[key]}
                               disabled
                             />
                             <div className="input-group-append">

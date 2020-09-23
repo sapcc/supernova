@@ -10,7 +10,7 @@
     "editable_labels": ["region"]
   },
   {
-    "status": "disabled",
+    "status": "active",
     "title": "VmWare silence stuff",
     "description": "This silence silences VmWare related alerts and this description should be better",
     "fixed_labels": {
@@ -20,7 +20,7 @@
     "editable_labels": ["vccluster", "alertname", "cluster"]
   },
   {
-    "status": "disabled",
+    "status": "active",
     "title": "VmWare silence other",
     "description": "This silence silences some other VmWare related alerts and this description should also be better",
     "fixed_labels": {
