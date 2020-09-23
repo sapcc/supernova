@@ -1,9 +1,6 @@
 import React, { useState } from "react"
 import { Button, Form, FormGroup, Label, Input, Alert } from "reactstrap"
-import classnames from "classnames"
 import apiClient from "../../lib/apiClient"
-
-import { severityToColor } from "../../lib/utilities"
 
 export default ({ alert, onSuccess, Body, Buttons, hide }) => {
   const [duration, setDuration] = useState(4)
@@ -25,16 +22,10 @@ export default ({ alert, onSuccess, Body, Buttons, hide }) => {
         setSuccess(true)
         onSuccess()
       })
-      .catch((error) => setError(error.message))
+      .catch((error) => {
+        setError(error.message)
+      })
       .finally(() => setSubmitting(false))
-    // axios
-    //   .post(`/api/silences/alert/${alert.fingerprint}`, { duration, comment })
-    //   .then(() => {
-    //     setSuccess(true)
-    //     onSuccess()
-    //   })
-    //   .catch((error) => setError(error.response.data))
-    //   .finally(() => setSubmitting(false))
   }
 
   return (
@@ -48,7 +39,9 @@ export default ({ alert, onSuccess, Body, Buttons, hide }) => {
           </Alert>
         ) : (
           <React.Fragment>
-            <Alert color={classnames(severityToColor(alert.labels.severity))}>
+            <Alert color="info">
+              Alert:
+              <br />
               {alert.annotations.description}
             </Alert>
             <FormGroup>

@@ -40,7 +40,10 @@ function on403(handler) {
  * @param {Object} options Common options used by fetch
  */
 const request = (url, options = {}) => {
-  const defaultHeaders = {}
+  const defaultHeaders = {
+    "Content-Type": "application/json",
+    // 'Content-Type': 'application/x-www-form-urlencoded',
+  }
   // use idToken as Bearer token
   if (idToken) defaultHeaders["Authorization"] = `Bearer ${idToken}`
 
@@ -52,11 +55,14 @@ const request = (url, options = {}) => {
 
   // console.log(url, options)
   // make request
-  return fetch(url, Object.assign({}, options)).then((res) => {
+  return fetch(url, Object.assign({}, options)).then(async (res) => {
     // Backend responses with 403 if token is expired or invalid
     // if unauthorizedHandler exists it will be called
     if (res.status === 403 && unauthorizedHandler) unauthorizedHandler()
-    else return res
+    else if (res.status >= 400) {
+      const message = await res.text()
+      throw Error(message, { status: res.status, statusText: res.statusText })
+    } else return res
   })
 }
 

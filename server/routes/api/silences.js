@@ -23,7 +23,7 @@ router.post("/alert/:fingerprint", verifyToken, async (req, res) => {
   // check user credentials
   if (!req.user.editor) return res.status(401).send("Not authorized!")
   const { duration, comment } = req.body
-  if (!comment) throw "Please give a description"
+  if (!comment) return res.status(422).send("Please provide a description")
 
   Alerts.get()
     .then((result) =>
