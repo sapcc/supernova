@@ -1,7 +1,6 @@
 import React from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { chunkArray } from "../../lib/utilities"
-import { useGlobalState } from "../../lib/globalState"
 import { Button, Form, FormGroup, Alert, Label, Input, Col } from "reactstrap"
 import apiClient from "../../lib/apiClient"
 
@@ -34,6 +33,7 @@ const initialState = {
 const init = (state) => {
   const now = new Date(Date.now() + 60 * 60 * 1000)
   const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000)
+
   return {
     ...state,
     startDate: formatDateForInput(now),
@@ -104,7 +104,7 @@ function reducer(state, action) {
         },
       }
     case "SELECT_TEMPLATE":
-      return {
+      const newState = {
         ...state,
         templates: {
           ...state.templates,
@@ -112,6 +112,22 @@ function reducer(state, action) {
           current: state.templates.items[action.value],
         },
       }
+
+      // set default values for editable_labels
+      const cur = newState.templates.current
+      const def_values = cur && cur.editable_labels_default_values
+      if (cur && cur.editable_labels && def_values) {
+        newState.labelValues = newState.labelValues || {}
+        cur.editable_labels.forEach((label, i) => {
+          if (def_values[i]) {
+            newState.labelValues[label] = {
+              value: def_values[i],
+              valid: !!def_values[i],
+            }
+          }
+        })
+      }
+      return newState
 
     case "START_DATE":
       let startDateValidation =
@@ -190,7 +206,6 @@ function reducer(state, action) {
 }
 
 const NewForm = ({ Body, Buttons, hide }) => {
-  const { user } = useGlobalState()
   const [form, dispatch] = React.useReducer(reducer, initialState, init)
 
   const templatesItems = React.useMemo(
@@ -198,11 +213,18 @@ const NewForm = ({ Body, Buttons, hide }) => {
     [form.templates]
   )
 
+  React.useEffect(() => {
+    if (form && form.templates && form.templates.current) {
+      form.templates.current.editable_labels =
+        form.templates.current.editable_labels || []
+    }
+  }, [form])
+
   const selectedFixedLabelsKeys = React.useMemo(
     () =>
       form.templates.current &&
       Object.keys(form.templates.current.fixed_labels),
-    [form.templates.current]
+    [form.templates]
   )
 
   React.useEffect(() => {
@@ -224,11 +246,14 @@ const NewForm = ({ Body, Buttons, hide }) => {
       form.startTimeValid &&
       form.endDateValid &&
       form.endTimeValid &&
-      form.templates.current.editable_labels.reduce(
-        (bool, label) =>
-          bool && !!form.labelValues[label] && !!form.labelValues[label].valid,
-        [true]
-      )
+      (!form.templates.current.editable_labels ||
+        form.templates.current.editable_labels.reduce(
+          (bool, label) =>
+            bool &&
+            !!form.labelValues[label] &&
+            !!form.labelValues[label].valid,
+          [true]
+        ))
     return isValid
   }
 
@@ -244,7 +269,7 @@ const NewForm = ({ Body, Buttons, hide }) => {
       silence.matchers.push({
         name: label,
         value: form.templates.current.fixed_labels[label],
-        isRegex: false,
+        isRegex: true, //false,
       })
     }
     form.templates.current.editable_labels.forEach((label) => {
@@ -275,6 +300,7 @@ const NewForm = ({ Body, Buttons, hide }) => {
           <Alert color="success">
             Silence was created successfully!
             <a
+              rel="noopener noreferrer"
               href={process.env.REACT_APP_ALERTMANAGER_API_ENDPOINT.replace(
                 "/api/v2",
                 "#/silences"
@@ -451,52 +477,62 @@ const NewForm = ({ Body, Buttons, hide }) => {
                     You may use regular expressions for labels
                   </div>
 
-                  {chunkArray(form.templates.current.editable_labels, 3).map(
-                    (labels, i) => (
-                      <div key={i} className="form-row">
-                        {labels.map((label, j) => (
-                          <div key={j} className="col-sm-4">
-                            <div className="input-group mb-3">
-                              <div className="input-group-prepend ">
-                                <span className="input-group-text">
-                                  {label}{" "}
-                                  <span className="text-danger"> *</span>
-                                </span>
-                              </div>
-                              <input
-                                type="text"
-                                className={`form-control ${
-                                  form.labelValues[label] &&
-                                  form.labelValues[label].valid
-                                    ? "is-valid"
-                                    : "is-invalid"
-                                }`}
-                                placeholder={label}
-                                value={
-                                  (form.labelValues[label] &&
-                                    form.labelValues[label].value) ||
-                                  ""
-                                }
-                                onChange={(e) =>
-                                  dispatch({
-                                    type: "LABEL_VALUE",
-                                    name: label,
-                                    value: e.target.value,
-                                  })
-                                }
-                              />
-                              {(!form.labelValues[label] ||
-                                !form.labelValues[label].valid) && (
-                                <div className="invalid-feedback">
-                                  {`${label} is required`}
+                  {form &&
+                    form.templates &&
+                    form.templates.current &&
+                    form.templates.current.editable_labels &&
+                    chunkArray(form.templates.current.editable_labels, 3).map(
+                      (labels, i) => (
+                        <div key={i} className="form-row">
+                          {labels.map((label, j) => (
+                            <div key={j} className="col-sm-4">
+                              <div className="input-group mb-3">
+                                <div className="input-group-prepend ">
+                                  <span className="input-group-text">
+                                    {label}{" "}
+                                    <span className="text-danger"> *</span>
+                                  </span>
                                 </div>
-                              )}
+                                <input
+                                  type="text"
+                                  className={`form-control ${
+                                    form.labelValues[label] &&
+                                    form.labelValues[label].valid
+                                      ? "is-valid"
+                                      : "is-invalid"
+                                  }`}
+                                  placeholder={
+                                    (form.templates.current
+                                      .editable_labels_default_values &&
+                                      form.templates.current
+                                        .editable_labels_default_values[i]) ||
+                                    label
+                                  }
+                                  value={
+                                    (form.labelValues[label] &&
+                                      form.labelValues[label].value) ||
+                                    ""
+                                  }
+                                  onChange={(e) =>
+                                    dispatch({
+                                      type: "LABEL_VALUE",
+                                      name: label,
+                                      value: e.target.value,
+                                    })
+                                  }
+                                />
+                                {(!form.labelValues[label] ||
+                                  !form.labelValues[label].valid) && (
+                                  <div className="invalid-feedback">
+                                    {`${label} is required`}
+                                  </div>
+                                )}
+                              </div>
                             </div>
-                          </div>
-                        ))}
-                      </div>
-                    )
-                  )}
+                          ))}
+                        </div>
+                      )
+                    )}
                   {chunkArray(selectedFixedLabelsKeys, 3).map((keys, i) => (
                     <div key={i} className="form-row">
                       {keys.map((key) => (

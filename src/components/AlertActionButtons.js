@@ -7,7 +7,7 @@ import { useGlobalState } from "../lib/globalState"
 const AckButton = ({ pagerDutyInfos, fingerprint }) => {
   const [confirm, setConfirm] = useState(false)
   const [isSending, setIsSending] = useState(false)
-  const [acked, setAcked] = useState(
+  const [, setAcked] = useState(
     pagerDutyInfos &&
       pagerDutyInfos.acknowledgements &&
       pagerDutyInfos.acknowledgements.length > 0

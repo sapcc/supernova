@@ -1,5 +1,3 @@
-import { useMemo } from "react"
-
 const descriptionParsed = (text) => {
   if (!text) return ""
   // urls in descriptions follow the schema: <URL|URL-NAME>

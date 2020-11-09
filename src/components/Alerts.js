@@ -108,56 +108,83 @@ const Alerts = React.memo(
     }, [])
 
     // opens a modal window with silence form
-    const createAlertSilence = React.useCallback((alert) => {
-      return new Promise((resolve, reject) =>
+    const createAlertSilence = React.useCallback(
+      (alert) => {
+        return new Promise((resolve, reject) =>
+          showModal({
+            size: "lg",
+            header: `New Silence ${
+              alert.labels.alertname && `for alert ${alert.labels.alertname}`
+            } in ${alert.labels.region} `,
+            // props are Body, Buttons and hide
+            content: (props) => (
+              <NewAlertSilenceForm
+                alert={alert}
+                onSuccess={resolve}
+                onFailure={reject}
+                {...props}
+              />
+            ),
+          })
+        )
+      },
+      [showModal]
+    )
+
+    const toggleInhibitedModal = React.useCallback(
+      (fingerprint) => {
+        if (Array.isArray(fingerprint)) fingerprint = fingerprint[0]
+        const alert = alerts.items.find((a) => a.fingerprint === fingerprint)
+        if (!alert) return
         showModal({
-          size: "lg",
-          header: `New Silence ${
-            alert.labels.alertname && `for alert ${alert.labels.alertname}`
-          } in ${alert.labels.region} `,
-          // props are Body, Buttons and hide
-          content: (props) => (
-            <NewAlertSilenceForm
-              alert={alert}
-              onSuccess={resolve}
-              onFailure={reject}
-              {...props}
+          header: <React.Fragment>Alert</React.Fragment>,
+          body: (
+            <ReactJson
+              src={alert}
+              collapsed={2}
+              collapseStringsAfterLength={100}
             />
           ),
+          cancelButtonText: "Close",
         })
-      )
-    }, [])
+      },
+      [alerts.items, showModal]
+    )
 
-    const toggleInhibitedModal = React.useCallback((fingerprint) => {
-      if (Array.isArray(fingerprint)) fingerprint = fingerprint[0]
-      const alert = alerts.items.find((a) => a.fingerprint === fingerprint)
-      if (!alert) return
-      showModal({
-        header: <React.Fragment>Alert</React.Fragment>,
-        body: (
-          <ReactJson
-            src={alert}
-            collapsed={2}
-            collapseStringsAfterLength={100}
-          />
-        ),
-        cancelButtonText: "Close",
-      })
-    }, [])
+    const toggleAckedModal = React.useCallback(
+      (payload) => {
+        showModal({
+          header: <React.Fragment>Acknowledgement</React.Fragment>,
+          body: (
+            <ReactJson
+              src={payload}
+              collapsed={2}
+              collapseStringsAfterLength={100}
+            />
+          ),
+          cancelButtonText: "Close",
+        })
+      },
+      [showModal]
+    )
 
-    const toggleAckedModal = React.useCallback((payload) => {
-      showModal({
-        header: <React.Fragment>Acknowledgement</React.Fragment>,
-        body: (
-          <ReactJson
-            src={payload}
-            collapsed={2}
-            collapseStringsAfterLength={100}
-          />
-        ),
-        cancelButtonText: "Close",
-      })
-    }, [])
+    const toggleSilenceModal = React.useCallback(
+      (silenceId) => {
+        if (!silencesKeyPayload[silenceId]) return
+        showModal({
+          header: <React.Fragment>Silence</React.Fragment>,
+          body: (
+            <ReactJson
+              src={silencesKeyPayload[silenceId]}
+              collapsed={2}
+              collapseStringsAfterLength={100}
+            />
+          ),
+          cancelButtonText: "Close",
+        })
+      },
+      [silencesKeyPayload, showModal]
+    )
 
     const alertCounts = React.useCallback((alerts) => {
       const criticals = alerts.filter(
@@ -210,25 +237,15 @@ const Alerts = React.memo(
           ),
         })
       },
-      [labelSettings, silencesKeyPayload, createAlertSilence]
-    )
-
-    const toggleSilenceModal = React.useCallback(
-      (silenceId) => {
-        if (!silencesKeyPayload[silenceId]) return
-        showModal({
-          header: <React.Fragment>Silence</React.Fragment>,
-          body: (
-            <ReactJson
-              src={silencesKeyPayload[silenceId]}
-              collapsed={2}
-              collapseStringsAfterLength={100}
-            />
-          ),
-          cancelButtonText: "Close",
-        })
-      },
-      [silencesKeyPayload]
+      [
+        showModal,
+        labelSettings,
+        silencesKeyPayload,
+        createAlertSilence,
+        toggleInhibitedModal,
+        toggleSilenceModal,
+        toggleAckedModal,
+      ]
     )
 
     return (

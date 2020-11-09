@@ -85,7 +85,12 @@ const informUpdateListeners = () =>
  */
 const updateAlerts = (alerts) => {
   // if alerts provided then extend them otherwise load them from the cache
-  if (!alerts) ({ alerts } = _alertsCache.get())
+  // if (!alerts) ({ alerts } = _alertsCache.get())
+  if (!alerts) {
+    const cache = _alertsCache.get()
+    if (!cache || !cache.alerts) return
+    alerts = cache.alerts
+  }
 
   const acknowledgements = _acknowledgementsCache.get()
   // extend alerts with acknowledgements
@@ -147,11 +152,15 @@ const loadPagerDutyAlerts = () => {
   // date.setDate(date.getDate() - 1) // one day in the past
   date.setHours(date.getHours() - 9) // hours in the past
 
-  return PagerDutyApi.incidents({
+  const options = {
     statuses: ["acknowledged", "triggered"],
     limit: 200,
     since: date,
-  })
+  }
+  if (process.env.PAGERDUTY_SERVICE_IDS)
+    options["service_ids"] = process.env.PAGERDUTY_SERVICE_IDS.split(",")
+
+  return PagerDutyApi.incidents(options)
     .then((incidents) => {
       console.log(
         `[${moment().format(
@@ -207,7 +216,8 @@ const loadPagerDutyAlerts = () => {
     .catch((error) =>
       console.error(
         `[${moment().format("DD.MM.YYYY HH:mm")}] PAGERDUTY LOADER: error: `,
-        error.message
+        error.message,
+        error
       )
     )
 }

@@ -43,6 +43,7 @@ const ContactList = React.memo(({ visible, componentKey }) => {
       })
 
     return () => (isSubscribed = false)
+    // eslint-disable-next-line
   }, [])
 
   return (
