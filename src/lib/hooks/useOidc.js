@@ -116,6 +116,7 @@ const useOidc = () => {
       // user is not authenticated yet!
       login()
     }
+    // eslint-disable-next-line
   }, [])
 
   // return login status

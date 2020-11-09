@@ -7,7 +7,27 @@
       "service": "limes",
       "severity": "info"
     },
-    "editable_labels": ["region"]
+    "editable_labels": ["region"],
+    "editable_labels_default_values": ["eu-nl-1"]
+  },
+  {
+    "status": "active",
+    "title": "Test no editable Values",
+    "description": "This a test silence template",
+    "fixed_labels": {
+      "service": "limes",
+      "severity": "info"
+    }
+  },
+  {
+    "status": "active",
+    "title": "Test empty editable Values",
+    "description": "This a test silence template",
+    "fixed_labels": {
+      "service": "limes",
+      "severity": "info"
+    },
+    "editable_labels": []
   },
   {
     "status": "active",
@@ -27,6 +47,6 @@
       "service": "compute",
       "tier": "vmware"
     },
-    "editable_labels": ["vccluster", "cluster"]
+    "editable_labels": ["vccluster", "cluster", "region"]
   }
 ]

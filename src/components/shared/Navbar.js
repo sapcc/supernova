@@ -45,10 +45,14 @@ const SuperNavbar = React.memo(({ showModal }) => {
   // opens a modal window with silence form
   const createSilence = React.useCallback(() => {
     showModal({
-      header: <span className="u-text-info">Schedule Silence for Maintenance Window</span>,
+      header: (
+        <span className="u-text-info">
+          Schedule Silence for Maintenance Window
+        </span>
+      ),
       content: NewPreemptiveSilenceForm,
     })
-  }, [])
+  }, [showModal])
 
   return (
     <Navbar expand="md">
@@ -59,21 +63,19 @@ const SuperNavbar = React.memo(({ showModal }) => {
         Supernova
       </NavbarBrand>
       <Nav className="utility-nav ml-auto" navbar>
-       
-            <button
-              className="btn btn-link float-right nav-support-link"
-              onClick={createSilence}
-            >
-              <FontAwesomeIcon icon="tools" /> 
-              Schedule Maintenance
-            </button>
+        <button
+          className="btn btn-link float-right nav-support-link"
+          onClick={createSilence}
+        >
+          <FontAwesomeIcon icon="tools" />
+          Schedule Maintenance
+        </button>
 
-       
         <Button color="link" onClick={() => toggleContactsList()}>
           <FontAwesomeIcon icon="ambulance" />
-            <span className="nav-support-link">
-              {layout.contactsListVisible ? "Hide " : "Show "}
-              Support Contacts
+          <span className="nav-support-link">
+            {layout.contactsListVisible ? "Hide " : "Show "}
+            Support Contacts
           </span>
         </Button>
         <Form inline className="layout-nav">
