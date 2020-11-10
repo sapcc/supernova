@@ -219,10 +219,7 @@ const Alerts = React.memo(
           ),
           content: (props) => (
             <AlertDetails
-              alert={{
-                ...alert,
-                labels: { ...alert.labels, support_component: "asr03" },
-              }}
+              alert={alert}
               labelSettings={labelSettings}
               silencesKeyPayload={silencesKeyPayload}
               showDetails={() => showDetailsModal(alert)}
