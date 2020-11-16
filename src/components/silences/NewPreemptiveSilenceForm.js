@@ -91,7 +91,9 @@ function reducer(state, action) {
           ...state.templates,
           isLoading: false,
           error: null,
-          items: action.templates,
+          items: action.templates.filter(
+            (template) => template.status === "active"
+          ),
         },
       }
     case "TEMPLATES_ERROR":
@@ -104,6 +106,7 @@ function reducer(state, action) {
         },
       }
     case "SELECT_TEMPLATE":
+      const index = parseInt(action.value)
       const newState = {
         ...state,
         templates: {
@@ -207,11 +210,6 @@ function reducer(state, action) {
 
 const NewForm = ({ Body, Buttons, hide }) => {
   const [form, dispatch] = React.useReducer(reducer, initialState, init)
-
-  const templatesItems = React.useMemo(
-    () => form.templates.items.filter((t) => t.status === "active"),
-    [form.templates]
-  )
 
   React.useEffect(() => {
     if (form && form.templates && form.templates.current) {
@@ -341,7 +339,7 @@ const NewForm = ({ Body, Buttons, hide }) => {
           "Loading templates ..."
         ) : (
           <>
-            {templatesItems.length > 0 ? (
+            {form.templates.items.length > 0 ? (
               <FormGroup>
                 <Input
                   type="select"
@@ -355,7 +353,7 @@ const NewForm = ({ Body, Buttons, hide }) => {
                   }
                 >
                   <option>Select template</option>
-                  {templatesItems.map((template, index) => (
+                  {form.templates.items.map((template, index) => (
                     <option key={index} value={index}>
                       {template.title}
                     </option>
