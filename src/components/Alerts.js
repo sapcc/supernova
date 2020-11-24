@@ -76,7 +76,20 @@ const Alerts = React.memo(
 
         if (visible && Object.keys(activeLabelFilters).length >= 0) {
           for (let name in activeLabelFilters) {
-            if (activeLabelFilters[name].indexOf(alert.labels[name]) < 0)
+            // alertname needs special handling. While other filters can contain multiple values,
+            // alertname filter contains exactly one value. Each alert is checked whether
+            // it contains the searched alertname as a substring.
+            if (name === "alertname") {
+              const searchTerm =
+                activeLabelFilters[name] && activeLabelFilters[name].length > 0
+                  ? activeLabelFilters[name][0]
+                  : ""
+              if (
+                alert.labels[name] &&
+                alert.labels[name].indexOf(searchTerm) < 0
+              )
+                visible = false
+            } else if (activeLabelFilters[name].indexOf(alert.labels[name]) < 0)
               visible = false
           }
         }
