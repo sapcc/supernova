@@ -300,11 +300,17 @@ const pagerDutyAlertKey = (alert) => {
 
 // Run alerts polling every 30 seconds
 utils.doPeriodical({ intervalInSeconds: 30, immediate: true }, load)
-// Run pagerduty alerts polling every 5 minutes
-utils.doPeriodical(
-  { intervalInSeconds: 300, immediate: true },
-  loadPagerDutyAlerts
-)
+
+if (process.env.DISABLE_PAGERDUTY === "true") {
+  console.log("========== DISABLE PAGERDUTY SERVICE ==========")
+} else {
+  console.log("========== START PAGERDUTY SERVICE ==========")
+  // Run pagerduty alerts polling every 5 minutes
+  utils.doPeriodical(
+    { intervalInSeconds: 300, immediate: true },
+    loadPagerDutyAlerts
+  )
+}
 
 const Alerts = {
   addUpdateListener,
