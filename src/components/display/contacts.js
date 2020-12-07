@@ -35,9 +35,9 @@ const ContactList = React.memo(({ visible, componentKey }) => {
         if (isSubscribed) {
           setIsLoading(false)
           setError({
-            status: error.response.status,
-            name: error.response.statusText,
-            message: error.response.data,
+            status: error.response && error.response.status,
+            name: error.response && error.response.statusText,
+            message: error.response && error.response.data,
           })
         }
       })

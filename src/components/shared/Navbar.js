@@ -23,6 +23,7 @@ import NewPreemptiveSilenceForm from "../silences/NewPreemptiveSilenceForm"
 const SuperNavbar = React.memo(({ showModal }) => {
   const state = useGlobalState()
   const dispatch = useDispatch()
+  const { contactList } = state
 
   const { user, layout } = state
 
@@ -71,13 +72,20 @@ const SuperNavbar = React.memo(({ showModal }) => {
           Schedule Maintenance
         </button>
 
-        <Button color="link" onClick={() => toggleContactsList()}>
-          <FontAwesomeIcon icon="ambulance" />
-          <span className="nav-support-link">
-            {layout.contactsListVisible ? "Hide " : "Show "}
-            Support Contacts
-          </span>
-        </Button>
+        {contactList.contacts &&
+          Object.entries(contactList.contacts).length > 0 && (
+            <Button
+              color="link"
+              onClick={() => toggleContactsList()}
+              test={console.log(":::::::::::::", contactList)}
+            >
+              <FontAwesomeIcon icon="ambulance" />
+              <span className="nav-support-link">
+                {layout.contactsListVisible ? "Hide " : "Show "}
+                Support Contacts
+              </span>
+            </Button>
+          )}
         <Form inline className="layout-nav">
           <FormGroup>
             <CustomInput
