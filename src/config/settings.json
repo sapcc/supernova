@@ -17,7 +17,7 @@
     },
     {
       "area": "landscape",
-      "name": "TEST1",
+      "name": "Staging",
       "match_re": {
         "region": "^(?:staging|qa-de-[2-9]+|admin)$"
       }
@@ -60,14 +60,6 @@
     {
       "area": "service",
       "name": "k8s",
-      "match_re": {
-        "tier": "^(?:k8s)$"
-      }
-    },
-    {
-      "area": "support",
-      "name": "support_k8s",
-      "label": "k8s",
       "match_re": {
         "tier": "^(?:k8s)$"
       }

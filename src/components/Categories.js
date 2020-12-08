@@ -46,7 +46,7 @@ const Categories = ({ categories, counts }) => {
                   }`}
                   onClick={() => handleCategoryChange(category)}
                 >
-                  {category.label || category.name}{" "}
+                  {category.label || category.name} n{" "}
                   {counts && counts[category.name] && (
                     <CategorySeverityBadges
                       {...counts[category.name].summary}
