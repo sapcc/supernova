@@ -1,5 +1,5 @@
 // import {categories} from '../config.json'
-import { categories } from "../config/categories.json"
+import { categories } from "../config/settings.json"
 
 const initialState = {
   items: categories,

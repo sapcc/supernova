@@ -1,6 +1,5 @@
-{ 
-  "categories": 
-  [
+{
+  "categories": [
     {
       "area": "landscape",
       "name": "All",
@@ -18,7 +17,7 @@
     },
     {
       "area": "landscape",
-      "name": "LAB",
+      "name": "TEST1",
       "match_re": {
         "region": "^(?:staging|qa-de-[2-9]+|admin)$"
       }
@@ -74,8 +73,7 @@
     }
   ],
 
-  "labelFilters": 
-  {
+  "labelFilters": {
     "app": [],
     "cluster": [],
     "cluster_type": [],
@@ -88,7 +86,6 @@
     "tier": [],
     "type": []
   },
-
 
   "defaultRegions": [
     "eu-de-1",
