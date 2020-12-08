@@ -32,3 +32,4 @@ report.20*
 /config/users/editors.json
 /config/support/incident_contact_list.yaml
 /config/support/incident_contact_list.json
+/config/support/silence_templates.json
