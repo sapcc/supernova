@@ -65,6 +65,14 @@
       }
     },
     {
+      "area": "support",
+      "name": "support_k8s",
+      "label": "k8s",
+      "match_re": {
+        "tier": "^(?:k8s)$"
+      }
+    },
+    {
       "area": "service",
       "name": "Kubernikus",
       "match_re": {
