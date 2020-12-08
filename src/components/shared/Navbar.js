@@ -74,11 +74,7 @@ const SuperNavbar = React.memo(({ showModal }) => {
 
         {contactList.contacts &&
           Object.entries(contactList.contacts).length > 0 && (
-            <Button
-              color="link"
-              onClick={() => toggleContactsList()}
-              test={console.log(":::::::::::::", contactList)}
-            >
+            <Button color="link" onClick={() => toggleContactsList()}>
               <FontAwesomeIcon icon="ambulance" />
               <span className="nav-support-link">
                 {layout.contactsListVisible ? "Hide " : "Show "}
