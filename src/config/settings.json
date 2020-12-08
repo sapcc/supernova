@@ -17,7 +17,7 @@
     },
     {
       "area": "landscape",
-      "name": "Staging",
+      "name": "LAB",
       "match_re": {
         "region": "^(?:staging|qa-de-[2-9]+|admin)$"
       }
