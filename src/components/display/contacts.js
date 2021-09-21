@@ -61,8 +61,8 @@ const ContactList = React.memo(({ visible, componentKey }) => {
                   <Col md="2">Component</Col>
                   <Col md="2">Hotline</Col>
                   <Col md="2">Service Area</Col>
-                  <Col md="2">SPC Service</Col>
-                  <Col md="2">SPC Queue</Col>
+                  <Col md="2">Service Offering</Col>
+                  <Col md="2">Assignment Group</Col>
                   <Col md="2">OPS Area Owner</Col>
                 </Row>
                 {contacts ? (

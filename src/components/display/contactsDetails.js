@@ -34,7 +34,7 @@ const ContactsDetailsList = ({mainKey, details}) => {
                                         )}
                                     </ul>
                                 </dd>
-                                <dt>SPC Queue</dt>
+                                <dt>Assignment Group</dt>
                                 <dd>{level.spc_queue}</dd>
                             
                                 <dt>Team DL</dt>
