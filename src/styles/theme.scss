@@ -476,8 +476,10 @@ thead {
   color: #fff;
 }
 
-td.snug {
-  width: 1px;
+td, th {
+  &.snug {
+    width: 1px;
+  }
 }
 
 .action-buttons {
