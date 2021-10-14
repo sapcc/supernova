@@ -37,11 +37,11 @@
     "socket.io-client": "^2.2.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=$APP_PORT react-scripts start",
     "build": "react-scripts build",
     "test": "NODE_ENV=test concurrently --kill-others-on-fail \"jest server\" \"react-scripts test\" ",
     "eject": "react-scripts eject",
-    "production": "NODE_ENV=production node server",
+    "production": "PORT=$APP_PORT NODE_ENV=production node server",
     "server": "nodemon server",
     "dev": "HTTPS=true concurrently --kill-others-on-fail \"yarn server\" \"yarn start\" "
   },
