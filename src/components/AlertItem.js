@@ -1,6 +1,7 @@
-import React from 'react'
+import React, {useState} from 'react'
 import moment from 'moment'
 import { Markup } from 'interweave'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import AlertActionButtons from './AlertActionButtons'
 import AlertLinks from './AlertLinks'
@@ -44,6 +45,10 @@ const AlertItem = React.memo(({
 
   const silences = useSilences(alert.status, silencesKeyPayload)
 
+  const firingSince = moment(alert.startsAt)
+  const now = moment()
+  const daysFiring = now.diff(firingSince, "days")
+
   return (
     <tr className={alert.labels.severity} >
       <td className="text-nowrap">
@@ -76,7 +81,12 @@ const AlertItem = React.memo(({
 
         <AlertLabels labels={alert.labels} labelSettings={labelSettings}/>
       </td>
-      <td>{moment(alert.startsAt).format('DD.MM.YYYY HH:mm:ss')}</td>
+      <td>
+        {firingSince.format('DD.MM.YYYY HH:mm:ss ')}
+        { daysFiring > 7 &&
+          <FontAwesomeIcon icon="exclamation-triangle" className="warning-icon" title="This alert has been firing for more than 7 days!" fixedWidth />
+        }
+      </td>
       <td>
         <AlertStatus 
           status={alert.status} 

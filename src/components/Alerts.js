@@ -273,7 +273,7 @@ const Alerts = React.memo(
               <th>Region</th>
               <th>Service</th>
               <th>Title</th>
-              <th className="text-nowrap">Firing Since</th>
+              <th className="text-nowrap snug">Firing Since</th>
               <th>Status</th>
               <th></th>
             </tr>

@@ -147,6 +147,10 @@ button {
     background: rgba(255, 255, 255, 0.5);
     color: lighten($danger, 5);
   }
+
+  .warning-icon {
+    color: lighten($danger, 25);
+  }
 }
 
 .warning td {
@@ -170,6 +174,10 @@ button {
     background: rgba(255, 255, 255, 0.8);
     color: darken($warning, 15);
   }
+
+  .warning-icon {
+    color: darken($warning, 10);;
+  }
 }
 
 .info td {
@@ -192,6 +200,10 @@ button {
   code {
     background: rgba(255, 255, 255, 0.5);
     color: darken($info, 20);
+  }
+
+  .warning-icon {
+    color: darken($info, 10);
   }
 }
 
@@ -464,8 +476,10 @@ thead {
   color: #fff;
 }
 
-td.snug {
-  width: 1px;
+td, th {
+  &.snug {
+    width: 1px;
+  }
 }
 
 .action-buttons {
