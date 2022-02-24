@@ -25,6 +25,9 @@ const AlertLinks = ({alert}) => {
       {alert.labels.cloudops && 
         <a href={`https://dashboard.${alert.labels.region}.cloud.sap/ccadmin/cloud_admin/cloudops#/universal-search/${alert.labels.cloudops}`} target="_blank" rel="noopener noreferrer">CloudOps</a>
       }
+      {alert.labels.report && 
+        <a href={`https://dashboard.${alert.labels.region}.cloud.sap/${alert.labels.report}`} target="_blank" rel="noopener noreferrer">Report</a>
+      }
       {alert.annotations.mail_subject && 
         <a href={`mailto:?subject=${encodeURIComponent(alert.annotations.mail_subject)}&body=${encodeURIComponent(alert.annotations.mail_body)}`} rel="noopener noreferrer">Email Owner</a>
       }
