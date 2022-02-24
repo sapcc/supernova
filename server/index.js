@@ -6,8 +6,7 @@ const path = require("path")
 const configureWesocket = require("./socket")
 const cookieParser = require("cookie-parser")
 const app = express()
-const port =
-  process.env.NODE_ENV === "production" ? 80 : process.env.PORT || 5000
+const port = process.env.NODE_ENV === "production" ? 80 : 5000
 const metrics = require("./middlewares/metrics")
 
 if (process.env.NODE_ENV === "production") {
@@ -25,6 +24,9 @@ app.use(cookieParser())
 app.use("/", require("./routes"))
 
 const server = require("http").createServer(app)
+server.keepAliveTimeout = 61 * 1000
+server.headersTimeout = 65 * 1000 // This should be bigger than `keepAliveTimeout + your server's expected response time`
+
 configureWesocket(server)
 
 // in production the client code is served by express.
