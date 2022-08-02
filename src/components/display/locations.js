@@ -46,14 +46,6 @@ export default {
     "dx":         0,
     "dy":         -30  
   },
-  "eu-ru-1":{
-    "country":    "Russia",
-    "regionname": "EU-RU-1",
-    "lat":        55.75,
-    "lon":        37.62,
-    "dx":         25,
-    "dy":         -20  
-  },
   "na-us-1":{
     "country":    "USA",
     "regionname": "NA-US-1",
