@@ -300,9 +300,9 @@ const NewForm = ({ Body, Buttons, hide }) => {
             <a
               rel="noopener noreferrer"
               href={process.env.REACT_APP_ALERTMANAGER_API_ENDPOINT.replace(
-                "/api/v2",
-                "#/silences"
-              )}
+                "-internal.",
+                "."
+              ).replace("/api/v2", "#/silences")}
               target="_blank"
             >
               <br />
