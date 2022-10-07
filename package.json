@@ -16,7 +16,7 @@
     "cookie-parser": "^1.4.4",
     "express": "^4.16.4",
     "express-prom-bundle": "^5.1.5",
-    "interweave": "^11.1.0",
+    "interweave": "^13.0.0",
     "ldapjs": "^1.0.2",
     "moment": "^2.24.0",
     "node-fetch": "^2.6.0",
