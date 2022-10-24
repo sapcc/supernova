@@ -79,49 +79,49 @@
       }
     },
     {
-      "area": "support",
+      "area": "Legacy Tiers",
       "name": "API",
       "match_re": {
         "tier": "^(?:os|k8s)$"
       }
     },
     {
-      "area": "support",
+      "area": "Legacy Tiers",
       "name": "Metal",
       "match_re": {
         "tier": "^(?:metal)$"
       }
     },
     {
-      "area": "support",
+      "area": "Legacy Tiers",
       "name": "Network",
       "match_re": {
         "tier": "^(?:net)$"
       }
     },
     {
-      "area": "support",
+      "area": "Legacy Tiers",
       "name": "VMware",
       "match_re": {
         "tier": "^(?:vmware)$"
       }
     },
     {
-      "area": "service",
+      "area": "Legacy Tiers",
       "name": "Concourse",
       "match_re": {
         "service": "^(?:concourse)$"
       }
     },
     {
-      "area": "service",
-      "name": "k8s",
+      "area": "Legacy Tiers",
+      "name": "Kubernetes",
       "match_re": {
         "tier": "^(?:k8s)$"
       }
     },
     {
-      "area": "service",
+      "area": "Legacy Tiers",
       "name": "Kubernikus",
       "match_re": {
         "tier": "^(?:kks)$"
