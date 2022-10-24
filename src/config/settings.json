@@ -23,6 +23,62 @@
       }
     },
     {
+      "area": "support groups",
+      "name": "Compute",
+      "match_re": {
+        "support_group": "^(?:compute)$"
+      }
+    },
+    {
+      "area": "support groups",
+      "name": "Compute Storage API",
+      "match_re": {
+        "support_group": "^(?:compute-storage-api)$"
+      }
+    },
+    {
+      "area": "support groups",
+      "name": "Containers",
+      "match_re": {
+        "support_group": "^(?:containers)$"
+      }
+    },
+    {
+      "area": "support groups",
+      "name": "Email",
+      "match_re": {
+        "support_group": "^(?:email)$"
+      }
+    },
+    {
+      "area": "support groups",
+      "name": "Identity",
+      "match_re": {
+        "support_group": "^(?:identity)$"
+      }
+    },
+    {
+      "area": "support groups",
+      "name": "Network API",
+      "match_re": {
+        "support_group": "^(?:network-api)$"
+      }
+    },
+    {
+      "area": "support groups",
+      "name": "Observability",
+      "match_re": {
+        "support_group": "^(?:observability)$"
+      }
+    },
+    {
+      "area": "support groups",
+      "name": "Others",
+      "match_re": {
+        "support_group": "^(?!compute|compute-storage-api|containers|email|identity|network-api|observability|undefined|null).+"
+      }
+    },
+    {
       "area": "support",
       "name": "API",
       "match_re": {
@@ -83,6 +139,7 @@
     "service": [],
     "severity": [],
     "status": [],
+    "support_group": [],
     "tier": [],
     "type": []
   },
@@ -96,7 +153,6 @@
     "na-ca-1",
     "la-br-1",
     "eu-nl-1",
-    "eu-ru-1",
     "ap-ae-1",
     "ap-sa-1",
     "ap-cn-1",

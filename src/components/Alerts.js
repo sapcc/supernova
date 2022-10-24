@@ -64,7 +64,7 @@ const Alerts = React.memo(
                 Object.keys(category.match_re).reduce(
                   (matchesOtherLabels, label) => {
                     const regex = new RegExp(category.match_re[label])
-                    return matchesOtherLabels && regex.test(alert.labels[label])
+                    return matchesOtherLabels && alert.labels[label] && regex.test(alert.labels[label])
                   },
                   true
                 )
