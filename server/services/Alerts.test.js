@@ -327,7 +327,7 @@ describe("get", () => {
           region: { "eu-de-1": { critical: 1 }, "eu-nl-1": { info: 1 } },
           summary: { critical: 1, warning: 1, info: 1 },
         },
-        k8s: { region: { "qa-de-1": { warning: 1 } }, summary: { warning: 1 } },
+        Kubernetes: { region: { "qa-de-1": { warning: 1 } }, summary: { warning: 1 } },
       })
     })
 
