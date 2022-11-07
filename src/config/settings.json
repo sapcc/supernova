@@ -79,6 +79,13 @@
       }
     },
     {
+      "area": "support groups",
+      "name": "No Support Group",
+      "match_re": {
+        "support_group": "^(?:undefined|null)"
+      }
+    },
+    {
       "area": "Legacy Tiers",
       "name": "API",
       "match_re": {
