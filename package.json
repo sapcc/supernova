@@ -20,7 +20,7 @@
     "ldapjs": "^1.0.2",
     "moment": "^2.24.0",
     "node-fetch": "^2.6.0",
-    "node-jose": "^1.1.4",
+    "node-jose": "^2.0.0",
     "node-sass": "^4.12.0",
     "nodemon": "^1.18.11",
     "prom-client": "^11.5.3",
