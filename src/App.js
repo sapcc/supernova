@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from "react"
 
+import { Alert } from 'reactstrap'
+
 import {
   GlobalStateProvider,
   useGlobalState,
@@ -51,8 +53,10 @@ import {
   faPlusCircle,
   faThumbtack,
   faTools,
+  faExternalLinkAlt,
 } from "@fortawesome/free-solid-svg-icons"
 import { faBellSlash as faBellSlashRegular } from "@fortawesome/free-regular-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 // build icon library, only needs to be done once, then the icon will be available everywhere, only the FontAwesomeIcon import is necessary in other components
 library.add(
@@ -70,7 +74,8 @@ library.add(
   faAngleRight,
   faUser,
   faAmbulance,
-  faExclamationTriangle
+  faExclamationTriangle,
+  faExternalLinkAlt
 )
 // --------------------------------------------------------------
 
@@ -216,6 +221,19 @@ const App = () => {
                 />
               ) : (
                 <React.Fragment>
+                  <Alert color="info" isOpen={true}>
+                    <h4>Important Update! 🌟 </h4>
+                    <p>Introducing the all-new Supernova, now seamlessly integrated into Greenhouse! 🌿🚀 Discover a range of fantastic new features and enhancements in Greenhouse, our new cloud operations platform:</p> 
+                    <p className="info">
+                      <a className="btn btn-info" href="https://ccloud.dashboard.greenhouse.global.cloud.sap">
+                        <FontAwesomeIcon icon="external-link-alt" />
+                        &nbsp;
+                        Go to Greenhouse
+                        </a>
+                    </p>
+                    
+                    <p>Your feedback matters to us! We genuinely appreciate your thoughts as we work towards making Supernova even better. Give the new Supernova a try and kindly share your insights with us, either in the <a href="https://convergedcloud.slack.com/archives/C04Q0QM40KF">Greenhouse Slack channel</a> or open an issue in <a href="https://github.wdf.sap.corp/cc/greenhouse-extensions/issues">the Greenhouse Extensions Github repo</a></p>
+                  </Alert>
                   <Regions labelFilters={labelFilters} counts={counts.region} />
 
                   <Filters
