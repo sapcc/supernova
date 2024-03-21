@@ -8,7 +8,7 @@ import contactList from "./contactList"
 import silenceTemplates from "./silenceTemplates"
 import user from "./user"
 
-export default {
+const appReducers = {
   app,
   categories,
   labelFilters,
@@ -19,3 +19,5 @@ export default {
   silenceTemplates,
   user,
 }
+
+export default appReducers

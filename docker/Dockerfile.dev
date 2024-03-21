@@ -1,0 +1,8 @@
+FROM keppel.eu-de-1.cloud.sap/ccloud-dockerhub-mirror/library/node:18-alpine
+
+LABEL source_repository="https://github.com/sapcc/supernova"
+ENV NODE_OPTIONS=--openssl-legacy-provider
+
+RUN apk --no-cache add git ca-certificates make
+
+

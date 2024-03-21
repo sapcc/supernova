@@ -1,4 +1,4 @@
-export default {
+const Locations = {
   staging: {
     country: "Germany",
     lat: 52.52,
@@ -134,3 +134,5 @@ export default {
     dy: -20,
   },
 }
+
+export default Locations

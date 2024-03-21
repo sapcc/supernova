@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import { useDispatch } from "../globalState"
 import openSocket from "socket.io-client"
 
-export default ({ userProfile }) => {
+const useInitialLoader = ({ userProfile }) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -34,3 +34,5 @@ export default ({ userProfile }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userProfile])
 }
+
+export default useInitialLoader

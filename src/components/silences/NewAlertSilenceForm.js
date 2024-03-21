@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Button, Form, FormGroup, Label, Input, Alert } from "reactstrap"
 import apiClient from "../../lib/apiClient"
 
-export default ({ alert, onSuccess, Body, Buttons, hide }) => {
+const NewAlertSilenceForm = ({ alert, onSuccess, Body, Buttons, hide }) => {
   const [duration, setDuration] = useState(4)
   const [comment, setComment] = useState("")
   const [submitting, setSubmitting] = useState(false)
@@ -97,3 +97,5 @@ export default ({ alert, onSuccess, Body, Buttons, hide }) => {
     </Form>
   )
 }
+
+export default NewAlertSilenceForm

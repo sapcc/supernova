@@ -1,4 +1,5 @@
-import { labelFilters } from "../config/settings.json"
+import settings from "../config/settings.json"
+const labelFilters = settings.labelFilters
 
 const initialState = {
   settings: labelFilters,
@@ -51,7 +52,7 @@ const removeFilter = (state, { name, value }) => {
   return { ...state, settings: { ...state.settings, [name]: values } }
 }
 
-export default (state = initialState, action) => {
+const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "SET_VALUES_FOR_FILTER":
       return setValuesForFilter(state, action)
@@ -72,3 +73,5 @@ export default (state = initialState, action) => {
       return state
   }
 }
+
+export default reducer

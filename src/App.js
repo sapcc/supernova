@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react"
 
-import { Alert } from 'reactstrap'
+import { Alert } from "reactstrap"
 
 import {
   GlobalStateProvider,
@@ -31,7 +31,7 @@ import "./styles/theme.scss"
 import "./App.css"
 
 // import AlertsChart from './AlertsChart'
-// import AlertDurationChart from './AlertDurationChart'
+// import AlertDurationChart from "./AlertDurationChart"
 import MapDisplay from "./components/display/Map"
 import OverviewDisplay from "./components/display/Overview"
 import ContactList from "./components/display/contacts"
@@ -223,16 +223,35 @@ const App = () => {
                 <React.Fragment>
                   <Alert color="info" isOpen={true}>
                     <h4>Important Update! 🌟 </h4>
-                    <p>Introducing the all-new Supernova, now seamlessly integrated into Greenhouse! 🌿🚀 Discover a range of fantastic new features and enhancements in Greenhouse, our new cloud operations platform:</p> 
-                    <p className="info">
-                      <a className="btn btn-info" href="https://ccloud.dashboard.greenhouse.global.cloud.sap">
-                        <FontAwesomeIcon icon="external-link-alt" />
-                        &nbsp;
-                        Go to Greenhouse
-                        </a>
+                    <p>
+                      Introducing the all-new Supernova, now seamlessly
+                      integrated into Greenhouse! 🌿🚀 Discover a range of
+                      fantastic new features and enhancements in Greenhouse, our
+                      new cloud operations platform:
                     </p>
-                    
-                    <p>Your feedback matters to us! We genuinely appreciate your thoughts as we work towards making Supernova even better. Give the new Supernova a try and kindly share your insights with us, either in the <a href="https://convergedcloud.slack.com/archives/C04Q0QM40KF">Greenhouse Slack channel</a> or open an issue in <a href="https://github.wdf.sap.corp/cc/greenhouse-extensions/issues">the Greenhouse Extensions Github repo</a></p>
+                    <p className="info">
+                      <a
+                        className="btn btn-info"
+                        href="https://ccloud.dashboard.greenhouse.global.cloud.sap"
+                      >
+                        <FontAwesomeIcon icon="external-link-alt" />
+                        &nbsp; Go to Greenhouse
+                      </a>
+                    </p>
+
+                    <p>
+                      Your feedback matters to us! We genuinely appreciate your
+                      thoughts as we work towards making Supernova even better.
+                      Give the new Supernova a try and kindly share your
+                      insights with us, either in the{" "}
+                      <a href="https://convergedcloud.slack.com/archives/C04Q0QM40KF">
+                        Greenhouse Slack channel
+                      </a>{" "}
+                      or open an issue in{" "}
+                      <a href="https://github.wdf.sap.corp/cc/greenhouse-extensions/issues">
+                        the Greenhouse Extensions Github repo
+                      </a>
+                    </p>
                   </Alert>
                   <Regions labelFilters={labelFilters} counts={counts.region} />
 
@@ -280,9 +299,10 @@ const App = () => {
     </React.Fragment>
   )
 }
-
-export default () => (
+const AppWrapper = () => (
   <GlobalStateProvider reducers={reducers}>
     <App />
   </GlobalStateProvider>
 )
+
+export default AppWrapper

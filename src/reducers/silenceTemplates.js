@@ -4,7 +4,7 @@ const initialState = {
   isLoading: false,
 }
 
-export default (state = initialState, action) => {
+const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "REQUEST_SILENCE_TEMPLATES":
       return { ...state, isLoading: true, error: null }
@@ -21,3 +21,5 @@ export default (state = initialState, action) => {
       return state
   }
 }
+
+export default reducer

@@ -1,5 +1,6 @@
 // import {categories} from '../config.json'
-import { categories } from "../config/settings.json"
+import settings from "../config/settings.json"
+const categories = settings.categories
 
 const initialState = {
   items: categories,
@@ -55,7 +56,7 @@ const setActive = (state, { name, active }) => {
   return { ...state, items, active: activeItems }
 }
 
-export default (state = initialState, action) => {
+const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "REQUEST_CATEGORIES_FAILURE":
       return { ...state, isLoading: false, error: action.error }
@@ -67,3 +68,5 @@ export default (state = initialState, action) => {
       return state
   }
 }
+
+export default reducer

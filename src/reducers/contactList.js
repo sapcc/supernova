@@ -4,7 +4,7 @@ const initialState = {
 
 const setContacts = (state, { contacts }) => ({ ...state, contacts })
 
-export default (state = initialState, action) => {
+const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "SET_SUPPORT_CONTACTS":
       return setContacts(state, action)
@@ -12,3 +12,5 @@ export default (state = initialState, action) => {
       return state
   }
 }
+
+export default reducer

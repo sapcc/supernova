@@ -1,7 +1,13 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent } from "react"
 import {
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar
-} from 'recharts';
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  BarChart,
+  Bar,
+} from "recharts"
 
 //const data = [
 //  {
@@ -27,40 +33,40 @@ import {
 //  },
 //];
 
-export default class Alerts extends PureComponent {
+class Alerts extends PureComponent {
   date = (alert) => {
     const d = new Date(alert.startsAt)
-    return `${d.getDate()}.${d.getMonth()+1}.${d.getFullYear()}`
+    return `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`
   }
 
   toData = (alerts) => {
     const map = {}
-    alerts.forEach(alert => {
+    alerts.forEach((alert) => {
       const date = this.date(alert)
       map[date] = map[date] || {}
       map[date][alert.labels.severity] = map[date][alert.labels.severity] || 0
       map[date][alert.labels.severity] += 1
     })
 
-    return Object.keys(map).map(date => ({ ...map[date], name: date}) )
+    return Object.keys(map).map((date) => ({ ...map[date], name: date }))
   }
 
   render() {
-    if(!this.props.alerts || this.props.alerts.length === 0) return null
+    if (!this.props.alerts || this.props.alerts.length === 0) return null
     const alerts = this.props.alerts.slice()
-    alerts.sort((a,b) => {
-      if(a.startsAt < b.startsAt) return -1
-      if(a.startsAt > b.startsAt) return 1
+    alerts.sort((a, b) => {
+      if (a.startsAt < b.startsAt) return -1
+      if (a.startsAt > b.startsAt) return 1
       return 0
     })
     const data = this.toData(alerts)
-    const criticalColor = this.props.colors.critical || '#E74C3C'
-    const warningColor = this.props.colors.warning || '#F39C12'
-    const infoColor = this.props.colors.info || '#3498DB'
+    const criticalColor = this.props.colors.critical || "#E74C3C"
+    const warningColor = this.props.colors.warning || "#F39C12"
+    const infoColor = this.props.colors.info || "#3498DB"
 
     return (
       <React.Fragment>
-        { /*
+        {/*
         <LineChart
           width={window.innerWidth}
           height={300}
@@ -84,22 +90,32 @@ export default class Alerts extends PureComponent {
           height={300}
           data={data}
           margin={{
-            top: 20, right: 30, left: 20, bottom: 5,
+            top: 20,
+            right: 30,
+            left: 20,
+            bottom: 5,
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
-          <Legend verticalAlign="top" height={36} formatter={(value, entry, index) => 
-              `${value} (${alerts.filter(alert => alert.labels.severity === value).length})`
-          }/> 
+          <Legend
+            verticalAlign="top"
+            height={36}
+            formatter={(value, entry, index) =>
+              `${value} (${
+                alerts.filter((alert) => alert.labels.severity === value).length
+              })`
+            }
+          />
           <Bar dataKey="critical" stackId="a" fill={criticalColor} />
           <Bar dataKey="warning" stackId="a" fill={warningColor} />
           <Bar dataKey="info" stackId="a" fill={infoColor} />
         </BarChart>
-      </React.Fragment> 
-    );
+      </React.Fragment>
+    )
   }
 }
 
+export default Alerts

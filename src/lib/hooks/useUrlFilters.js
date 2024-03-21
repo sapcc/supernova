@@ -130,7 +130,7 @@ const urlStringToJson = (urlString) => {
  * Returns a json object containing current url filters.
  **/
 
-export default (userLoggedIn, filters) => {
+const useUrlFilters = (userLoggedIn, filters) => {
   const host = `${window.location.protocol}//${window.location.host}`
   let initial = false
 
@@ -175,3 +175,5 @@ export default (userLoggedIn, filters) => {
 
   return initialUrlFilters
 }
+
+export default useUrlFilters

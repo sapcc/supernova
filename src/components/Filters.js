@@ -6,7 +6,6 @@ import { useDispatch } from "../lib/globalState"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 const Filters = ({ labelFilters, labelValues }) => {
-  const [name, setName] = useState("")
   const [showAdvabcedFilters, updateShowAdvancedFilters] = useState(false)
   const dispatch = useDispatch()
   const { settings } = labelFilters

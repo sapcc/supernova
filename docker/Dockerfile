@@ -1,13 +1,24 @@
-FROM keppel.eu-de-1.cloud.sap/ccloud-dockerhub-mirror/library/node:14-alpine
+
+FROM keppel.eu-de-1.cloud.sap/ccloud-dockerhub-mirror/library/node:18-alpine as base
 
 LABEL source_repository="https://github.com/sapcc/supernova"
 
-RUN apk --no-cache add git ca-certificates make
-RUN npm install -g serve
+ENV NODE_OPTIONS="--openssl-legacy-provider"
 
-ADD . /home/app/webapp
+RUN apk --no-cache add ca-certificates
+
+RUN mkdir -p /home/app/webapp
 WORKDIR /home/app/webapp
+ADD . /home/app/webapp
 
-RUN yarn
+# install dependencies dev and prod
+RUN npm install 
+# build the app
+RUN npm run build 
 
-CMD yarn build && yarn production
+# Production image
+ENV NODE_ENV="production" 
+# remove dev dependencies
+RUN npm prune --production
+
+CMD npm run production

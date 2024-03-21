@@ -106,7 +106,6 @@ function reducer(state, action) {
         },
       }
     case "SELECT_TEMPLATE":
-      const index = parseInt(action.value)
       const newState = {
         ...state,
         templates: {

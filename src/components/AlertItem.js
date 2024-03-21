@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import moment from "moment"
 import { Markup } from "interweave"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -50,18 +50,18 @@ const AlertItem = React.memo(
     showAckedBy,
     createSilence,
   }) => {
+    const silences = useSilences(alert.status, silencesKeyPayload)
+
+    const firingSince = moment(alert.startsAt)
+    const now = moment()
+    const daysFiring = now.diff(firingSince, "days")
+
     if (!visible)
       return (
         <tr>
           <td colSpan={6}>Loading...</td>
         </tr>
       )
-
-    const silences = useSilences(alert.status, silencesKeyPayload)
-
-    const firingSince = moment(alert.startsAt)
-    const now = moment()
-    const daysFiring = now.diff(firingSince, "days")
 
     return (
       <tr className={alert.labels.severity}>

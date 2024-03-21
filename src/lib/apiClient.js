@@ -66,8 +66,10 @@ const request = (url, options = {}) => {
   })
 }
 
-export default {
+const apiClient = {
   request,
   updateIdToken,
   on403,
 }
+
+export default apiClient
