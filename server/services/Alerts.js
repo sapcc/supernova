@@ -230,7 +230,8 @@ const loadPagerDutyAlerts = () => {
 const buildAcknowledgements = (incident) => {
   const result = []
   if (incident.notes) {
-    const regex = /Incident was acknowledged on behalf of (.+@.+)\. \(?([^\)]+)?\)?\s*time: (.+)/
+    const regex =
+      /Incident was acknowledged on behalf of (.+@.+)\. \(?([^\)]+)?\)?\s*time: (.+)/
     incident.notes.forEach((note) => {
       const found = note.content.match(regex)
       let name = found && found[2]

@@ -18,6 +18,7 @@
     "express": "^4.16.4",
     "express-prom-bundle": "^5.1.5",
     "interweave": "^13.0.0",
+    "jest": "^27.5.1",
     "jquery": "3.7.1",
     "ldapjs": "^1.0.2",
     "moment": "^2.24.0",

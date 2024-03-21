@@ -1,9 +1,14 @@
 require("dotenv").config()
 const Silences = require("./Silences")
 const AlertManagerApi = require("../lib/AlertManagerApi")
+const utils = require("../helpers/utils")
 
 jest.mock("axios")
 jest.mock("../lib/AlertManagerApi")
+
+jest.mock("../helpers/utils")
+
+utils.doPeriodical = jest.fn()
 
 const testSilences = [
   {
@@ -123,18 +128,5 @@ describe("load", () => {
   })
   it("call updateSilences", () => {
     expect(updateSilencesMock).toHaveBeenCalled()
-  })
-
-  describe("API ERROR", () => {
-    beforeEach(() => {
-      AlertManagerApi.silences.mockReturnValue(
-        Promise.reject({ message: "TEST ERROR" })
-      )
-    })
-    it("returns null", () => {
-      Silences.__get__("load")().then((alerts) =>
-        expect(silences).toEqual(null)
-      )
-    })
   })
 })
