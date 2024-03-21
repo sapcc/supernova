@@ -67,6 +67,6 @@
     "enzyme-adapter-react-16": "^1.14.0",
     "nodemon": "^3.1.0",
     "react-scripts": "^5.0.1",
-    "supertest": "^4.0.2"
+    "supertest": "^6.0.0"
   }
 }
