@@ -1,5 +1,8 @@
 # supernova
 
+This project is outdated and no longer maintained. You can find the new version in the [new project](https://github.com/cloudoperators/greenhouse-extensions/tree/main/alerts/ui.)
+
+
 Supernova is an alternative UI for Prometheus Alertmanager with some quality of life improvements:
 
 
